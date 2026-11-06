@@ -1,10 +1,7 @@
-/* =========================================================
- *  KONFIGURASI — cukup ubah file ini saja.
- *  Tempel URL Web App Apps Script (yang berakhiran /exec).
- * ========================================================= */
+/* Diisi otomatis oleh server-laptop\PASANG_SERVER.bat. Tidak perlu diubah sendiri. */
 window.APP_CONFIG = {
-  API_URL: 'https://ujian-server.mikhaelnardotunas.workers.dev',
+  API_URL: 'GANTI_DENGAN_ALAMAT_SERVER',
   NAMA_APLIKASI: 'Petualangan Ujian',
-  // Kirim progres ke dashboard guru setiap X detik (saat ada internet)
+  // Dipakai sampai HP menerima pengaturan dari server
   INTERVAL_PROGRES_DETIK: 60
 };

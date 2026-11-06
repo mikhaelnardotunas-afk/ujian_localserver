@@ -3,7 +3,7 @@
   'use strict';
   var CFG = window.APP_CONFIG || {};
 
-  /* ---------- API ke Google Apps Script ---------- */
+  /* ---------- API ke server di laptop ---------- */
   // Aksi yang hanya membaca aman diulang bila server sedang penuh. Aksi yang menulis tidak diulang otomatis.
   var AKSI_BACA = { ping: 1, kelas: 1, unduh: 1, hasilSiswa: 1, guruLogin: 1, guruData: 1, guruMeta: 1, guruDetail: 1, guruLaporan: 1, guruRekap: 1, guruAmbilSoal: 1, guruEkspor: 1, guruPengaturan: 1, cetakMeta: 1, cetakSoal: 1 };
   var GALAT_SEMENTARA = /too many times|service .*(failed|unavailable|error)|server error|internal error|timed out|sedang sibuk|try again|tidak aktif|mengalami masalah/i;
@@ -24,12 +24,12 @@
 
   function apiSekali(action, data, timeoutMs, onProgress) {
     if (!CFG.API_URL || CFG.API_URL.indexOf('GANTI_DENGAN') >= 0) {
-      return Promise.reject(new Error('URL API belum diatur di config.js'));
+      return Promise.reject(new Error('Alamat server belum diatur. Guru perlu menjalankan PASANG_SERVER.bat lalu mengunggah config.js.'));
     }
     var body = Object.assign({ action: action }, data || {});
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs || 60000) : null;
-    // text/plain → "simple request", tidak memicu preflight CORS di Apps Script
+    // text/plain → "simple request", tidak memicu preflight CORS
     return fetch(CFG.API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -61,13 +61,13 @@
     }).catch(function (e) {
       if (e && e.name === 'AbortError') throw sementara('Koneksi terlalu lama, coba lagi', { waktuHabis: true });
       if (e && (e.message === 'Failed to fetch' || e.name === 'TypeError')) throw sementara('Tidak ada koneksi ke server');
-      // Saat kewalahan Apps Script membalas halaman HTML, bukan JSON
+      // Gangguan di jalur internet bisa membalas halaman HTML, bukan JSON
       if (e && e.name === 'SyntaxError') throw sementara('Server sedang sibuk. Coba lagi sebentar.');
       throw e;
     }).finally(function () { if (timer) clearTimeout(timer); });
   }
 
-  /* ---------- Kripto (pasangan dari Code.gs) ---------- */
+  /* ---------- Kripto (pasangan dari server) ---------- */
   function hex(buf) {
     return Array.prototype.map.call(new Uint8Array(buf), function (b) {
       return ('0' + b.toString(16)).slice(-2);
@@ -90,7 +90,7 @@
   }
   async function decrypt(b64, keyStr) {
     if (b64.indexOf('a1:') === 0) return decryptAES(b64.slice(3), keyStr);
-    // Format lama (Apps Script): data yang sudah terunduh di HP tetap bisa dibuka
+    // Format lama: data yang sudah terunduh di HP tetap bisa dibuka
     var bin = atob(b64);
     var out = new Array(bin.length);
     var block = null;

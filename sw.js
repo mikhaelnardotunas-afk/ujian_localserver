@@ -1,10 +1,9 @@
 ﻿/* Service worker — membuat aplikasi bisa dibuka tanpa internet.
    Setiap kali Anda mengubah file website, naikkan angka VERSI agar HP siswa ikut terbarui. */
-const VERSI = 'ue2-v15-server-laptop';
+const VERSI = 'ue2-v16-tanpa-spreadsheet';
 const SHELL = [
-  './', './index.html', './kuis.html', './guru.html', './Cetak_Kartu.html', './Cetak_Soal.html', './config.js', './manifest.json',
-  './assets/style.css', './assets/guru.css', './assets/common.js', './assets/app.js', './assets/guru.js', './assets/laporan.js',
-  './assets/rekap.js', './assets/ekspor.js', './assets/pengaturan.js',
+  './', './index.html', './kuis.html', './config.js', './manifest.json',
+  './assets/style.css', './assets/common.js', './assets/app.js',
   './assets/maskot.svg', './assets/icon-192.png', './assets/icon-512.png'
 ];
 const CDN = [
@@ -36,7 +35,7 @@ self.addEventListener('fetch', (e) => {
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
   // Jangan pernah menyimpan panggilan API. Gambar soal dari server laptop (lewat workers.dev) tetap disimpan agar bisa dibuka offline.
-  if (url.hostname.endsWith('script.google.com') || url.hostname.endsWith('script.googleusercontent.com') || (url.hostname.endsWith('workers.dev') && req.destination !== 'image')) return;
+  if (url.hostname.endsWith('workers.dev') && req.destination !== 'image') return;
 
   // Gambar soal: ambil dari cache dulu
   if (req.destination === 'image' && url.origin !== location.origin) {

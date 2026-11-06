@@ -104,14 +104,14 @@
     var b = this; UE.sfx('klik');
     b.disabled = true; b.innerHTML = '<span class="spinner"></span> Memuat…';
     UE.api('kelas').then(function (r) {
-      if (r.versi !== 2) throw new Error('Server masih versi 1. Perbarui Code.gs ke versi 2.');
+      if (r.versi !== 2) throw new Error('Versi server tidak cocok dengan aplikasi. Hubungi guru.');
       $('schoolName').textContent = r.sekolah || '';
       var p = pkg();
       kelasTerpilih = p ? p.kelas.slice() : [];
       $('kelasChips').innerHTML = r.kelas.map(function (k) {
         return '<button type="button" class="chip" aria-pressed="' + (kelasTerpilih.indexOf(k.kelas) >= 0) + '" data-k="' + UE.esc(k.kelas) + '">' +
           UE.esc(k.kelas) + ' <small>' + k.jumlah + ' siswa</small></button>';
-      }).join('') || '<p class="muted">Belum ada siswa di sheet USER.</p>';
+      }).join('') || '<p class="muted">Belum ada data siswa di server.</p>';
       $('kelasBox').classList.add('hidden');
       $('kelasPilih').classList.remove('hidden');
       $('btnUnduh').disabled = !kelasTerpilih.length;
@@ -199,7 +199,7 @@
       Unduh.ket(1, ukuranKB(diterima));
     }).then(function (r) {
       Unduh.henti();
-      if (r.versi !== 2) throw new Error('Server masih versi 1. Perbarui Code.gs ke versi 2.');
+      if (r.versi !== 2) throw new Error('Versi server tidak cocok dengan aplikasi. Hubungi guru.');
       var p = { versi: 2, sekolah: r.sekolah, kelas: r.kelas, users: {}, paket: {}, unduh: Date.now(), selisih: r.waktuServer - Date.now() };
       r.users.forEach(function (u) { p.users[u.u] = u; });
       r.paket.forEach(function (x) { p.paket[x.id] = x; });
@@ -463,7 +463,7 @@
 
   /* HP rusak atau hilang di tengah ujian: siswa masuk dari HP lain, jawaban sementara terakhir di server bisa dilanjutkan. */
   function tawarkanDraf(a) {
-    if (!store.get(K.HP, null) || !navigator.onLine) return Promise.resolve(null); // aturan dari server tidak ada = backend tanpa fitur ini
+    if (!store.get(K.HP, null) || !navigator.onLine) return Promise.resolve(null); // aturan dari server belum ada = HP belum pernah terhubung ke server
     return UE.api('ambilDraf', { paket: a.paket, username: a.u, hash: a.h }, 8000).then(function (r) {
       var d = r.draf;
       if (!d || !d.data || !d.data.ans) return null;
@@ -489,7 +489,7 @@
   }
 
   /* ---------------- Pengaturan kiriman dari server ---------------- */
-  /** Di backend Apps Script tidak ada aturan dari server: progres memakai config.js dan jawaban sementara tidak dikirim. */
+  /** Sebelum aturan dari server diterima: progres memakai config.js dan jawaban sementara belum dikirim. */
   function aturanHP() {
     var h = store.get(K.HP, null) || {};
     return { kirimMenit: h.kirimMenit || 0, progresDetik: h.progresDetik || CFG.INTERVAL_PROGRES_DETIK || 30 };
