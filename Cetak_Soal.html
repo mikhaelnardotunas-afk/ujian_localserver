@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cetak Soal — Naskah Ujian PDF &amp; Word</title>
+<link rel="icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+    svg: { fontCache: 'none' }, options: { enableMenu: false }, startup: { typeset: false }
+  };
+</script>
+<script id="mjx" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+<script src="config.js"></script>
+<script src="assets/common.js"></script>
+<style id="css-halaman"></style>
+<style>
+/* ============ Tampilan aplikasi ============ */
+:root{--navy:#14284b;--biru:#1f4e8c;--biru2:#2f6fc4;--biruBg:#e9f0fa;--garis:#d5dce6;--garis2:#e7ebf1;--teks:#1b2533;--abu:#5b6577;--latar:#eef1f5;--putih:#fff;--merah:#b42318;--merahBg:#fdecea;--kuning:#8a5206;--kuningBg:#fdf3e2;--hijau:#1e7b45;--hijauBg:#e7f5ec}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{font:14px/1.45 Inter,"Segoe UI",Arial,sans-serif;color:var(--teks);background:var(--latar)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--biru2);outline-offset:1px}
+.hidden{display:none!important}
+.app{display:grid;grid-template-rows:auto 1fr;height:100vh;overflow:hidden}
+.topbar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--navy);color:#fff;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;margin-right:auto}
+.brand img{width:34px;height:34px;border-radius:7px;background:#fff}
+.brand b{display:block;font-size:15.5px;font-weight:700;line-height:1.2}
+.brand small{display:block;font-size:12px;color:#bfcbe0}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:99px;font-size:12px;font-weight:600;background:#ffffff1f;color:#fff;white-space:nowrap}
+.pill.contoh{background:#f5b84a;color:#3d2800}
+.top-aksi{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--garis);border-radius:7px;background:#fff;color:var(--teks);padding:8px 13px;font-weight:600;font-size:13px;line-height:1.2}
+.btn:hover:not(:disabled){background:#f4f6f9}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn svg{width:16px;height:16px;flex:none}
+.btn.utama{background:var(--biru2);border-color:var(--biru2);color:#fff}
+.btn.utama:hover:not(:disabled){background:var(--biru)}
+.btn.pdf{background:#c0392b;border-color:#c0392b;color:#fff}
+.btn.pdf:hover:not(:disabled){background:#a5301f}
+.btn.gelap{background:#ffffff1a;border-color:#ffffff33;color:#fff}
+.btn.gelap:hover:not(:disabled){background:#ffffff33}
+.btn.kecil{padding:5px 9px;font-size:12px;font-weight:600}
+.btn.bahaya{color:var(--merah);border-color:#f0c4bf}
+.btn.lebar{width:100%}
+.kerja{display:grid;grid-template-columns:432px minmax(0,1fr);min-height:0}
+.sisi{display:grid;grid-template-columns:82px minmax(0,1fr);background:#fff;border-right:1px solid var(--garis);min-height:0}
+.langkah{display:flex;flex-direction:column;gap:2px;padding:8px 6px;background:#f6f8fb;border-right:1px solid var(--garis2);overflow:auto}
+.langkah button{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;border-radius:7px;background:none;padding:9px 2px;font-size:11px;font-weight:600;color:var(--abu);position:relative}
+.langkah button svg{width:20px;height:20px}
+.langkah button:hover{background:#e9edf3}
+.langkah button.aktif{background:var(--biruBg);color:var(--biru)}
+.langkah .jml{position:absolute;top:3px;right:5px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:var(--biru2);color:#fff;font-size:10px;line-height:17px;text-align:center}
+.panel{display:none;overflow:auto;padding:16px 16px 28px;min-width:0}
+.panel.aktif{display:block}
+.panel h2{margin:0 0 3px;font-size:16px;font-weight:700;color:var(--navy)}
+.panel .lead{margin:0 0 14px;color:var(--abu);font-size:12.5px}
+.seksi{margin-bottom:18px}
+.seksi>.jdl,.jdl{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 7px;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--navy);text-transform:uppercase}
+.jdl .aksi-kecil{display:flex;gap:4px;font-weight:600;text-transform:none;letter-spacing:0}
+.tautan{border:0;background:none;padding:2px 4px;color:var(--biru2);font-size:12px;font-weight:600;border-radius:4px}
+.tautan:hover{background:var(--biruBg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 11px;border:1px solid var(--garis);border-radius:99px;background:#fff;font-size:13px;font-weight:500;user-select:none}
+.chip:hover{border-color:var(--biru2)}
+.chip[aria-pressed=true]{background:var(--biru);border-color:var(--biru);color:#fff}
+.kosong{padding:12px;border:1px dashed var(--garis);border-radius:8px;color:var(--abu);font-size:12.5px;text-align:center}
+.f{display:block;margin-bottom:10px;min-width:0}
+.f>span{display:block;margin-bottom:4px;font-size:12px;font-weight:600;color:#3b4557}
+.f small{display:block;margin-top:3px;color:var(--abu);font-size:11.5px;font-weight:400}
+.f input[type=text],.f input[type=number],.f input[type=password],.f select,.f textarea,.isian{width:100%;padding:7px 9px;border:1px solid var(--garis);border-radius:6px;background:#fff;font-size:13px}
+.f textarea{resize:vertical;min-height:84px;line-height:1.4}
+.baris{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.baris3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.baris4{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.cek{display:flex;align-items:flex-start;gap:8px;margin:0 0 8px;font-size:13px;line-height:1.35}
+.cek input{margin:2px 0 0;flex:none;width:15px;height:15px;accent-color:var(--biru)}
+.cek small{display:block;color:var(--abu);font-size:11.5px}
+.daftar-paket{display:flex;flex-direction:column;gap:6px}
+.paket{display:flex;gap:9px;align-items:flex-start;padding:9px 10px;border:1px solid var(--garis);border-radius:8px;background:#fff}
+.paket.on{border-color:#a9c3e8;background:#f5f8fd}
+.paket input{margin-top:3px;width:15px;height:15px;flex:none;accent-color:var(--biru)}
+.paket .nm{font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.paket .mt{font-size:11.5px;color:var(--abu);overflow-wrap:anywhere}
+.lencana{display:inline-block;padding:0 6px;border-radius:4px;font-size:10.5px;font-weight:700;background:#eceff4;color:#4a5568;vertical-align:1px}
+.lencana.warn{background:var(--kuningBg);color:var(--kuning)}
+.lencana.err{background:var(--merahBg);color:var(--merah)}
+.lencana.pg{background:var(--biruBg);color:var(--biru)}
+.lencana.es{background:var(--hijauBg);color:var(--hijau)}
+.galeri{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tpl{display:flex;flex-direction:column;gap:6px;padding:8px;border:1.5px solid var(--garis);border-radius:9px;background:#fff;text-align:left}
+.tpl:hover{border-color:var(--biru2)}
+.tpl[aria-pressed=true]{border-color:var(--biru);background:#f2f6fc;box-shadow:0 0 0 1px var(--biru)}
+.tpl svg{display:block;width:100%;height:82px;background:#eef1f5;border-radius:5px}
+.tpl b{font-size:12.5px;line-height:1.25;color:var(--navy)}
+.tpl small{font-size:11px;line-height:1.3;color:var(--abu)}
+.baris-kop{display:grid;grid-template-columns:auto 58px 30px 1fr 26px 26px 26px;gap:5px;align-items:center;padding:8px;margin-bottom:6px;border:1px solid var(--garis2);border-radius:8px;background:#f8fafc}
+.baris-kop input[type=text]{grid-column:1/-1;width:100%;padding:7px 9px;border:1px solid var(--garis);border-radius:6px;font-size:13px;font-weight:600;background:#fff}
+.baris-kop input[type=number]{width:100%;padding:5px 6px;border:1px solid var(--garis);border-radius:6px;font-size:12.5px;background:#fff}
+.baris-kop .lbl{font-size:11.5px;color:var(--abu)}
+.ik{display:inline-flex;align-items:center;justify-content:center;width:26px;height:30px;border:1px solid var(--garis);border-radius:6px;background:#fff;font-size:12px;font-weight:700;padding:0}
+.ik:hover:not(:disabled){background:#f1f4f8}
+.ik:disabled{opacity:.35;cursor:not-allowed}
+.ik.on{background:var(--biru);border-color:var(--biru);color:#fff}
+.logo-kotak{display:flex;flex-direction:column;align-items:center;gap:6px;padding:9px;border:1px dashed var(--garis);border-radius:8px;text-align:center}
+.logo-kotak .gbr{display:flex;align-items:center;justify-content:center;width:64px;height:64px;background:#f6f8fb;border-radius:6px;color:var(--abu);font-size:11px}
+.logo-kotak img{max-width:64px;max-height:64px}
+.logo-kotak .btn-baris{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.seg{display:flex;border:1px solid var(--garis);border-radius:7px;overflow:hidden}
+.seg button{flex:1;border:0;border-right:1px solid var(--garis);background:#fff;padding:6px 4px;font-size:12px;font-weight:600;color:var(--abu)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--biru);color:#fff}
+.catatan{padding:9px 11px;border-radius:7px;background:var(--biruBg);color:#1b3a68;font-size:12px;margin:0 0 12px}
+.catatan.warn{background:var(--kuningBg);color:var(--kuning)}
+.butir-alat{position:sticky;top:-16px;z-index:2;background:#fff;padding:0 0 9px;margin-bottom:6px;border-bottom:1px solid var(--garis2)}
+.butir{display:grid;grid-template-columns:18px minmax(0,1fr) 74px;gap:8px;align-items:flex-start;padding:8px 2px;border-bottom:1px solid var(--garis2)}
+.butir input[type=checkbox]{margin:2px 0 0;width:15px;height:15px;accent-color:var(--biru)}
+.butir .tks{font-size:12.5px;overflow-wrap:anywhere}
+.butir .tp{display:block;margin-top:2px;color:var(--abu);font-size:11px}
+.butir select{width:100%;padding:3px 2px;border:1px solid var(--garis);border-radius:5px;font-size:12px;background:#fff}
+.butir .est{display:block;margin-top:2px;color:var(--kuning);font-size:10.5px;text-align:center}
+.grup-butir{margin:13px 0 2px;font-size:12px;font-weight:700;color:var(--biru)}
+.pangung{display:flex;flex-direction:column;min-width:0;min-height:0}
+.alat{display:flex;align-items:center;gap:8px;padding:8px 14px;background:#fff;border-bottom:1px solid var(--garis);flex-wrap:wrap}
+.alat .info{font-size:12.5px;color:var(--abu);margin-right:auto;min-width:0}
+.alat .info b{color:var(--teks)}
+.zoom{display:flex;align-items:center;gap:3px}
+.zoom output{min-width:44px;text-align:center;font-size:12px;font-weight:600}
+.pesan{display:none;padding:8px 14px;background:var(--kuningBg);border-bottom:1px solid #f0dfbd;color:var(--kuning);font-size:12.5px;max-height:104px;overflow:auto}
+.pesan.ada{display:block}
+.pesan ul{margin:0;padding-left:18px}
+.pesan button{border:0;background:none;padding:0;color:inherit;font-weight:700;text-decoration:underline;font-size:inherit}
+.kanvas{flex:1;overflow:auto;padding:20px;background:#d6dbe3;min-height:0;position:relative}
+#pages{width:max-content;margin:0 auto}
+.muat-lapis{position:sticky;top:0;left:0;float:right;background:#14284be0;color:#fff;padding:4px 10px;border-radius:99px;font-size:12px;font-weight:600;z-index:3;display:none}
+.muat-lapis.on{display:block}
+.layar-kosong{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:60%;padding:50px 20px;color:#3f4a5c;text-align:center}
+.layar-kosong svg{width:54px;height:54px;color:#8894a7}
+.layar-kosong b{font-size:16px}
+.layar-kosong p{margin:0;max-width:430px;font-size:13px}
+#build{position:absolute;left:-30000px;top:0;visibility:hidden}
+#measure{position:absolute;left:-30000px;top:0;visibility:hidden}
+.lapis{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:#14284b99}
+.dialog{width:100%;max-width:440px;max-height:90vh;overflow:auto;background:#fff;border-radius:12px;padding:22px;box-shadow:0 20px 50px #0005}
+.dialog h3{margin:0 0 6px;font-size:18px;color:var(--navy)}
+.dialog p{margin:0 0 12px;color:var(--abu);font-size:13px}
+.dialog ol{margin:0 0 14px;padding-left:20px;font-size:13px}
+.dialog ol li{margin-bottom:5px}
+.dialog .aksi{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin-top:12px}
+.form-err{color:var(--merah);font-size:12.5px;min-height:18px;margin:2px 0 8px}
+#toasts{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:7px;align-items:center;pointer-events:none}
+.toast{padding:9px 14px;background:#1f2a3b;color:#fff;border-radius:8px;font-size:13px;box-shadow:0 6px 18px #0004;max-width:88vw;transition:opacity .3s}
+.toast.err{background:var(--merah)}
+.toast.ok{background:var(--hijau)}
+.toast.out{opacity:0}
+.spin{display:inline-block;width:13px;height:13px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:p .8s linear infinite;vertical-align:-2px}
+@keyframes p{to{transform:rotate(360deg)}}
+@media(max-width:960px){
+  .app{height:auto;overflow:visible;min-height:100vh}
+  .kerja{grid-template-columns:1fr}
+  .sisi{grid-template-columns:1fr;border-right:0;border-bottom:1px solid var(--garis)}
+  .langkah{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--garis2)}
+  .langkah button{flex:1 0 62px}
+  .panel{max-height:none}
+  .butir-alat{top:0}
+  .kanvas{min-height:70vh;padding:12px}
+  .brand{width:100%}
+}
+
+/* ============ Lembar cetak ============ */
+.page{position:relative;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#000;box-shadow:0 3px 14px #0003;margin:0 auto 18px;
+  font-family:var(--f);font-size:var(--fs);line-height:var(--lh);width:var(--W);height:var(--H);padding:var(--mt) var(--mr) var(--mb) var(--ml)}
+.page-body{position:relative;z-index:1;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.page-body>*{flex:none}
+.page-foot{position:relative;z-index:1;flex:none;height:7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:8mm;font-size:8.5pt;line-height:1.15;color:#222}
+.page-foot span:first-child{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.page-foot span:last-child{white-space:nowrap}
+.wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:0;pointer-events:none;overflow:hidden}
+.wm span{transform:rotate(-38deg);font-family:Arial,sans-serif;font-size:calc(var(--W) / 8.5);font-weight:700;letter-spacing:.06em;color:#0000001a;white-space:nowrap}
+.cols{flex:1 1 0!important;min-height:0;display:flex;gap:7mm}
+.cols.garis-tengah{background:linear-gradient(#999,#999) center/1px 100% no-repeat}
+.col{flex:1 1 0;min-width:0;overflow:hidden}
+#measure,#build{font-family:var(--f);font-size:var(--fs);line-height:var(--lh)}
+.kop{margin-bottom:3.5mm}
+.kop-row{display:flex;align-items:center;gap:3mm}
+.kop-logo{flex:none;width:var(--logo);height:var(--logo);display:flex;align-items:center;justify-content:center}
+.kop-logo img{max-width:100%;max-height:100%}
+.kop-t{flex:1;min-width:0;text-align:center;line-height:1.18}
+.kop-t div{overflow-wrap:anywhere}
+.kop-line{margin-top:2mm}
+.kop-line.ganda{border-top:2.2pt solid #000;border-bottom:.7pt solid #000;height:3.6pt}
+.kop-line.tebal{border-top:2.2pt solid #000}
+.kop-line.tipis{border-top:.8pt solid #000}
+.judul{text-align:center;margin-bottom:3mm;font-weight:700;line-height:1.25}
+.judul .a{font-size:1.1em}
+.judul .b{font-size:.95em}
+.identitas{width:100%;border-collapse:collapse;margin-bottom:2.5mm;font-size:.97em}
+.identitas td{padding:.4mm 1mm .4mm 0;vertical-align:top}
+.identitas td.l{white-space:nowrap;width:1%}
+.identitas td.c{width:1%;padding:0 1.2mm .4mm 0}
+.peserta{display:grid;grid-template-columns:2.2fr 1.2fr .8fr;gap:0;border:1px solid #000;margin-bottom:3mm}
+.peserta>div{padding:1.5mm 2mm 3mm;border-right:1px solid #000;font-size:.92em}
+.peserta>div:last-child{border-right:0}
+.petunjuk{border:1px solid #000;padding:1.6mm 2.5mm;margin-bottom:3mm;font-size:.93em}
+.petunjuk b{display:block}
+.petunjuk ol{margin:.5mm 0 0;padding-left:5mm}
+.h-bag{margin:1.5mm 0 1.8mm;font-weight:700}
+.h-bag .i{display:block;font-weight:400;font-style:italic}
+.q{display:flex;gap:1mm;padding-bottom:var(--gq)}
+.q .no{flex:none;width:8mm}
+.q .bd{flex:1;min-width:0}
+.q .tks{overflow-wrap:anywhere}
+.gbr-soal{display:block;margin:1.2mm 0;max-width:var(--imgw);max-height:var(--imgh)}
+.gbr-gagal{display:inline-block;margin:1mm 0;padding:1mm 2mm;border:1px dashed #a33;color:#a33;font-size:.85em}
+.opts{display:grid;gap:.6mm 3mm;margin-top:.8mm}
+.opts.c1{grid-template-columns:1fr}.opts.c2{grid-template-columns:1fr 1fr}.opts.c4{grid-template-columns:repeat(4,1fr)}
+.opt{display:flex;gap:1mm;min-width:0}
+.opt .l{flex:none;width:6mm}
+.opt .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.opt.key{font-weight:700;background:#e8f3ea;outline:.5pt solid #5d9c6f;border-radius:1px}
+.kunci-box{margin-top:1mm;padding:1mm 2mm;background:#f1f3f6;border-left:1.5pt solid #333;font-size:.93em}
+.meta{margin-top:.7mm;font-size:.8em;color:#333}
+.garis{height:6.5mm;border-bottom:.6pt dotted #333}
+.lines-wrap{margin-top:.8mm}
+.tb{width:100%;table-layout:fixed;border-collapse:collapse;font-size:var(--fst);line-height:1.22;margin-bottom:2.5mm}
+.tb th{background:#e6e9ee;border:.6pt solid #000;padding:1mm 1.2mm;font-weight:700;text-align:center;vertical-align:middle;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tb td{border:.6pt solid #000;padding:.9mm 1.2mm;vertical-align:top;overflow-wrap:anywhere}
+.tb td.grp{background:#f1f3f6;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.tb .tengah{text-align:center}
+.cp{margin:0 0 .5mm}.cp:last-child{margin-bottom:0}
+.cp.lab{display:flex;gap:1mm}.cp.lab>span:first-child{flex:none;width:4.8mm}.cp.lab>span:last-child{flex:1;min-width:0}
+.cp.b{font-weight:700}
+.tb .gbr-soal{max-width:100%;max-height:calc(var(--imgh) * .75)}
+.kv{width:100%;table-layout:fixed;border-collapse:collapse;font-size:var(--fst);line-height:1.22;margin-bottom:4mm}
+.kv td{border:.6pt solid #000;padding:1mm 1.5mm;vertical-align:top;overflow-wrap:anywhere}
+.kv td.l{background:#eef0f4;font-weight:700;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.kv td.jdl-kv{background:#dfe3ea;font-weight:700;text-align:center;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ljk{display:grid;gap:0 2mm;border:.8pt solid #000;padding:1.5mm 2mm;margin-bottom:3mm;font-size:.9em}
+.ljk-c{min-width:0}
+.ljk-i{display:flex;align-items:center;gap:1mm;height:6mm;white-space:nowrap}
+.ljk-i .n{width:6.5mm;text-align:right;padding-right:1mm;font-weight:700}
+.bub{display:inline-flex;align-items:center;justify-content:center;width:4.4mm;height:4.4mm;border:.7pt solid #000;border-radius:50%;font-size:7.5pt;line-height:1}
+.ljk-es{padding-bottom:2mm}
+.ljk-es .jd{font-weight:700;margin-bottom:.5mm}
+.p-teks{margin-bottom:2mm}
+.p-kecil{margin-bottom:2mm;font-size:.84em}
+.ttd{display:grid;grid-template-columns:1fr 1fr;gap:8mm;margin-top:4mm;text-align:center;font-size:.97em}
+.ttd .sp{height:17mm}
+.ttd .nm{font-weight:700;text-decoration:underline}
+mjx-container[display=true]{margin:.6mm 0!important}
+mjx-container svg{max-width:100%}
+
+@media print{
+  html,body{height:auto;background:#fff}
+  .app{display:block;height:auto;overflow:visible}
+  .kerja{display:block}
+  .topbar,.sisi,.alat,.pesan,#build,#measure,#toasts,.muat-lapis,.lapis{display:none!important}
+  .pangung{display:block}
+  .kanvas{display:block;overflow:visible;padding:0;background:#fff}
+  #pages{zoom:1!important;margin:0;width:auto}
+  .page{box-shadow:none;margin:0;height:calc(var(--H) - .4mm);break-after:page;break-inside:avoid}
+  .page:last-child{break-after:auto}
+  .page-body,.col{overflow:visible}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <img src="assets/icon-192.png" alt="">
+      <div><b>Cetak Soal</b><small>Naskah ujian, kunci, tabel, kisi-kisi — PDF &amp; Word</small></div>
+    </div>
+    <span class="pill" id="sumber">Belum terhubung</span>
+    <div class="top-aksi">
+      <button class="btn gelap" id="btnMuatUlang" type="button" title="Ambil ulang paket dan soal dari spreadsheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg>Muat ulang</button>
+      <button class="btn gelap" id="btnCetak" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3h12v6M6 18H3v-8h18v8h-3M7 14h10v7H7z"/></svg>Cetak</button>
+      <button class="btn pdf" id="btnPDF" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h6"/></svg>Simpan PDF</button>
+      <button class="btn utama" id="btnDOCX" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12M7 11l5 5 5-5M4 20h16"/></svg>Unduh Word (.docx)</button>
+    </div>
+  </header>
+
+  <div class="kerja">
+    <aside class="sisi">
+      <nav class="langkah" id="langkah" aria-label="Langkah pengaturan"></nav>
+      <div style="min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden">
+
+        <section class="panel aktif" data-panel="data">
+          <h2>Pilih Soal</h2>
+          <p class="lead">Mata pelajaran dan kelas boleh dipilih lebih dari satu. Paket yang cocok tampil di bawah.</p>
+          <div class="seksi">
+            <div class="jdl"><span>Mata Pelajaran</span><span class="aksi-kecil"><button class="tautan" type="button" data-semua="mapel">Semua</button><button class="tautan" type="button" data-hapus="mapel">Kosongkan</button></span></div>
+            <div class="chips" id="chipMapel"></div>
+          </div>
+          <div class="seksi">
+            <div class="jdl"><span>Kelas</span><span class="aksi-kecil"><button class="tautan" type="button" data-semua="kelas">Semua</button><button class="tautan" type="button" data-hapus="kelas">Kosongkan</button></span></div>
+            <div class="chips" id="chipKelas"></div>
+          </div>
+          <div class="seksi">
+            <div class="jdl"><span>Paket Ujian</span><span id="jmlPaket" style="font-weight:600;text-transform:none;letter-spacing:0;color:var(--abu)"></span></div>
+            <div class="daftar-paket" id="daftarPaket"></div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Bentuk Soal</div>
+            <label class="cek"><input type="checkbox" data-b="pilih.pg"> Pilihan ganda</label>
+            <label class="cek"><input type="checkbox" data-b="pilih.es"> Essay</label>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Pembagian Naskah</div>
+            <label class="cek"><input type="checkbox" data-b="pilih.perKelas"><span>Buat naskah terpisah untuk tiap kelas<small>Mati: satu naskah per paket, semua kelas tertulis di identitas.</small></span></label>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="template">
+          <h2>Template</h2>
+          <p class="lead">Pilih bentuk dokumen. Pratinjau di kanan langsung berubah.</p>
+          <div class="galeri" id="galeri"></div>
+          <div class="seksi" style="margin-top:16px" id="opsiTemplate">
+            <div class="jdl">Pilihan Template</div>
+            <div data-tpl="soal_kunci,naskah,duakolom">
+              <label class="cek"><input type="checkbox" data-b="tpl.sertakanLjk"><span>Sertakan lembar jawaban siswa<small>Halaman terpisah dengan lingkaran pilihan &amp; garis jawaban essay.</small></span></label>
+            </div>
+            <div data-tpl="soal_kunci,naskah,duakolom">
+              <label class="cek"><input type="checkbox" data-b="tpl.skorEssay"> Tampilkan skor di setiap soal essay</label>
+            </div>
+            <div data-tpl="soal_kunci,naskah,duakolom,ruang,ljk">
+              <label class="f"><span>Baris jawaban tiap soal essay</span><input type="number" min="0" max="30" data-b="tpl.garisEssay" data-num>
+              <small>0 = tanpa garis di naskah. Template Lembar Jawaban &amp; Ruang Jawab memakai minimal 3 baris.</small></label>
+            </div>
+            <div data-tpl="soal_jawab">
+              <label class="cek"><input type="checkbox" data-b="tpl.metaSoal"> Tampilkan skor, level, dan TP di bawah soal</label>
+            </div>
+            <div data-tpl="tabel">
+              <div class="f"><span>Kolom tabel</span>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.no"> No</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.soal"> Soal</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.jawaban"> Jawaban</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.level"> Level</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.tp"> Tujuan Pembelajaran</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.bentuk"> Bentuk soal</label>
+                <label class="cek"><input type="checkbox" data-b="tpl.kol.skor"> Skor</label>
+              </div>
+              <label class="cek"><input type="checkbox" data-b="tpl.opsiDiTabel"> Tampilkan opsi A–E di kolom Soal</label>
+              <label class="cek"><input type="checkbox" data-b="tpl.teksKunci"> Kolom Jawaban memuat teks opsi (bukan huruf saja)</label>
+            </div>
+            <p class="catatan" id="catatanTpl" style="margin-top:6px"></p>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="kop">
+          <h2>Pengaturan KOP</h2>
+          <p class="lead">Tersimpan otomatis di perangkat ini dan dipakai di PDF maupun Word.</p>
+          <div class="seksi">
+            <div class="jdl"><span>Baris KOP</span><span class="aksi-kecil"><button class="tautan" type="button" id="kopTambah">+ Tambah baris</button></span></div>
+            <div id="kopBaris"></div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Logo</div>
+            <div class="baris">
+              <div class="logo-kotak" id="logoKiri"></div>
+              <div class="logo-kotak" id="logoKanan"></div>
+            </div>
+            <label class="f" style="margin-top:10px"><span>Ukuran logo (mm)</span><input type="number" min="10" max="45" data-b="kop.logoSize" data-num></label>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Garis Bawah KOP</div>
+            <div class="seg" id="segGaris" role="group" aria-label="Garis bawah kop">
+              <button type="button" data-v="ganda">Ganda</button><button type="button" data-v="tebal">Tebal</button><button type="button" data-v="tipis">Tipis</button><button type="button" data-v="tanpa">Tanpa</button>
+            </div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Pemakaian</div>
+            <label class="cek"><input type="checkbox" data-b="kop.tampil"> Tampilkan KOP</label>
+            <label class="cek"><input type="checkbox" data-b="kop.setiapBagian"><span>Ulangi KOP di setiap bagian<small>Lembar jawaban dan kunci ikut memakai KOP. Mati: hanya di bagian pertama tiap naskah.</small></span></label>
+          </div>
+          <button class="btn bahaya kecil" type="button" id="kopReset">Kembalikan KOP bawaan</button>
+        </section>
+
+        <section class="panel" data-panel="naskah">
+          <h2>Identitas Naskah</h2>
+          <p class="lead">Isian yang dikosongkan mengikuti data paket, atau dicetak titik-titik untuk diisi tangan.</p>
+          <div class="seksi">
+            <div class="jdl">Judul</div>
+            <label class="f"><span>Judul naskah</span><input type="text" data-b="naskah.judul" placeholder="Kosong = nama ujian pada paket"></label>
+            <div class="baris">
+              <label class="f"><span>Tahun pelajaran</span><input type="text" data-b="naskah.tahun"></label>
+              <label class="f"><span>Semester</span><select data-b="naskah.semester"><option>Ganjil</option><option>Genap</option><option value="">(tidak ditampilkan)</option></select></label>
+            </div>
+            <div class="baris">
+              <label class="f"><span>Hari / tanggal</span><input type="text" data-b="naskah.tanggal" placeholder="Kosong = titik-titik"></label>
+              <label class="f"><span>Waktu</span><input type="text" data-b="naskah.waktu" placeholder="Kosong = durasi paket"></label>
+            </div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Isi Bagian Atas</div>
+            <label class="cek"><input type="checkbox" data-b="naskah.identitas"> Tabel identitas (mapel, kelas, waktu, dll.)</label>
+            <label class="cek"><input type="checkbox" data-b="naskah.peserta"> Kotak nama, nomor peserta, dan nilai</label>
+            <label class="cek"><input type="checkbox" data-b="naskah.petunjukOn"> Petunjuk umum</label>
+            <label class="f" id="wrapPetunjuk"><span>Petunjuk umum (satu baris satu butir)</span><textarea rows="5" data-b="naskah.petunjuk"></textarea></label>
+            <label class="f"><span>Instruksi pilihan ganda</span><input type="text" data-b="naskah.instruksiPG"></label>
+            <label class="f"><span>Instruksi essay</span><input type="text" data-b="naskah.instruksiES"></label>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Penomoran &amp; Paket Soal</div>
+            <label class="f"><span>Nomor soal</span><select data-b="naskah.nomor">
+              <option value="ulang">Mulai dari 1 di tiap bagian (PG, Essay)</option>
+              <option value="lanjut">Bersambung (PG lalu Essay)</option>
+              <option value="asli">Sesuai nomor di Bank Soal</option>
+            </select></label>
+            <label class="f"><span>Jumlah varian naskah</span><select data-b="naskah.varian" data-num>
+              <option value="1">1 (tanpa varian)</option><option value="2">2 (Paket A, B)</option><option value="3">3 (Paket A, B, C)</option><option value="4">4 (Paket A, B, C, D)</option>
+            </select><small>Setiap varian punya kunci sendiri yang menyesuaikan urutan baru.</small></label>
+            <label class="cek"><input type="checkbox" data-b="naskah.acakSoal"> Acak urutan soal</label>
+            <label class="cek"><input type="checkbox" data-b="naskah.acakOpsi"><span>Acak urutan opsi A–E<small>Periksa opsi seperti “A dan B benar” atau “semua benar”, karena hurufnya bisa berubah.</small></span></label>
+            <button class="btn kecil" type="button" id="acakUlang">Acak ulang</button>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Tanda Tangan</div>
+            <label class="cek"><input type="checkbox" data-b="ttd.on"><span>Tanda tangan di dokumen guru<small>Berlaku untuk tabel, kunci, kisi-kisi, dan kartu soal. Naskah siswa tidak memakai tanda tangan.</small></span></label>
+            <div class="baris">
+              <label class="f"><span>Tempat</span><input type="text" data-b="ttd.kota"></label>
+              <label class="f"><span>Tanggal</span><input type="text" data-b="ttd.tanggal" placeholder="Kosong = hari ini"></label>
+            </div>
+            <div class="baris">
+              <label class="f"><span>Kepala sekolah</span><input type="text" data-b="ttd.kepsek"></label>
+              <label class="f"><span>NIP kepala sekolah</span><input type="text" data-b="ttd.nipKepsek"></label>
+            </div>
+            <div class="baris">
+              <label class="f"><span>Guru mata pelajaran</span><input type="text" data-b="ttd.guru"></label>
+              <label class="f"><span>NIP guru</span><input type="text" data-b="ttd.nipGuru"></label>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="tata">
+          <h2>Tata Letak</h2>
+          <p class="lead">Ukuran kertas, huruf, dan susunan halaman.</p>
+          <div class="seksi">
+            <div class="jdl">Kertas</div>
+            <div class="baris">
+              <label class="f"><span>Ukuran</span><select data-b="tata.kertas">
+                <option value="A4">A4 (210 × 297 mm)</option><option value="F4">F4 / Folio (215 × 330 mm)</option><option value="LETTER">Letter (216 × 279 mm)</option><option value="LEGAL">Legal (216 × 356 mm)</option><option value="A5">A5 (148 × 210 mm)</option>
+              </select></label>
+              <label class="f"><span>Orientasi</span><select data-b="tata.orientasi">
+                <option value="auto">Ikuti template</option><option value="portrait">Tegak</option><option value="landscape">Mendatar</option>
+              </select></label>
+            </div>
+            <div class="baris4">
+              <label class="f"><span>Atas (mm)</span><input type="number" min="5" max="50" data-b="tata.mt" data-num></label>
+              <label class="f"><span>Bawah</span><input type="number" min="5" max="50" data-b="tata.mb" data-num></label>
+              <label class="f"><span>Kiri</span><input type="number" min="5" max="50" data-b="tata.ml" data-num></label>
+              <label class="f"><span>Kanan</span><input type="number" min="5" max="50" data-b="tata.mr" data-num></label>
+            </div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Huruf</div>
+            <label class="f"><span>Jenis huruf</span><select data-b="tata.font">
+              <option>Times New Roman</option><option>Arial</option><option>Calibri</option><option>Cambria</option><option>Bookman Old Style</option><option>Georgia</option><option>Tahoma</option><option>Verdana</option>
+            </select></label>
+            <div class="baris3">
+              <label class="f"><span>Ukuran (pt)</span><input type="number" min="8" max="16" step="0.5" data-b="tata.ukuran" data-num></label>
+              <label class="f"><span>Huruf tabel (pt)</span><input type="number" min="7" max="14" step="0.5" data-b="tata.ukuranTabel" data-num></label>
+              <label class="f"><span>Spasi baris</span><select data-b="tata.spasi" data-num><option value="1">1,0</option><option value="1.1">1,1</option><option value="1.15">1,15</option><option value="1.3">1,3</option><option value="1.5">1,5</option></select></label>
+            </div>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Susunan Soal</div>
+            <div data-tpl="soal_kunci,naskah,duakolom,ruang">
+              <label class="f"><span>Kolom halaman</span><select data-b="tata.kolom">
+                <option value="auto">Ikuti template</option><option value="1">1 kolom</option><option value="2">2 kolom</option>
+              </select></label>
+            </div>
+            <div data-tpl="soal_kunci,soal_jawab,naskah,duakolom,ruang">
+              <label class="f"><span>Susunan opsi</span><select data-b="tata.opsi">
+                <option value="auto">Otomatis (sesuai panjang)</option><option value="1">Satu per baris</option><option value="2">2 kolom</option><option value="4">4 kolom</option>
+              </select></label>
+              <label class="f"><span>Jarak antarsoal (mm)</span><input type="number" min="0" max="15" step="0.5" data-b="tata.gap" data-num></label>
+            </div>
+            <label class="f"><span>Ukuran gambar soal</span><select data-b="tata.gambar"><option value="s">Kecil</option><option value="m">Sedang</option><option value="l">Besar</option></select></label>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Kaki Halaman &amp; Tanda Air</div>
+            <label class="cek"><input type="checkbox" data-b="tata.footer"> Tampilkan keterangan dan nomor halaman</label>
+            <label class="f"><span>Tanda air</span><input type="text" data-b="tata.watermark" placeholder="Contoh: RAHASIA (kosong = tanpa)"></label>
+          </div>
+          <div class="seksi">
+            <div class="jdl">Cadangan Pengaturan</div>
+            <p class="lead" style="margin-bottom:8px">Pindahkan KOP, logo, tata letak, dan isian Level ke perangkat lain.</p>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <button class="btn kecil" type="button" id="cadangSimpan">Simpan ke file</button>
+              <button class="btn kecil" type="button" id="cadangMuat">Muat dari file</button>
+              <input type="file" id="cadangFile" accept=".json" class="hidden">
+              <button class="btn kecil bahaya" type="button" id="resetSemua">Reset tata letak &amp; naskah</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel" data-panel="butir">
+          <h2>Butir Soal &amp; Level</h2>
+          <p class="lead">Centang soal yang ikut dicetak dan isi levelnya. Level tersimpan di perangkat ini.</p>
+          <div class="butir-alat">
+            <label class="f" style="margin-bottom:7px"><span>Skala level</span><select data-b="pilih.skala"><option value="L">Level 1–3 (Pengetahuan, Aplikasi, Penalaran)</option><option value="C">Taksonomi Bloom (C1–C6)</option></select></label>
+            <div class="baris" style="margin-bottom:7px">
+              <input class="isian" id="cariButir" type="text" placeholder="Cari soal atau TP…" aria-label="Cari soal">
+              <select class="isian" id="filterLevel" aria-label="Saring level"></select>
+            </div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <button class="btn kecil" type="button" id="butirSemua">Pilih semua</button>
+              <button class="btn kecil" type="button" id="butirKosong">Kosongkan</button>
+              <button class="btn kecil" type="button" id="butirPerkirakan" title="Mengisi level yang kosong berdasarkan kata kerja pada TP">Perkirakan level kosong</button>
+            </div>
+          </div>
+          <p class="catatan warn hidden" id="catatanLevel"></p>
+          <div id="daftarButir"></div>
+        </section>
+      </div>
+    </aside>
+
+    <main class="pangung">
+      <div class="alat">
+        <div class="info" id="infoDok">Belum ada dokumen</div>
+        <div class="zoom">
+          <button class="ik" type="button" id="zoomKecil" aria-label="Perkecil">−</button>
+          <output id="zoomNilai">100%</output>
+          <button class="ik" type="button" id="zoomBesar" aria-label="Perbesar">+</button>
+          <button class="btn kecil" type="button" id="zoomPas">Pas lebar</button>
+        </div>
+      </div>
+      <div class="pesan" id="pesan"></div>
+      <div class="kanvas" id="kanvas">
+        <div class="muat-lapis" id="muatLapis"><span class="spin"></span> Menyusun halaman…</div>
+        <div id="pages"></div>
+      </div>
+    </main>
+  </div>
+</div>
+<div id="measure"></div>
+<div id="build"></div>
+
+<div class="lapis hidden" id="lapisLogin" role="dialog" aria-modal="true" aria-labelledby="judulLogin">
+  <form class="dialog" id="formLogin">
+    <h3 id="judulLogin">Masuk Cetak Soal</h3>
+    <p>Gunakan password cetak soal atau password dashboard guru untuk mengambil soal dari spreadsheet.</p>
+    <label class="f"><span>Password</span><input type="password" id="pwLogin" autocomplete="current-password"></label>
+    <div class="form-err" id="errLogin" role="alert"></div>
+    <div class="aksi">
+      <button class="btn" type="button" id="btnContoh">Coba dengan data contoh</button>
+      <button class="btn utama" type="submit" id="btnMasuk">Masuk</button>
+    </div>
+  </form>
+</div>
+
+<div class="lapis hidden" id="lapisPDF" role="dialog" aria-modal="true" aria-labelledby="judulPDF">
+  <div class="dialog">
+    <h3 id="judulPDF">Simpan sebagai PDF</h3>
+    <p>Jendela cetak browser akan terbuka. Hasilnya PDF bertipe teks yang tajam dan rumusnya rapi.</p>
+    <ol>
+      <li>Pada <b>Tujuan / Printer</b>, pilih <b>Simpan sebagai PDF</b>.</li>
+      <li>Biarkan <b>Skala 100%</b>; ukuran kertas sudah diatur otomatis.</li>
+      <li>Tekan <b>Simpan</b>.</li>
+    </ol>
+    <label class="cek"><input type="checkbox" id="pdfJangan"> Jangan tampilkan lagi</label>
+    <div class="aksi">
+      <button class="btn" type="button" id="pdfBatal">Batal</button>
+      <button class="btn pdf" type="button" id="pdfLanjut">Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* =====================================================================
+   CETAK SOAL
+   Alur: data paket/soal → buildDoc() menghasilkan model dokumen (bagian & blok)
+   → model yang sama dirender ke halaman HTML (cetak/PDF) dan ke OOXML (.docx),
+   sehingga isi kedua format selalu sama.
+   ===================================================================== */
+const UE = window.UE;
+const $ = id => document.getElementById(id);
+const esc = s => UE.esc(s);
+const KUNCI_STATE = 'cs_pengaturan_v1', KUNCI_LEVEL = 'cs_level_v1', KUNCI_NONPDF = 'cs_pdf_info_v1';
+
+/* ---------- Pengaturan bawaan ---------- */
+const KOP_BAWAAN = () => ({
+  baris: [
+    { t: 'SMP KRISTEN BASAAN', s: 16, b: true },
+    { t: 'KECAMATAN RATATOTOK', s: 13, b: true },
+    { t: 'KABUPATEN MINAHAS TENGGARA', s: 13, b: true }
+  ],
+  logoKiri: '', logoKanan: '', logoSize: 22, garis: 'ganda', tampil: true, setiapBagian: true
+});
+const NASKAH_BAWAAN = () => ({
+  judul: '', tahun: '', semester: 'Ganjil', tanggal: '', waktu: '', identitas: true, peserta: true, petunjukOn: true,
+  petunjuk: 'Berdoalah sebelum mengerjakan soal.\nTulis nama, nomor peserta, dan kelas pada tempat yang tersedia.\nBaca setiap soal dengan teliti sebelum menjawab.\nPeriksa kembali pekerjaan Anda sebelum diserahkan.',
+  instruksiPG: 'Pilihlah satu jawaban yang paling tepat!', instruksiES: 'Jawablah pertanyaan berikut dengan jelas dan benar!',
+  nomor: 'ulang', varian: 1, acakSoal: false, acakOpsi: false, seed: 1
+});
+const TATA_BAWAAN = () => ({
+  kertas: 'A4', orientasi: 'auto', mt: 15, mb: 12, ml: 20, mr: 15, font: 'Times New Roman', ukuran: 12, ukuranTabel: 10, spasi: 1.1,
+  kolom: 'auto', opsi: 'auto', gap: 2.5, gambar: 'm', footer: true, watermark: ''
+});
+const TPL_BAWAAN = () => ({
+  id: 'soal_kunci', sertakanLjk: false, skorEssay: false, garisEssay: 0, metaSoal: true, opsiDiTabel: true, teksKunci: false,
+  kol: { no: true, soal: true, jawaban: true, level: true, tp: true, bentuk: false, skor: false }
+});
+const STATE_BAWAAN = () => ({
+  kop: KOP_BAWAAN(), naskah: NASKAH_BAWAAN(), tata: TATA_BAWAAN(), tpl: TPL_BAWAAN(),
+  ttd: { on: true, kota: '', tanggal: '', kepsek: '', nipKepsek: '', guru: '', nipGuru: '' },
+  pilih: { mapel: [], kelas: [], paket: {}, pg: true, es: true, perKelas: false, skala: 'L', off: {} }
+});
+const gabung = (a, b) => {
+  if (!b || typeof b !== 'object' || Array.isArray(b)) return b === undefined ? a : b;
+  const o = Array.isArray(a) ? [] : { ...a };
+  Object.keys(b).forEach(k => { o[k] = a && typeof a[k] === 'object' && !Array.isArray(a[k]) ? gabung(a[k], b[k]) : b[k]; });
+  return o;
+};
+let S = gabung(STATE_BAWAAN(), UE.store.get(KUNCI_STATE, {}));
+let LV = UE.store.get(KUNCI_LEVEL, {});
+let simpanT = 0, pilihAsli = null;
+// Mode contoh tidak boleh mengotori pilihan & level milik data asli
+const simpan = () => {
+  clearTimeout(simpanT);
+  simpanT = setTimeout(() => {
+    if (MODE_CONTOH) { UE.store.set(KUNCI_STATE, { ...S, pilih: pilihAsli }); return; }
+    UE.store.set(KUNCI_STATE, S); UE.store.set(KUNCI_LEVEL, LV);
+  }, 250);
+};
+
+/* ---------- Data ---------- */
+const AKSI_CETAK = { meta: 'cetakMeta', soal: 'cetakSoal' }, AKSI_GURU = { meta: 'guruMeta', soal: 'guruAmbilSoal' };
+let PW = '', META = null, MODE_CONTOH = false, AKSI = AKSI_CETAK;
+const SOAL = {}, STATUS = {}, GALAT = {};
+
+const KERTAS = { A4: [210, 297], F4: [215, 330], LETTER: [215.9, 279.4], LEGAL: [215.9, 355.6], A5: [148, 210] };
+const GBR = { s: [40, 40], m: [60, 60], l: [85, 85] }; // [lebar maks %, tinggi maks mm]
+const NILAI_ROMAWI = { I: 1, V: 5, X: 10 };
+function kelasUrut(a, b) {
+  const nomor = k => {
+    const m = String(k).toUpperCase().match(/^([IVX]+)\b/);
+    if (m) { let n = 0; const r = m[1]; for (let i = 0; i < r.length; i++) { const v = NILAI_ROMAWI[r[i]], w = NILAI_ROMAWI[r[i + 1]] || 0; n += v < w ? -v : v; } return n; }
+    const d = parseInt(k, 10); return isNaN(d) ? 99 : d;
+  };
+  return nomor(a) - nomor(b) || String(a).localeCompare(String(b), 'id', { numeric: true });
+}
+const mapelNama = p => p.mapel || '(Tanpa mapel)';
+const daftarMapel = () => [...new Set((META?.pakets || []).map(mapelNama))].sort((a, b) => a.localeCompare(b, 'id'));
+function daftarKelas() {
+  const k = new Set();
+  (META?.pakets || []).forEach(p => p.kelas.forEach(x => { if (x !== 'SEMUA') k.add(x); }));
+  (META?.users || []).forEach(u => { if (u.k) k.add(u.k); });
+  return [...k].sort(kelasUrut);
+}
+const untukSemua = p => !p.kelas.length || p.kelas.includes('SEMUA');
+function paketCocok() {
+  return (META?.pakets || []).filter(p => S.pilih.mapel.includes(mapelNama(p)) && (untukSemua(p) ? S.pilih.kelas.length > 0 : p.kelas.some(k => S.pilih.kelas.includes(k))));
+}
+const paketDipilih = p => (p.id in S.pilih.paket ? S.pilih.paket[p.id] : p.aktif);
+const paketAktifDipilih = () => paketCocok().filter(paketDipilih);
+function kelasUntuk(p) {
+  const pilihan = [...S.pilih.kelas].sort(kelasUrut);
+  return untukSemua(p) ? pilihan : pilihan.filter(k => p.kelas.includes(k));
+}
+
+/* Antrean pengambilan soal: Apps Script lambat bila diserbu, maksimal 2 sekaligus */
+const antre = []; let aktifAmbil = 0;
+function ambilSoal(id, paksa) {
+  if (!paksa && STATUS[id]) return; // yang gagal hanya diulang lewat tombol "Coba lagi" atau "Muat ulang"
+  STATUS[id] = 'muat'; delete GALAT[id]; antre.push(id); pompa();
+}
+function pompa() {
+  while (aktifAmbil < 2 && antre.length) {
+    const id = antre.shift(); aktifAmbil++;
+    UE.api(AKSI.soal, { paket: id, password: PW }, 90000).then(r => { SOAL[id] = r.soal || []; STATUS[id] = 'ok'; })
+      .catch(e => { STATUS[id] = 'err'; GALAT[id] = e.message; })
+      .finally(() => { aktifAmbil--; pompa(); perbaruiPilihan(); });
+  }
+}
+function pastikanSoal() { paketAktifDipilih().forEach(p => { if (!MODE_CONTOH) ambilSoal(p.id); }); }
+
+/* ---------- Level ---------- */
+const NAMA_LEVEL = { L1: 'Pengetahuan & Pemahaman', L2: 'Aplikasi', L3: 'Penalaran', C1: 'Mengingat', C2: 'Memahami', C3: 'Menerapkan', C4: 'Menganalisis', C5: 'Mengevaluasi', C6: 'Mencipta' };
+const levelSkala = () => (S.pilih.skala === 'C' ? ['C1', 'C2', 'C3', 'C4', 'C5', 'C6'] : ['L1', 'L2', 'L3']);
+function normLevel(v) {
+  const s = String(v || '').trim().toUpperCase(); let m;
+  if (!s) return '';
+  if ((m = s.match(/^(?:LEVEL\s*|L\s*)?([1-3])$/))) return 'L' + m[1];
+  if ((m = s.match(/^C\s*([1-6])$/))) return 'C' + m[1];
+  return String(v).trim();
+}
+function keSkala(v) {
+  if (S.pilih.skala === 'L' && /^C[1-6]$/.test(v)) return { C1: 'L1', C2: 'L1', C3: 'L2', C4: 'L3', C5: 'L3', C6: 'L3' }[v];
+  if (S.pilih.skala === 'C' && /^L[1-3]$/.test(v)) return { L1: 'C2', L2: 'C3', L3: 'C4' }[v];
+  return v;
+}
+const kunciLv = (pid, s) => pid + '|' + s.id;
+function infoLevel(pid, s) {
+  const e = LV[kunciLv(pid, s)];
+  return e ? { v: keSkala(normLevel(e.v)), est: !!e.est } : { v: keSkala(normLevel(s.level)), est: false };
+}
+const KATA_BLOOM = {
+  C6: ['merancang', 'merencanakan', 'menciptakan', 'mengembangkan', 'merumuskan', 'menyusun', 'memodifikasi', 'mengkreasikan'],
+  C5: ['mengevaluasi', 'menilai', 'mengkritik', 'memutuskan', 'membuktikan', 'memvalidasi', 'menyimpulkan', 'merefleksikan'],
+  C4: ['menganalisis', 'menelaah', 'menguraikan', 'membandingkan', 'mengorganisasikan', 'menghubungkan', 'mengaitkan', 'mendiagnosis', 'menginvestigasi'],
+  C3: ['menerapkan', 'menghitung', 'menggunakan', 'menentukan', 'menyelesaikan', 'mendemonstrasikan', 'melakukan', 'mempraktikkan', 'memecahkan', 'mengoperasikan', 'mengukur', 'menjumlahkan'],
+  C2: ['menjelaskan', 'memahami', 'mendeskripsikan', 'menguraikan', 'merangkum', 'meringkas', 'membedakan', 'mengklasifikasikan', 'menafsirkan', 'mencontohkan', 'memberi contoh', 'memberikan contoh', 'menginterpretasikan'],
+  C1: ['menyebutkan', 'mendefinisikan', 'menuliskan', 'mengenali', 'mengidentifikasi', 'menunjukkan', 'mengingat', 'menamai', 'memilih', 'mengetahui', 'melafalkan']
+};
+function perkirakanLevel(s) {
+  const cari = t => { t = String(t || '').toLowerCase(); for (const c of ['C6', 'C5', 'C4', 'C3', 'C2', 'C1']) if (KATA_BLOOM[c].some(k => t.includes(k))) return c; return ''; };
+  return cari(s.tp) || cari(s.soal);
+}
+
+/* ---------- Teks kaya: satu pengurai untuk HTML & Word ---------- */
+const POLA_RUMUS = /(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$|\\\([\s\S]+?\\\)|\\\[[\s\S]+?\\\])/g;
+function uraiTeks(src) {
+  const out = [];
+  String(src == null ? '' : src).split(POLA_RUMUS).forEach((p, i) => {
+    if (!p) return;
+    if (i % 2 === 1) {
+      const blok = p.startsWith('$$') || p.startsWith('\\[');
+      const tex = p.startsWith('$$') ? p.slice(2, -2) : p.startsWith('$') ? p.slice(1, -1) : p.slice(2, -2);
+      out.push({ math: true, tex, display: blok, raw: p });
+      return;
+    }
+    const re = /\*\*(.+?)\*\*|(^|\s)_(.+?)_(?=\s|$|[.,!?])|\n/g; let pos = 0, m;
+    const teks = (t, f) => { if (t) out.push({ t, ...f }); };
+    while ((m = re.exec(p))) {
+      teks(p.slice(pos, m.index), {});
+      if (m[1] !== undefined) teks(m[1], { b: true });
+      else if (m[3] !== undefined) { teks(m[2], {}); teks(m[3], { i: true }); }
+      else out.push({ br: true });
+      pos = re.lastIndex;
+    }
+    teks(p.slice(pos), {});
+  });
+  return out;
+}
+function kayaHTML(src) {
+  return uraiTeks(src).map(r => {
+    if (r.math) return esc(r.raw);
+    if (r.br) return '<br>';
+    const t = esc(r.t);
+    return r.b ? '<b>' + t + '</b>' : r.i ? '<i>' + t + '</i>' : t;
+  }).join('');
+}
+const teksPolos = s => uraiTeks(s).map(r => (r.math ? r.tex : r.br ? ' ' : r.t)).join('');
+function ringkas(s, n) { const t = teksPolos(s).trim(); return t.length > n ? t.slice(0, n - 1) + '…' : t; }
+
+/* ---------- Acak terkendali: hasil sama selama benih sama, sehingga pratinjau, PDF, dan Word identik ---------- */
+function acakDari(teks) {
+  let h = 1779033703 ^ teks.length;
+  for (let i = 0; i < teks.length; i++) { h = Math.imul(h ^ teks.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+  return () => { h = (h + 0x6D2B79F5) | 0; let t = Math.imul(h ^ (h >>> 15), 1 | h); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function kocok(arr, r) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+/* ---------- Definisi template ---------- */
+const TEMPLATE = [
+  { id: 'soal_kunci', nama: 'Soal, lalu Jawaban', desk: 'Naskah ujian manual; kunci di halaman terpisah di bagian akhir.', orient: 'portrait', kolom: 1, catatan: 'Halaman kunci punya nomor halaman sendiri, jadi mudah dipisahkan sebelum naskah digandakan.' },
+  { id: 'soal_jawab', nama: 'Soal beserta Jawaban', desk: 'Jawaban langsung di bawah setiap soal.', orient: 'portrait', kolom: 1, catatan: 'Dokumen ini memuat kunci. Untuk arsip guru dan pembahasan, bukan untuk siswa.' },
+  { id: 'tabel', nama: 'Bentuk Tabel', desk: 'No · Soal · Jawaban · Level · Tujuan Pembelajaran.', orient: 'landscape', kolom: 1, catatan: 'Level diisi di menu Butir. Tanpa isian, kolomnya dicetak “-”.' },
+  { id: 'naskah', nama: 'Soal Saja', desk: 'Naskah siswa tanpa jawaban.', orient: 'portrait', kolom: 1, catatan: 'Aman digandakan untuk siswa: tidak memuat kunci, pedoman, level, maupun TP.' },
+  { id: 'duakolom', nama: 'Naskah 2 Kolom', desk: 'Hemat kertas, gaya buku ujian.', orient: 'portrait', kolom: 2, catatan: 'Aman digandakan untuk siswa. Opsi otomatis menyesuaikan lebar kolom.' },
+  { id: 'ruang', nama: 'Soal + Ruang Jawab', desk: 'Essay dengan garis jawaban di bawah soal.', orient: 'portrait', kolom: 1, catatan: 'Cocok untuk latihan atau ulangan harian tanpa kertas jawaban terpisah.' },
+  { id: 'ljk', nama: 'Lembar Jawaban', desk: 'Lingkaran pilihan & garis essay.', orient: 'portrait', kolom: 1, catatan: 'Jumlah lingkaran mengikuti jumlah opsi tiap soal.' },
+  { id: 'kunci', nama: 'Kunci & Penskoran', desk: 'Kunci ringkas, pedoman essay, rumus nilai.', orient: 'portrait', kolom: 1, catatan: 'Mengikuti varian dan pengacakan yang sedang dipilih.' },
+  { id: 'kisi', nama: 'Kisi-kisi Soal', desk: 'TP, level, bentuk, nomor soal, skor.', orient: 'landscape', kolom: 1, catatan: 'Soal dengan TP, level, dan bentuk yang sama digabung dalam satu baris.' },
+  { id: 'kartu', nama: 'Kartu Soal', desk: 'Satu kartu rinci untuk setiap butir.', orient: 'portrait', kolom: 1, catatan: 'Setiap kartu tidak dipotong antarhalaman.' }
+];
+const tplAktif = () => TEMPLATE.find(t => t.id === S.tpl.id) || TEMPLATE[0];
+function sketsa(id) {
+  const L = (x, y, w, c, h) => `<rect x="${x}" y="${y}" width="${w}" height="${h || 1.6}" rx=".5" fill="${c || '#9aa5b6'}"/>`;
+  const kop = `<rect x="42" y="4" width="36" height="2.6" rx=".6" fill="#14284b"/>${L(46, 8, 28)}${L(25, 11.5, 70, '#14284b', .9)}`;
+  const baris = (x, y, n, w, gap) => { let s = ''; for (let i = 0; i < n; i++) s += L(x, y + i * (gap || 4), (i % 3 === 2 ? w * .7 : w)); return s; };
+  const kertas = (x, w) => `<rect x="${x}" y="1" width="${w}" height="78" rx="1" fill="#fff" stroke="#c9d0db" stroke-width=".5"/>`;
+  const biru = '#2f6fc4', hijau = '#1e7b45';
+  const P = (inner) => `<svg viewBox="0 0 120 80" aria-hidden="true">${kertas(20, 80)}${inner}</svg>`;
+  const tabelG = (y, kol) => { let s = `<rect x="25" y="${y}" width="70" height="5" fill="#d7deea"/>`; for (let r = 0; r < 6; r++) s += `<line x1="25" x2="95" y1="${y + 5 + r * 9}" y2="${y + 5 + r * 9}" stroke="#aab3c1" stroke-width=".4"/>`; kol.forEach(k => { s += `<line x1="${k}" x2="${k}" y1="${y}" y2="${y + 50}" stroke="#aab3c1" stroke-width=".4"/>`; }); return s; };
+  switch (id) {
+    case 'soal_kunci': return `<svg viewBox="0 0 120 80" aria-hidden="true">${kertas(4, 54)}${L(16, 5, 30, '#14284b', 2)}${L(9, 9.5, 44, '#14284b', .8)}${baris(9, 14, 13, 44)}${kertas(62, 54)}${L(74, 5, 30, hijau, 2)}${baris(67, 12, 14, 44)}</svg>`;
+    case 'soal_jawab': return P(kop + baris(25, 16, 3, 70, 3.5) + L(25, 27, 42, hijau, 2.2) + baris(25, 33, 3, 70, 3.5) + L(25, 44, 42, hijau, 2.2) + baris(25, 50, 3, 70, 3.5) + L(25, 61, 42, hijau, 2.2) + baris(25, 67, 2, 70, 3.5));
+    case 'tabel': return P(kop + tabelG(16, [31, 62, 74, 81]));
+    case 'naskah': return P(kop + baris(25, 16, 15, 70));
+    case 'duakolom': return P(kop + baris(25, 16, 15, 32) + baris(63, 16, 15, 32));
+    case 'ruang': { let s = kop + baris(25, 16, 2, 70); for (let i = 0; i < 4; i++) s += `<line x1="25" x2="95" y1="${28 + i * 4}" y2="${28 + i * 4}" stroke="#7b8799" stroke-width=".4" stroke-dasharray="1 1"/>`; s += baris(25, 46, 2, 70); for (let i = 0; i < 5; i++) s += `<line x1="25" x2="95" y1="${58 + i * 4}" y2="${58 + i * 4}" stroke="#7b8799" stroke-width=".4" stroke-dasharray="1 1"/>`; return P(s); }
+    case 'ljk': { let s = kop; for (let c = 0; c < 3; c++) for (let r = 0; r < 12; r++) for (let o = 0; o < 4; o++) s += `<circle cx="${29 + c * 23 + o * 4}" cy="${19 + r * 4.8}" r="1.3" fill="none" stroke="${biru}" stroke-width=".45"/>`; return P(s); }
+    case 'kunci': { let s = kop; for (let c = 0; c < 4; c++) s += baris(26 + c * 18, 16, 6, 13); return P(s + `<rect x="25" y="42" width="70" height="28" fill="#eef2f7" stroke="#aab3c1" stroke-width=".4"/>` + baris(28, 46, 5, 64)); }
+    case 'kisi': return P(kop + tabelG(16, [31, 59, 69, 79, 88]));
+    case 'kartu': { let s = kop; [16, 47].forEach(y => { s += `<rect x="25" y="${y}" width="70" height="27" fill="#fff" stroke="#7b8799" stroke-width=".5"/><rect x="25" y="${y}" width="70" height="4.6" fill="#d7deea"/>` + baris(29, y + 8, 4, 62, 4); }); return P(s); }
+    default: return '';
+  }
+}
+
+/* ---------- Unit naskah (paket + kelas + varian) ---------- */
+const HURUF = ['A', 'B', 'C', 'D', 'E', 'F'];
+function buatUnit(p, kelas, varian, soal) {
+  const N = S.naskah, jmlVar = +N.varian || 1, acakS = N.acakSoal || (jmlVar > 1 && !N.acakOpsi), acakO = N.acakOpsi;
+  const benih = p.id + '|' + varian + '|' + N.seed;
+  const r = acakDari(benih);
+  const salin = soal.map(s => {
+    const lv = infoLevel(p.id, s);
+    const c = { ...s, level: lv.v, _orig: s };
+    if (s.tipe === 'PG') {
+      const urut = acakO ? kocok(s.opsi, r) : s.opsi;
+      c.opsi = urut.map((o, i) => ({ k: acakO ? HURUF[i] : o.k, t: o.t, kunci: o.k === s.kunci }));
+      const kk = c.opsi.find(o => o.kunci);
+      c.kunci = kk ? kk.k : '';
+      c.teksKunci = kk ? kk.t : '';
+    }
+    return c;
+  });
+  let pg = salin.filter(s => s.tipe === 'PG'), es = salin.filter(s => s.tipe !== 'PG');
+  if (acakS) { pg = kocok(pg, r); es = kocok(es, r); }
+  let n = 0;
+  pg.forEach((s, i) => { s.n = N.nomor === 'asli' ? s.no : i + 1; n = i + 1; });
+  es.forEach((s, i) => { s.n = N.nomor === 'asli' ? s.no : N.nomor === 'lanjut' ? n + i + 1 : i + 1; });
+  return { p, kelas, varian: jmlVar > 1 ? HURUF[varian] : '', pg, es, semua: pg.concat(es) };
+}
+function daftarUnit() {
+  const out = [];
+  paketAktifDipilih().forEach(p => {
+    const semua = SOAL[p.id] || [];
+    const soal = semua.filter(s => (s.tipe === 'PG' ? S.pilih.pg : S.pilih.es) && !S.pilih.off[kunciLv(p.id, s)]);
+    if (!soal.length) return;
+    const kelas = kelasUntuk(p);
+    const grup = S.pilih.perKelas && kelas.length > 1 ? kelas.map(k => [k]) : [kelas];
+    grup.forEach(g => { for (let v = 0; v < (+S.naskah.varian || 1); v++) out.push(buatUnit(p, g, v, soal)); });
+  });
+  return out;
+}
+
+/* ---------- Pembentuk blok ---------- */
+const skorStr = v => String(+(+v).toFixed(2)).replace('.', ',');
+function jumlahSoalStr(u) { return [u.pg.length ? u.pg.length + ' pilihan ganda' : '', u.es.length ? u.es.length + ' essay' : ''].filter(Boolean).join(', '); }
+function waktuStr(u) { return S.naskah.waktu || (u.p.durasiMenit && u.p.mode !== 'TIMERSOAL' ? u.p.durasiMenit + ' menit' : ''); } // TIMERSOAL tidak memakai DURASI_MENIT
+function judulNaskah(u) { return (S.naskah.judul || u.p.nama || '').toUpperCase(); }
+const setelan = k => (META && META.setting && META.setting[k]) || '';
+function nilaiTTD() {
+  const T = S.ttd, v = (a, k) => a || setelan(k);
+  return { kota: v(T.kota, 'KOTA'), kepsek: v(T.kepsek, 'NAMA_KEPSEK'), nipKepsek: v(T.nipKepsek, 'NIP_KEPSEK'), guru: v(T.guru, 'NAMA_GURU'), nipGuru: v(T.nipGuru, 'NIP_GURU') };
+}
+function subTahun() {
+  const N = S.naskah, th = N.tahun || setelan('TAHUN_PELAJARAN'), t = [th ? 'TAHUN PELAJARAN ' + th : '', N.semester ? 'SEMESTER ' + N.semester.toUpperCase() : ''].filter(Boolean);
+  return t.join(' · ');
+}
+const TITIK = '.............................';
+function identitasBaris(u) {
+  const rows = [
+    ['Mata Pelajaran', u.p.mapel || '-', 'Hari / Tanggal', S.naskah.tanggal || TITIK],
+    ['Kelas', u.kelas.join(', ') || '-', 'Waktu', waktuStr(u) || TITIK],
+    ['Jumlah Soal', jumlahSoalStr(u) || '-', u.varian ? 'Paket Soal' : '', u.varian || '']
+  ];
+  return rows;
+}
+function kepala(u, judul, sub, pakaiKop, opsi) {
+  const out = [];
+  if (S.kop.tampil && pakaiKop) out.push({ k: 'kop' });
+  out.push({ k: 'judul', a: judul, b: [].concat(sub).filter(Boolean) });
+  if (S.naskah.identitas) out.push({ k: 'identitas', rows: identitasBaris(u) });
+  if (opsi && opsi.peserta && S.naskah.peserta) out.push({ k: 'peserta' });
+  if (opsi && opsi.petunjuk && S.naskah.petunjukOn) {
+    const items = String(S.naskah.petunjuk || '').split('\n').map(x => x.trim()).filter(Boolean);
+    if (items.length) out.push({ k: 'petunjuk', items });
+  }
+  return out;
+}
+function judulBagian(u, tipe) {
+  const adaDua = u.pg.length && u.es.length;
+  const huruf = adaDua ? (tipe === 'PG' ? 'A. ' : 'B. ') : '';
+  return { k: 'h', t: huruf + (tipe === 'PG' ? 'PILIHAN GANDA' : 'ESSAY'), i: tipe === 'PG' ? S.naskah.instruksiPG : S.naskah.instruksiES, keep: true };
+}
+function blokSoal(u, opsi) {
+  const out = [], { tampil, garis, meta, skorEs, tanpaJudul } = opsi;
+  [['PG', u.pg], ['ES', u.es]].forEach(([tipe, list]) => {
+    if (!list.length) return;
+    if (!tanpaJudul) out.push(judulBagian(u, tipe));
+    list.forEach(s => out.push({ k: 'q', s, tampil, garis: tipe === 'ES' ? garis || 0 : 0, meta, skorEs: tipe === 'ES' && skorEs }));
+  });
+  return out;
+}
+const labelPart = (u, teks) => [u.p.mapel, u.kelas.join(', '), u.varian ? 'Paket ' + u.varian : '', teks].filter(Boolean).join(' · ');
+
+function bagNaskah(u, kol, opsi) {
+  const blocks = kepala(u, judulNaskah(u), subTahun(), true, { peserta: true, petunjuk: true });
+  if (kol === 2) blocks.push({ k: 'kolom' });
+  blocks.push(...blokSoal(u, { tampil: 'soal', garis: opsi?.garis ?? (+S.tpl.garisEssay || 0), skorEs: S.tpl.skorEssay }));
+  return { label: labelPart(u, 'Naskah soal'), blocks, kol };
+}
+function bagLjk(u) {
+  const garis = Math.max(3, +S.tpl.garisEssay || 5);
+  const blocks = kepala(u, 'LEMBAR JAWABAN', [judulNaskah(u), subTahun()], S.kop.setiapBagian || S.tpl.id === 'ljk', { peserta: true });
+  if (u.pg.length) {
+    blocks.push({ k: 'h', t: (u.es.length ? 'A. ' : '') + 'PILIHAN GANDA', i: 'Hitamkan lingkaran pada jawaban yang dipilih.', keep: true });
+    const kolom = 5, perBlok = 10 * kolom;
+    for (let i = 0; i < u.pg.length; i += perBlok) {
+      const isi = u.pg.slice(i, i + perBlok);
+      blocks.push({ k: 'ljkpg', kolom, perKol: Math.ceil(isi.length / kolom), items: isi.map(s => ({ n: s.n, opsi: s.opsi.map(o => o.k) })) });
+    }
+  }
+  if (u.es.length) {
+    blocks.push({ k: 'h', t: (u.pg.length ? 'B. ' : '') + 'ESSAY', keep: true });
+    u.es.forEach(s => blocks.push({ k: 'ljkes', n: s.n, garis }));
+  }
+  return { label: labelPart(u, 'Lembar jawaban'), blocks, kol: 1 };
+}
+function bagKunci(u, pakaiKop) {
+  const blocks = kepala(u, 'KUNCI JAWABAN DAN PEDOMAN PENSKORAN', [judulNaskah(u), subTahun()], pakaiKop);
+  if (u.pg.length) {
+    blocks.push({ k: 'h', t: (u.es.length ? 'A. ' : '') + 'PILIHAN GANDA', keep: true });
+    const perKol = Math.ceil(u.pg.length / 5) || 1, kol = Math.ceil(u.pg.length / perKol);
+    const rows = [];
+    for (let r = 0; r < perKol; r++) {
+      const cells = [];
+      for (let c = 0; c < kol; c++) { const s = u.pg[c * perKol + r]; cells.push({ p: [{ s: s ? String(s.n) : '', al: 'center' }] }, { p: [{ s: s ? (s.kunci || '-') : '', al: 'center', b: true }] }); }
+      rows.push({ cells });
+    }
+    const cols = []; for (let c = 0; c < kol; c++) cols.push({ h: 'No', w: 8 }, { h: 'Kunci', w: 12 });
+    blocks.push({ k: 'tabel', cols, rows });
+    const skor = u.pg.reduce((a, s) => a + s.skor, 0), seragam = u.pg.every(s => s.skor === u.pg[0].skor);
+    blocks.push({ k: 'p', s: 'Skor pilihan ganda: ' + (seragam ? u.pg.length + ' soal × ' + skorStr(u.pg[0].skor) + ' = ' : 'jumlah ') + skorStr(skor) });
+  }
+  if (u.es.length) {
+    blocks.push({ k: 'h', t: (u.pg.length ? 'B. ' : '') + 'ESSAY', keep: true });
+    blocks.push({ k: 'tabel', cols: [{ h: 'No', w: 7 }, { h: 'Pedoman Jawaban', w: 80 }, { h: 'Skor', w: 13 }], rows: u.es.map(s => ({ cells: [{ p: [{ s: String(s.n), al: 'center' }] }, { p: [{ s: s.pedoman || '-' }] }, { p: [{ s: skorStr(s.skor), al: 'center' }] }] })) });
+  }
+  const total = u.semua.reduce((a, s) => a + s.skor, 0);
+  blocks.push({ k: 'p', b: true, s: 'Skor maksimal: ' + skorStr(total) });
+  blocks.push({ k: 'p', s: 'Nilai akhir = (jumlah skor diperoleh ÷ ' + skorStr(total) + ') × 100' });
+  if (S.ttd.on) blocks.push({ k: 'ttd' });
+  return { label: labelPart(u, 'Kunci jawaban'), blocks, kol: 1 };
+}
+function keteranganLevel(list) {
+  const ada = [...new Set(list.map(s => s.level).filter(Boolean))].filter(v => NAMA_LEVEL[v]).sort();
+  return ada.length ? { k: 'p', kecil: true, s: 'Keterangan level: ' + ada.map(v => v + ' = ' + NAMA_LEVEL[v]).join('; ') + '.' } : null;
+}
+function isiSoalSel(s, sertaOpsi) {
+  const p = [{ s: s.soal }];
+  if (s.gambar) p.push({ img: s.gambar });
+  if (s.tipe === 'PG' && sertaOpsi) s.opsi.forEach(o => p.push({ lab: o.k + '.', s: o.t }));
+  return p;
+}
+function jawabanSel(s) {
+  if (s.tipe === 'PG') return [{ s: s.kunci ? (S.tpl.teksKunci ? s.kunci + '. ' + s.teksKunci : s.kunci) : '-', al: S.tpl.teksKunci ? 'left' : 'center', b: !S.tpl.teksKunci }];
+  return [{ s: s.pedoman || '-' }];
+}
+function bagTabel(u) {
+  const K = S.tpl.kol, cols = [], defs = [
+    ['no', 'No', 5, s => [{ s: String(s.n), al: 'center' }]],
+    ['soal', 'Soal', 42, s => isiSoalSel(s, S.tpl.opsiDiTabel)],
+    ['jawaban', 'Jawaban', S.tpl.teksKunci ? 21 : 19, jawabanSel],
+    ['level', 'Level', 7, s => [{ s: s.level || '-', al: 'center' }]],
+    ['tp', 'Tujuan Pembelajaran', 24, s => [{ s: s.tp || '-' }]],
+    ['bentuk', 'Bentuk', 8, s => [{ s: s.tipe === 'PG' ? 'PG' : 'Essay', al: 'center' }]],
+    ['skor', 'Skor', 6, s => [{ s: skorStr(s.skor), al: 'center' }]]
+  ].filter(d => K[d[0]]);
+  if (!defs.length) defs.push(['no', 'No', 5, s => [{ s: String(s.n), al: 'center' }]]);
+  defs.forEach(d => cols.push({ h: d[1], w: d[2] }));
+  const rows = [], baris = list => list.forEach(s => rows.push({ cells: defs.map(d => ({ p: d[3](s) })) }));
+  const dua = u.pg.length && u.es.length;
+  if (u.pg.length) { if (dua) rows.push({ group: 'A. PILIHAN GANDA' }); baris(u.pg); }
+  if (u.es.length) { if (dua) rows.push({ group: 'B. ESSAY' }); baris(u.es); }
+  const blocks = kepala(u, 'DAFTAR BUTIR SOAL', [judulNaskah(u), subTahun()], true);
+  blocks.push({ k: 'tabel', cols, rows });
+  const ket = K.level ? keteranganLevel(u.semua) : null; if (ket) blocks.push(ket);
+  if (S.ttd.on) blocks.push({ k: 'ttd' });
+  return { label: labelPart(u, 'Daftar butir soal'), blocks, kol: 1 };
+}
+function bagKisi(u) {
+  const grup = new Map();
+  u.semua.forEach(s => {
+    const key = (s.tp || '') + '|' + (s.level || '') + '|' + s.tipe;
+    if (!grup.has(key)) grup.set(key, { tp: s.tp || '(TP belum diisi)', level: s.level || '-', tipe: s.tipe, no: [], skor: 0 });
+    const g = grup.get(key); g.no.push(s); g.skor += s.skor;
+  });
+  const nomor = g => { const pre = u.pg.length && u.es.length && S.naskah.nomor !== 'lanjut' ? (g.tipe === 'PG' ? '' : 'E') : ''; return g.no.map(s => pre + s.n).sort((a, b) => String(a).localeCompare(String(b), 'id', { numeric: true })).join(', '); };
+  const total = u.semua.reduce((a, s) => a + s.skor, 0);
+  const rows = [...grup.values()].map((g, i) => ({ cells: [
+    { p: [{ s: String(i + 1), al: 'center' }] }, { p: [{ s: g.tp }] }, { p: [{ s: g.level, al: 'center' }] }, { p: [{ s: g.tipe === 'PG' ? 'Pilihan ganda' : 'Essay', al: 'center' }] },
+    { p: [{ s: nomor(g) }] }, { p: [{ s: String(g.no.length), al: 'center' }] }, { p: [{ s: skorStr(g.skor), al: 'center' }] }, { p: [{ s: total ? skorStr(Math.round(g.skor / total * 1000) / 10) + '%' : '-', al: 'center' }] }
+  ] }));
+  rows.push({ cells: [{ span: 5, p: [{ s: 'Jumlah', b: true, al: 'center' }] }, { p: [{ s: String(u.semua.length), b: true, al: 'center' }] }, { p: [{ s: skorStr(total), b: true, al: 'center' }] }, { p: [{ s: total ? '100%' : '-', b: true, al: 'center' }] }] });
+  const blocks = kepala(u, 'KISI-KISI SOAL', [judulNaskah(u), subTahun()], true);
+  blocks.push({ k: 'tabel', cols: [{ h: 'No', w: 4 }, { h: 'Tujuan Pembelajaran', w: 40 }, { h: 'Level', w: 7 }, { h: 'Bentuk Soal', w: 11 }, { h: 'Nomor Soal', w: 19 }, { h: 'Jumlah Soal', w: 7 }, { h: 'Skor', w: 6 }, { h: 'Bobot', w: 6 }], rows });
+  if (u.pg.length && u.es.length && S.naskah.nomor !== 'lanjut') blocks.push({ k: 'p', kecil: true, s: 'Nomor berawalan E adalah nomor soal essay.' });
+  const ket = keteranganLevel(u.semua); if (ket) blocks.push(ket);
+  if (S.ttd.on) blocks.push({ k: 'ttd' });
+  return { label: labelPart(u, 'Kisi-kisi'), blocks, kol: 1 };
+}
+function bagKartu(u) {
+  const blocks = kepala(u, 'KARTU SOAL', [judulNaskah(u), subTahun()], true);
+  u.semua.forEach(s => {
+    const pg = s.tipe === 'PG';
+    blocks.push({ k: 'kv', judul: (pg ? 'PILIHAN GANDA' : 'ESSAY') + ' — SOAL NOMOR ' + s.n, rows: [
+      ['Mata pelajaran / kelas', [{ s: (u.p.mapel || '-') + ' / ' + (u.kelas.join(', ') || '-') }]],
+      ['Tujuan Pembelajaran', [{ s: s.tp || '-' }]],
+      ['Level / skor', [{ s: (s.level ? s.level + (NAMA_LEVEL[s.level] ? ' (' + NAMA_LEVEL[s.level] + ')' : '') : '-') + ' / skor ' + skorStr(s.skor) }]],
+      ['Butir soal', isiSoalSel(s, true)],
+      [pg ? 'Kunci jawaban' : 'Pedoman jawaban', pg ? [{ s: s.kunci ? s.kunci + '. ' + s.teksKunci : '-' }] : [{ s: s.pedoman || '-' }]]
+    ] });
+  });
+  if (S.ttd.on) blocks.push({ k: 'ttd' });
+  return { label: labelPart(u, 'Kartu soal'), blocks, kol: 1 };
+}
+function bagSoalJawab(u) {
+  const blocks = kepala(u, judulNaskah(u), ['SOAL DAN JAWABAN', subTahun()], true);
+  blocks.push(...blokSoal(u, { tampil: 'jawab', meta: S.tpl.metaSoal }));
+  return { label: labelPart(u, 'Soal dan jawaban'), blocks, kol: 1 };
+}
+
+function buildDoc() {
+  const T = tplAktif(), units = daftarUnit(), parts = [];
+  const kolTpl = S.tata.kolom === 'auto' ? T.kolom : +S.tata.kolom;
+  const denganLjk = S.tpl.sertakanLjk && ['soal_kunci', 'naskah', 'duakolom'].includes(T.id);
+  units.forEach(u => {
+    const dariTpl = {
+      soal_kunci: () => { parts.push(bagNaskah(u, kolTpl)); if (denganLjk) parts.push(bagLjk(u)); parts.push(bagKunci(u, S.kop.setiapBagian)); },
+      soal_jawab: () => parts.push(bagSoalJawab(u)),
+      tabel: () => parts.push(bagTabel(u)),
+      naskah: () => { parts.push(bagNaskah(u, kolTpl)); if (denganLjk) parts.push(bagLjk(u)); },
+      duakolom: () => { parts.push(bagNaskah(u, kolTpl)); if (denganLjk) parts.push(bagLjk(u)); },
+      ruang: () => parts.push(bagNaskah(u, kolTpl, { garis: Math.max(3, +S.tpl.garisEssay || 5) })),
+      ljk: () => parts.push(bagLjk(u)),
+      kunci: () => parts.push(bagKunci(u, true)),
+      kisi: () => parts.push(bagKisi(u)),
+      kartu: () => parts.push(bagKartu(u))
+    };
+    dariTpl[T.id]();
+  });
+  const orient = S.tata.orientasi === 'auto' ? T.orient : S.tata.orientasi;
+  let [w, h] = KERTAS[S.tata.kertas] || KERTAS.A4;
+  if (orient === 'landscape') [w, h] = [h, w];
+  const peringatan = [];
+  units.forEach(u => u.pg.forEach(s => { if (!s.kunci) peringatan.push('Soal PG ' + s.n + ' (' + u.p.id + ') belum punya kunci yang valid.'); }));
+  return { units, parts, w, h, orient, T, peringatan };
+}
+
+/* =====================================================================
+   RENDER HTML
+   ===================================================================== */
+const sel = {};
+function kopHTML() {
+  const K = S.kop, ada = K.logoKiri || K.logoKanan;
+  const logo = src => (ada ? `<div class="kop-logo">${src ? `<img src="${esc(src)}" alt="" referrerpolicy="no-referrer">` : ''}</div>` : '');
+  return `<div class="kop"><div class="kop-row">${logo(K.logoKiri)}<div class="kop-t">${K.baris.filter(b => b.t).map(b => `<div style="font-size:${+b.s || 12}pt;font-weight:${b.b ? 700 : 400}">${esc(b.t)}</div>`).join('')}</div>${logo(K.logoKanan)}</div>${K.garis !== 'tanpa' ? `<div class="kop-line ${K.garis}"></div>` : ''}</div>`;
+}
+function opsiKolom(s, sempit) {
+  const m = S.tata.opsi;
+  if (m === '1') return 1;
+  if (m === '2') return 2;
+  if (m === '4') return sempit ? 2 : (s.opsi.length === 4 ? 4 : 2);
+  const panjang = o => uraiTeks(o.t).reduce((a, r) => a + (r.math ? r.tex.length * .55 : r.t ? r.t.length : 0), 0);
+  const maks = Math.max(0, ...s.opsi.map(panjang));
+  if (sempit) return maks <= 15 ? 2 : 1;
+  if (maks <= 15 && s.opsi.length === 4) return 4;
+  return maks <= 36 ? 2 : 1;
+}
+const imgHTML = url => `<img class="gbr-soal" src="${esc(url)}" alt="Gambar soal" referrerpolicy="no-referrer">`;
+function selHTML(paras) {
+  return paras.map(p => {
+    if (p.img) return imgHTML(p.img);
+    const cls = 'cp' + (p.lab ? ' lab' : '') + (p.b ? ' b' : '') + (p.al === 'center' ? ' tengah' : '');
+    return p.lab ? `<div class="${cls}"><span>${esc(p.lab)}</span><span>${kayaHTML(p.s)}</span></div>` : `<div class="${cls}">${kayaHTML(p.s)}</div>`;
+  }).join('');
+}
+function qHTML(b, sempit) {
+  const s = b.s, jawab = b.tampil === 'jawab';
+  let h = `<div class="q" data-no="${esc(s.n)}"><div class="no">${esc(s.n)}.</div><div class="bd"><div class="tks">${kayaHTML(s.soal)}${b.skorEs ? ` <i>(Skor: ${skorStr(s.skor)})</i>` : ''}</div>`;
+  if (s.gambar) h += imgHTML(s.gambar);
+  if (s.tipe === 'PG') {
+    const c = opsiKolom(s, sempit);
+    h += `<div class="opts c${c}">` + s.opsi.map(o => `<div class="opt${jawab && o.kunci ? ' key' : ''}"><span class="l">${o.k}.</span><span class="t">${kayaHTML(o.t)}${jawab && o.kunci ? ' ✓' : ''}</span></div>`).join('') + '</div>';
+    if (jawab) h += `<div class="kunci-box"><b>Kunci: ${esc(s.kunci || '-')}</b></div>`;
+  } else if (jawab) {
+    h += `<div class="kunci-box"><b>Pedoman jawaban:</b><br>${kayaHTML(s.pedoman || '-')}</div>`;
+  }
+  if (b.garis > 0) h += '<div class="lines-wrap">' + '<div class="garis"></div>'.repeat(b.garis) + '</div>';
+  if (b.meta) {
+    const m = ['Skor ' + skorStr(s.skor), s.level ? 'Level ' + s.level : '', s.tp ? 'TP: ' + s.tp : ''].filter(Boolean).join(' · ');
+    h += `<div class="meta">${kayaHTML(m)}</div>`;
+  }
+  return h + '</div></div>';
+}
+function tanggalTTD() { return S.ttd.tanggal || new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); }
+function blokHTML(b, sempit) {
+  switch (b.k) {
+    case 'kop': return kopHTML();
+    case 'judul': return `<div class="judul"><div class="a">${esc(b.a)}</div>${b.b.map(t => `<div class="b">${esc(t)}</div>`).join('')}</div>`;
+    case 'identitas': return '<table class="identitas">' + b.rows.map(r => `<tr><td class="l">${esc(r[0])}</td><td class="c">:</td><td>${esc(r[1])}</td><td class="l">${esc(r[2])}</td><td class="c">${r[2] ? ':' : ''}</td><td>${esc(r[3])}</td></tr>`).join('') + '</table>';
+    case 'peserta': return '<div class="peserta"><div>Nama :</div><div>No. Peserta :</div><div>Nilai :</div></div>';
+    case 'petunjuk': return `<div class="petunjuk"><b>Petunjuk umum:</b><ol>${b.items.map(x => `<li>${kayaHTML(x)}</li>`).join('')}</ol></div>`;
+    case 'h': return `<div class="h-bag">${esc(b.t)}${b.i ? `<span class="i">${esc(b.i)}</span>` : ''}</div>`;
+    case 'q': return qHTML(b, sempit);
+    case 'p': return `<div class="${b.kecil ? 'p-kecil' : 'p-teks'}"${b.b ? ' style="font-weight:700"' : ''}>${kayaHTML(b.s)}</div>`;
+    case 'tabel': {
+      const totW = b.cols.reduce((a, c) => a + c.w, 0);
+      const baris = b.rows.map(r => {
+        if (r.group) return `<tr data-group="1"><td class="grp" colspan="${b.cols.length}">${esc(r.group)}</td></tr>`;
+        return '<tr>' + r.cells.map(c => `<td${c.span ? ` colspan="${c.span}"` : ''}><div class="sel">${selHTML(c.p)}</div></td>`).join('') + '</tr>';
+      }).join('');
+      return `<table class="tb"><colgroup>${b.cols.map(c => `<col style="width:${(c.w / totW * 100).toFixed(2)}%">`).join('')}</colgroup><thead><tr>${b.cols.map(c => `<th>${esc(c.h)}</th>`).join('')}</tr></thead><tbody>${baris}</tbody></table>`;
+    }
+    case 'kv': return `<table class="kv"><colgroup><col style="width:24%"><col></colgroup><tr><td class="jdl-kv" colspan="2">${esc(b.judul)}</td></tr>${b.rows.map(r => `<tr><td class="l">${esc(r[0])}</td><td>${selHTML(r[1])}</td></tr>`).join('')}</table>`;
+    case 'ljkpg': {
+      const kol = []; for (let i = 0; i < b.items.length; i += b.perKol) kol.push(b.items.slice(i, i + b.perKol));
+      return `<div class="ljk" style="grid-template-columns:repeat(${b.kolom},1fr)">` + kol.map(c => '<div class="ljk-c">' + c.map(it => `<div class="ljk-i"><span class="n">${esc(it.n)}.</span>${it.opsi.map(o => `<span class="bub">${o}</span>`).join('')}</div>`).join('') + '</div>').join('') + '</div>';
+    }
+    case 'ljkes': return `<div class="ljk-es"><div class="jd">${esc(b.n)}.</div>${'<div class="garis"></div>'.repeat(b.garis)}</div>`;
+    case 'ttd': {
+      const T = nilaiTTD(), nip = n => (n && n !== '-' ? `<div>NIP. ${esc(n)}</div>` : '');
+      return `<div class="ttd"><div><div>Mengetahui,</div><div>Kepala Sekolah</div><div class="sp"></div><div class="nm">${esc(T.kepsek || TITIK)}</div>${nip(T.nipKepsek)}</div><div><div>${esc((T.kota ? T.kota + ', ' : '') + tanggalTTD())}</div><div>Guru Mata Pelajaran</div><div class="sp"></div><div class="nm">${esc(T.guru || TITIK)}</div>${nip(T.nipGuru)}</div></div>`;
+    }
+    default: return '';
+  }
+}
+
+/* ---------- Pemenggalan halaman: pratinjau = hasil cetak ---------- */
+function terapkanCSS(d) {
+  const T = S.tata, g = GBR[T.gambar] || GBR.m;
+  const v = {
+    '--W': d.w + 'mm', '--H': d.h + 'mm', '--mt': T.mt + 'mm', '--mb': T.mb + 'mm', '--ml': T.ml + 'mm', '--mr': T.mr + 'mm',
+    '--f': `"${T.font}",serif`, '--fs': T.ukuran + 'pt', '--fst': T.ukuranTabel + 'pt', '--lh': (T.spasi * 1.17).toFixed(3),
+    '--gq': T.gap + 'mm', '--imgw': g[0] + '%', '--imgh': g[1] + 'mm', '--logo': S.kop.logoSize + 'mm'
+  };
+  Object.keys(v).forEach(k => document.documentElement.style.setProperty(k, v[k]));
+  $('css-halaman').textContent = `@page{size:${d.w}mm ${d.h}mm;margin:0}`;
+}
+function paginasi(d, wadah) {
+  const peringatan = [];
+  let halamanTotal = 0;
+  d.parts.forEach(part => {
+    const halaman = [];
+    let page, body, flow, dua = false, idxKol = 0;
+    const bukaKolom = () => {
+      const c = document.createElement('div'); c.className = 'cols garis-tengah';
+      c.innerHTML = '<div class="col"></div><div class="col"></div>';
+      body.appendChild(c); flow = c.children[0]; idxKol = 0;
+    };
+    const halBaru = () => {
+      page = document.createElement('section'); page.className = 'page';
+      page.innerHTML = (S.tata.watermark ? `<div class="wm"><span>${esc(S.tata.watermark)}</span></div>` : '') + '<div class="page-body"></div>' + (S.tata.footer ? '<div class="page-foot"><span></span><span></span></div>' : '');
+      wadah.appendChild(page); halaman.push(page); body = page.querySelector('.page-body');
+      if (dua) bukaKolom(); else flow = body;
+    };
+    const lewat = () => (dua ? flow.scrollHeight > flow.clientHeight + 1 : body.scrollHeight > body.clientHeight + 1);
+    const lanjut = () => { if (dua && idxKol === 0) { idxKol = 1; flow = flow.parentElement.children[1]; } else halBaru(); };
+    const baru = () => flow.childElementCount === 0 && (!dua || body.firstElementChild === flow.parentElement);
+    /* Blok yang lebih tinggi dari satu halaman dilanjutkan ke halaman berikutnya.
+       Titik potong digeser ke celah antarbaris agar tidak ada baris atau rumus yang terbelah. */
+    const iris = (el, label) => {
+      flow.appendChild(el);
+      const atas = el.getBoundingClientRect().top, total = el.getBoundingClientRect().height, kotak = [];
+      const catat = r => { if (r.bottom > r.top) kotak.push([r.top - atas, r.bottom - atas]); };
+      // hanya baris teks & objek: kotak pembungkus membentang seluruh blok dan akan menggagalkan pencarian celah
+      const jalan = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      const rg = document.createRange();
+      while (jalan.nextNode()) { if (jalan.currentNode.parentElement.closest('svg')) continue; rg.selectNodeContents(jalan.currentNode); [...rg.getClientRects()].forEach(catat); }
+      el.querySelectorAll('img,svg').forEach(o => { if (!o.parentElement.closest('svg')) catat(o.getBoundingClientRect()); });
+      el.remove();
+      let posisi = 0, pertama = true;
+      while (posisi < total - 1) {
+        if (!pertama) lanjut();
+        pertama = false;
+        const akhirIsi = flow.lastElementChild ? flow.lastElementChild.getBoundingClientRect().bottom - flow.getBoundingClientRect().top : 0;
+        const ruang = flow.clientHeight - akhirIsi - 2;
+        let potong = posisi + ruang;
+        if (potong >= total) potong = total;
+        else {
+          for (let geser = true; geser;) {
+            geser = false;
+            for (const r of kotak) if (r[0] < potong - .5 && potong + .5 < r[1]) { potong = r[0]; geser = true; }
+          }
+          if (potong <= posisi + 1) {
+            if (!baru()) continue;       // baris/objek berikutnya tidak muat di sisa ruang: pindah halaman
+            potong = posisi + ruang;     // satu objek lebih tinggi dari satu halaman penuh
+          }
+        }
+        const w = document.createElement('div');
+        w.style.cssText = `overflow:hidden;flex:none;height:${potong - posisi}px`;
+        const c = el.cloneNode(true); c.style.marginTop = -posisi + 'px';
+        w.appendChild(c); flow.appendChild(w);
+        posisi = potong;
+      }
+      peringatan.push(label + ' lebih panjang dari satu halaman, sehingga dilanjutkan ke halaman berikutnya.');
+    };
+    const tempatkan = (els, label) => {
+      els.forEach(e => flow.appendChild(e));
+      if (!lewat()) return;
+      const inti = els[els.length - 1], raksasa = inti.getBoundingClientRect().height > flow.clientHeight;
+      els.forEach(e => e.remove());
+      if (raksasa) { // tidak akan muat di halaman mana pun: langsung mulai dari sisa ruang halaman ini
+        els.slice(0, -1).forEach(e => flow.appendChild(e));
+        iris(inti, label);
+        return;
+      }
+      for (let i = 0; i < 3 && !baru(); i++) {
+        lanjut();
+        els.forEach(e => flow.appendChild(e));
+        if (!lewat()) return;
+        els.forEach(e => e.remove());
+      }
+      els.slice(0, -1).forEach(e => flow.appendChild(e));
+      iris(els[els.length - 1], label);
+    };
+    const tempatkanTabel = (b, judul) => {
+      const src = b.el, thead = src.tHead, cg = src.querySelector('colgroup');
+      const barisSumber = [...src.tBodies[0].rows];
+      const buat = () => { const t = src.cloneNode(false); t.appendChild(cg.cloneNode(true)); t.appendChild(thead.cloneNode(true)); t.appendChild(document.createElement('tbody')); flow.appendChild(t); return t; };
+      judul.forEach(e => flow.appendChild(e));
+      let t = buat(), judulIkut = judul;
+      for (let i = 0; i < barisSumber.length; i++) {
+        const grp = [barisSumber[i]];
+        if (barisSumber[i].dataset.group && barisSumber[i + 1]) grp.push(barisSumber[++i]);
+        const tb = t.tBodies[0];
+        grp.forEach(r => tb.appendChild(r));
+        if (!lewat()) { judulIkut = []; continue; }
+        grp.forEach(r => r.remove());
+        const kosong = !tb.rows.length;
+        if (kosong) { t.remove(); judulIkut.forEach(e => e.remove()); } // judul bagian ikut pindah, tidak tertinggal sendirian
+        if (!(kosong && baru())) lanjut();
+        judulIkut.forEach(e => flow.appendChild(e));
+        judulIkut = [];
+        t = buat();
+        grp.forEach(r => t.tBodies[0].appendChild(r));
+        if (lewat()) { t.remove(); iris(t, 'Satu baris tabel'); t = buat(); }
+      }
+      if (!t.tBodies[0].rows.length) t.remove();
+    };
+    halBaru();
+    let tunda = [];
+    part.blocks.forEach(b => {
+      if (b.k === 'kolom') { dua = true; bukaKolom(); return; }
+      if (b.k === 'tabel') { tempatkanTabel(b, tunda); tunda = []; return; }
+      if (b.keep) { tunda.push(b.el); return; }
+      const label = b.k === 'q' ? 'Soal nomor ' + b.s.n : 'Blok ' + b.k;
+      tempatkan(tunda.concat(b.el), label); tunda = [];
+    });
+    tunda.forEach(e => flow.appendChild(e));
+    const n = halaman.length;
+    halaman.forEach((pg, i) => {
+      const f = pg.querySelector('.page-foot');
+      if (f) { f.children[0].textContent = part.label; f.children[1].textContent = 'Halaman ' + (i + 1) + ' dari ' + n; }
+    });
+    halamanTotal += n;
+    part.halaman = n;
+  });
+  return { peringatan, halamanTotal };
+}
+
+let DOC = null, urutRender = 0, renderT = 0, mjAntre = Promise.resolve(), zoomMode = 'pas', zoomNilai = 1;
+const siapMJ = () => !!(window.MathJax && MathJax.typesetPromise);
+function setStatusEkspor(aktif) { ['btnCetak', 'btnPDF', 'btnDOCX'].forEach(id => { $(id).disabled = !aktif; }); }
+function jadwal(ms) { clearTimeout(renderT); $('muatLapis').classList.add('on'); renderT = setTimeout(render, ms == null ? 320 : ms); }
+
+async function render() {
+  const urut = ++urutRender;
+  const d = buildDoc();
+  DOC = d;
+  const pages = $('pages'), M = $('measure'), B = $('build');
+  if (!d.parts.length) {
+    pages.style.zoom = 1;
+    pages.innerHTML = layarKosong();
+    $('infoDok').innerHTML = 'Belum ada dokumen';
+    setStatusEkspor(false); tampilPesan([]);
+    $('muatLapis').classList.remove('on');
+    return;
+  }
+  terapkanCSS(d);
+  const lebarIsi = d.w - S.tata.ml - S.tata.mr;
+  M.style.width = lebarIsi + 'mm';
+  M.innerHTML = '';
+  d.parts.forEach(part => {
+    const sempit = part.kol === 2 && (S.tata.kolom === 'auto' ? d.T.kolom === 2 : S.tata.kolom === '2');
+    part.blocks.forEach(b => {
+      if (b.k === 'kolom') return;
+      const w = document.createElement('div');
+      w.innerHTML = blokHTML(b, sempit);
+      b.el = w.firstElementChild;
+      if (b.el) M.appendChild(b.el);
+    });
+    part.blocks = part.blocks.filter(b => b.k === 'kolom' || b.el);
+  });
+  if (siapMJ()) {
+    mjAntre = mjAntre.then(() => MathJax.startup.promise).then(() => { MathJax.typesetClear(); return MathJax.typesetPromise([M]); }).catch(e => console.warn(e));
+    await mjAntre;
+    if (urut !== urutRender) return;
+  }
+  const gambarGagal = await tungguGambar(M);
+  if (urut !== urutRender) return;
+  try { await document.fonts.ready; } catch (e) { /* tidak semua browser */ }
+  if (urut !== urutRender) return;
+
+  B.innerHTML = '';
+  const { peringatan, halamanTotal } = paginasi(d, B);
+  const atasKiri = $('kanvas').scrollTop;
+  pages.innerHTML = '';
+  while (B.firstChild) pages.appendChild(B.firstChild);
+  M.innerHTML = '';
+  $('kanvas').scrollTop = atasKiri;
+  aturZoom();
+  const n = d.units.reduce((a, u) => a + u.semua.length, 0);
+  $('infoDok').innerHTML = `<b>${esc(d.T.nama)}</b> · ${d.parts.length} bagian · <b>${halamanTotal} halaman</b> · ${n} soal`;
+  setStatusEkspor(true);
+  const pesan = d.peringatan.concat(peringatan);
+  if (gambarGagal) pesan.push(gambarGagal + ' gambar soal tidak dapat dimuat.');
+  if (!siapMJ() && d.units.some(u => u.semua.some(s => /\$|\\\(|\\\[/.test(s.soal + (s.pedoman || '') + (s.opsi || []).map(o => o.t).join(''))))) pesan.push('Pustaka rumus belum termuat: rumus tampil sebagai teks LaTeX. Sambungkan internet lalu muat ulang halaman.');
+  tampilPesan(pesan, d);
+  $('muatLapis').classList.remove('on');
+}
+function layarKosong() {
+  let judul = 'Pilih mata pelajaran dan kelas', teks = 'Pratinjau naskah muncul setelah Anda memilih minimal satu mata pelajaran dan satu kelas.';
+  if (META && !(META.pakets || []).length) { judul = 'Belum ada paket ujian'; teks = 'Buat paket dan isi soal di dashboard guru, lalu tekan Muat ulang.'; }
+  else if (S.pilih.mapel.length && S.pilih.kelas.length) {
+    const cocok = paketCocok();
+    if (!cocok.length) { judul = 'Tidak ada paket yang cocok'; teks = 'Tidak ada paket untuk kombinasi mata pelajaran dan kelas ini.'; }
+    else if (!paketAktifDipilih().length) { judul = 'Belum ada paket dicentang'; teks = 'Centang minimal satu paket pada daftar Paket Ujian.'; }
+    else if (paketAktifDipilih().some(p => STATUS[p.id] === 'muat')) { judul = 'Mengambil soal…'; teks = 'Soal sedang diambil dari spreadsheet. Ini bisa memakan beberapa detik.'; }
+    else if (!S.pilih.pg && !S.pilih.es) { judul = 'Bentuk soal belum dipilih'; teks = 'Centang pilihan ganda atau essay.'; }
+    else { judul = 'Tidak ada soal untuk dicetak'; teks = 'Paket terpilih belum berisi soal, atau semua soal tidak dicentang di menu Butir.'; }
+  }
+  return `<div class="layar-kosong"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h4"/></svg><b>${esc(judul)}</b><p>${esc(teks)}</p></div>`;
+}
+function tungguGambar(root) {
+  const imgs = [...root.querySelectorAll('img')];
+  let gagal = 0;
+  return Promise.all(imgs.map(im => new Promise(ok => {
+    const gantiGagal = () => {
+      gagal++;
+      if (im.classList.contains('gbr-soal')) { const s = document.createElement('span'); s.className = 'gbr-gagal'; s.textContent = '[Gambar soal tidak dapat dimuat]'; im.replaceWith(s); }
+      ok();
+    };
+    if (im.complete) { if (im.naturalWidth) ok(); else gantiGagal(); return; }
+    const t = setTimeout(gantiGagal, 12000);
+    im.addEventListener('load', () => { clearTimeout(t); ok(); }, { once: true });
+    im.addEventListener('error', () => { clearTimeout(t); gantiGagal(); }, { once: true });
+  }))).then(() => gagal);
+}
+function tampilPesan(list, d) {
+  const el = $('pesan');
+  const tanpaLevel = d && ['tabel', 'kisi', 'kartu', 'soal_jawab'].includes(d.T.id) && (d.T.id !== 'tabel' || S.tpl.kol.level) ? d.units.reduce((a, u) => a + u.semua.filter(s => !s.level).length, 0) : 0;
+  el.classList.toggle('ada', list.length > 0 || tanpaLevel > 0);
+  el.innerHTML = '<ul>' + (tanpaLevel ? `<li>${tanpaLevel} soal belum memiliki Level. <button type="button" data-ke="butir">Isi di menu Butir</button></li>` : '') + list.slice(0, 12).map(x => `<li>${esc(x)}</li>`).join('') + (list.length > 12 ? `<li>… dan ${list.length - 12} peringatan lain.</li>` : '') + '</ul>';
+}
+function aturZoom() {
+  const pages = $('pages'), pertama = pages.querySelector('.page');
+  if (!pertama) return;
+  if (zoomMode === 'pas') {
+    pages.style.zoom = 1;
+    const pad = parseFloat(getComputedStyle($('kanvas')).paddingLeft) * 2;
+    zoomNilai = Math.max(.25, Math.min(1.4, ($('kanvas').clientWidth - pad - 4) / pertama.offsetWidth));
+  }
+  pages.style.zoom = zoomNilai;
+  $('zoomNilai').textContent = Math.round(zoomNilai * 100) + '%';
+}
+
+/* =====================================================================
+   GENERATOR .DOCX (Office Open XML, tanpa pustaka luar)
+   ===================================================================== */
+const TW = mm => Math.round(mm * 56.6929);
+const EMU = mm => Math.round(mm * 36000);
+const xe = s => String(s == null ? '' : s).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f￾￿]/g, '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- MathML (dari MathJax) → OMML: rumus tetap bisa diedit di Word ---------- */
+let SZ_RUMUS = 24;
+function mathRun(teks, sty, nor) {
+  const m = nor ? '<m:rPr><m:nor/></m:rPr>' : sty ? `<m:rPr><m:sty m:val="${sty}"/></m:rPr>` : '';
+  return `<m:r>${m}<w:rPr><w:rFonts w:ascii="Cambria Math" w:hAnsi="Cambria Math"/><w:sz w:val="${SZ_RUMUS}"/></w:rPr><m:t xml:space="preserve">${xe(teks)}</m:t></m:r>`;
+}
+const AKSEN = new Set(['→', '^', 'ˆ', '~', '˜', '¯', '˙', '¨', '´', '`', '˘', 'ˇ', '⃗', '→']);
+const GARIS_ATAS = new Set(['¯', '―', '_', '‾', '―', '‾']);
+function mmlKeOmml(n) {
+  const anak = [...n.children], semua = () => anak.map(mmlKeOmml).join('');
+  const isi = x => { const h = x ? mmlKeOmml(x) : ''; return h || mathRun('​'); };
+  const tag = n.localName;
+  switch (tag) {
+    case 'math': case 'mstyle': case 'mpadded': case 'semantics': case 'menclose': case 'mtd': return semua();
+    case 'annotation': case 'annotation-xml': case 'mphantom': return '';
+    case 'mrow': {
+      const a = anak[0], z = anak[anak.length - 1];
+      if (anak.length >= 2 && n.getAttribute('data-mjx-texclass') === 'INNER' && a.localName === 'mo' && z.localName === 'mo') {
+        const beg = a.textContent, end = z.textContent;
+        return `<m:d><m:dPr><m:begChr m:val="${xe(beg)}"/><m:endChr m:val="${xe(end)}"/></m:dPr><m:e>${anak.slice(1, -1).map(mmlKeOmml).join('') || mathRun('​')}</m:e></m:d>`;
+      }
+      return semua();
+    }
+    case 'mi': {
+      const t = n.textContent, v = n.getAttribute('mathvariant');
+      if (v === 'bold') return mathRun(t, 'b');
+      return mathRun(t, t.length > 1 || v === 'normal' ? 'p' : null);
+    }
+    case 'mn': case 'mo': return mathRun(n.textContent, 'p');
+    case 'mtext': return mathRun(n.textContent.replace(/ /g, ' '), null, true);
+    case 'ms': return mathRun('"' + n.textContent + '"', null, true);
+    case 'mspace': return parseFloat(n.getAttribute('width') || 0) > 0 ? mathRun(' ', 'p') : '';
+    case 'msup': return `<m:sSup><m:e>${isi(anak[0])}</m:e><m:sup>${isi(anak[1])}</m:sup></m:sSup>`;
+    case 'msub': return `<m:sSub><m:e>${isi(anak[0])}</m:e><m:sub>${isi(anak[1])}</m:sub></m:sSub>`;
+    case 'msubsup': return `<m:sSubSup><m:e>${isi(anak[0])}</m:e><m:sub>${isi(anak[1])}</m:sub><m:sup>${isi(anak[2])}</m:sup></m:sSubSup>`;
+    case 'mfrac': return `<m:f>${n.getAttribute('linethickness') === '0' ? '<m:fPr><m:type m:val="noBar"/></m:fPr>' : ''}<m:num>${isi(anak[0])}</m:num><m:den>${isi(anak[1])}</m:den></m:f>`;
+    case 'msqrt': return `<m:rad><m:radPr><m:degHide m:val="1"/></m:radPr><m:deg/><m:e>${semua() || mathRun('​')}</m:e></m:rad>`;
+    case 'mroot': return `<m:rad><m:deg>${isi(anak[1])}</m:deg><m:e>${isi(anak[0])}</m:e></m:rad>`;
+    case 'mover': {
+      const c = anak[1] ? anak[1].textContent.trim() : '';
+      if (GARIS_ATAS.has(c)) return `<m:bar><m:barPr><m:pos m:val="top"/></m:barPr><m:e>${isi(anak[0])}</m:e></m:bar>`;
+      if (AKSEN.has(c) || n.getAttribute('accent') === 'true') return `<m:acc><m:accPr><m:chr m:val="${xe(c)}"/></m:accPr><m:e>${isi(anak[0])}</m:e></m:acc>`;
+      return `<m:limUpp><m:e>${isi(anak[0])}</m:e><m:lim>${isi(anak[1])}</m:lim></m:limUpp>`;
+    }
+    case 'munder': return `<m:limLow><m:e>${isi(anak[0])}</m:e><m:lim>${isi(anak[1])}</m:lim></m:limLow>`;
+    case 'munderover': return `<m:limUpp><m:e><m:limLow><m:e>${isi(anak[0])}</m:e><m:lim>${isi(anak[1])}</m:lim></m:limLow></m:e><m:lim>${isi(anak[2])}</m:lim></m:limUpp>`;
+    case 'mtable': return '<m:m>' + anak.map(tr => '<m:mr>' + [...tr.children].map(td => `<m:e>${isi(td)}</m:e>`).join('') + '</m:mr>').join('') + '</m:m>';
+    default: return semua();
+  }
+}
+function texKeOmml(tex, display, sz) {
+  if (!siapMJ() || !MathJax.tex2mml) return null;
+  try {
+    SZ_RUMUS = sz;
+    const mml = MathJax.tex2mml(tex, { display: !!display });
+    const dom = new DOMParser().parseFromString(mml, 'application/xml');
+    if (dom.querySelector('parsererror') || dom.querySelector('merror')) return null;
+    return `<m:oMath>${mmlKeOmml(dom.documentElement)}</m:oMath>`;
+  } catch (e) { console.warn('Rumus', tex, e); return null; }
+}
+
+/* ---------- Penyusun XML dasar ---------- */
+function rPr(o) {
+  o = o || {};
+  return '<w:rPr>' + (o.font ? `<w:rFonts w:ascii="${xe(o.font)}" w:hAnsi="${xe(o.font)}" w:cs="${xe(o.font)}" w:eastAsia="${xe(o.font)}"/>` : '') + (o.b ? '<w:b/><w:bCs/>' : '') + (o.i ? '<w:i/><w:iCs/>' : '') +
+    (o.color ? `<w:color w:val="${o.color}"/>` : '') + (o.sz ? `<w:sz w:val="${Math.round(o.sz)}"/><w:szCs w:val="${Math.round(o.sz)}"/>` : '') + (o.u ? '<w:u w:val="single"/>' : '') + '</w:rPr>';
+}
+const run = (t, o) => (t === '' || t == null ? '' : `<w:r>${rPr(o)}<w:t xml:space="preserve">${xe(t)}</w:t></w:r>`);
+const TAB = '<w:r><w:tab/></w:r>';
+function kayaXML(src, o) {
+  o = o || {};
+  const dasar = o.sz || DX.sz;
+  return uraiTeks(src).map(r => {
+    if (r.br) return '<w:r><w:br/></w:r>';
+    if (r.math) {
+      const om = texKeOmml(r.tex, r.display, dasar);
+      if (om) return r.display ? `<m:oMathPara>${om}</m:oMathPara>` : om;
+      DX.rumusGagal++;
+      return run(r.raw, o);
+    }
+    return run(r.t, { ...o, b: o.b || r.b, i: o.i || r.i });
+  }).join('');
+}
+/* Word mengecilkan rumus blok bila sebaris dengan teks, jadi rumus $$…$$ dipecah menjadi paragraf sendiri */
+function pecahBlok(src) {
+  return String(src == null ? '' : src).split(/(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\])/).map(x => x.trim()).filter(Boolean);
+}
+function pPr(o) {
+  o = o || {};
+  let s = '<w:pPr>';
+  if (o.keepNext) s += '<w:keepNext/>';
+  if (o.keepLines) s += '<w:keepLines/>';
+  if (o.border) s += `<w:pBdr>${o.border}</w:pBdr>`;
+  if (o.shd) s += `<w:shd w:val="clear" w:color="auto" w:fill="${o.shd}"/>`;
+  if (o.tabs) s += `<w:tabs>${o.tabs}</w:tabs>`;
+  s += `<w:spacing w:before="${o.before || 0}" w:after="${o.after || 0}"${o.line ? ` w:line="${o.line}" w:lineRule="${o.lineRule || 'auto'}"` : ''}/>`;
+  if (o.left || o.hanging) s += `<w:ind w:left="${o.left || 0}"${o.hanging ? ` w:hanging="${o.hanging}"` : ''}/>`;
+  if (o.al) s += `<w:jc w:val="${o.al}"/>`;
+  if (o.sect) s += o.sect;
+  return s + '</w:pPr>';
+}
+const para = (inner, o) => `<w:p>${pPr(o)}${inner || ''}</w:p>`;
+const sisip = (h) => para('', { line: h || 60, lineRule: 'exact' });
+function tabel(o) {
+  const tot = o.cols.reduce((a, c) => a + c, 0);
+  const G = n => `<w:${n} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`, N = n => `<w:${n} w:val="nil"/>`;
+  const dalam = o.border === false || o.border === 'luar' ? N : G, luar = o.border === false ? N : G;
+  const batas = '<w:tblBorders>' + luar('top') + luar('left') + luar('bottom') + luar('right') + dalam('insideH') + dalam('insideV') + '</w:tblBorders>';
+  const mar = o.mar == null ? 70 : o.mar, vmar = o.border === false || o.border === 'luar' ? 0 : 28;
+  let s = `<w:tbl><w:tblPr><w:tblW w:w="${tot}" w:type="dxa"/>${o.ind ? `<w:tblInd w:w="${o.ind}" w:type="dxa"/>` : ''}${batas}<w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="${vmar}" w:type="dxa"/><w:left w:w="${mar}" w:type="dxa"/><w:bottom w:w="${vmar}" w:type="dxa"/><w:right w:w="${mar}" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${o.cols.map(c => `<w:gridCol w:w="${c}"/>`).join('')}</w:tblGrid>`;
+  o.rows.forEach(r => {
+    s += `<w:tr><w:trPr>${r.atomic === false ? '' : '<w:cantSplit/>'}${r.header ? '<w:tblHeader/>' : ''}</w:trPr>`;
+    let i = 0;
+    r.cells.forEach(c => {
+      const span = c.span || 1;
+      let w = 0; for (let k = 0; k < span; k++) w += o.cols[i + k];
+      i += span;
+      s += `<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${span > 1 ? `<w:gridSpan w:val="${span}"/>` : ''}${c.shd ? `<w:shd w:val="clear" w:color="auto" w:fill="${c.shd}"/>` : ''}${c.va ? `<w:vAlign w:val="${c.va}"/>` : ''}</w:tcPr>${c.xml || para('')}</w:tc>`;
+    });
+    s += '</w:tr>';
+  });
+  return s + '</w:tbl>';
+}
+
+/* ---------- Gambar ---------- */
+let DX = null;
+function ambilBytes(blob) { return blob.arrayBuffer().then(b => new Uint8Array(b)); }
+function muatElemen(src, cors) {
+  return new Promise((ok, no) => {
+    const im = new Image();
+    if (cors) im.crossOrigin = 'anonymous';
+    im.referrerPolicy = 'no-referrer';
+    im.onload = () => ok(im); im.onerror = () => no(new Error('gagal memuat'));
+    im.src = src;
+  });
+}
+function kanvasKePNG(im) {
+  const c = document.createElement('canvas');
+  const skala = im.naturalWidth < 300 ? 3 : 1;
+  c.width = (im.naturalWidth || 300) * skala; c.height = (im.naturalHeight || 150) * skala;
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+  x.drawImage(im, 0, 0, c.width, c.height);
+  return new Promise((ok, no) => c.toBlob(b => (b ? ok(b) : no(new Error('kanvas'))), 'image/png'));
+}
+async function siapkanGambar(url) {
+  if (DX.gambar.has(url)) return DX.gambar.get(url);
+  let hasil = null;
+  try {
+    let blob;
+    try {
+      const r = await fetch(url, url.startsWith('data:') ? {} : { mode: 'cors', referrerPolicy: 'no-referrer' });
+      if (!r.ok) throw new Error(r.status);
+      blob = await r.blob();
+    } catch (e) {
+      blob = await kanvasKePNG(await muatElemen(url, true));
+    }
+    const objek = URL.createObjectURL(blob);
+    try {
+      const im = await muatElemen(objek);
+      let bytes, ext;
+      if (/png/i.test(blob.type)) { bytes = await ambilBytes(blob); ext = 'png'; }
+      else if (/jpe?g/i.test(blob.type)) { bytes = await ambilBytes(blob); ext = 'jpeg'; }
+      else { bytes = await ambilBytes(await kanvasKePNG(im)); ext = 'png'; }
+      const no = DX.media.length + 1;
+      hasil = { rid: 'rIdImg' + no, nama: 'gambar' + no + '.' + ext, bytes, w: im.naturalWidth || 300, h: im.naturalHeight || 150, ext };
+      DX.media.push(hasil);
+    } finally { URL.revokeObjectURL(objek); }
+  } catch (e) {
+    console.warn('Gambar tidak bisa disematkan', url, e);
+    DX.gambarGagal.push(url);
+  }
+  DX.gambar.set(url, hasil);
+  return hasil;
+}
+function kumpulkanGambar(d) {
+  const set = new Set();
+  if (S.kop.tampil) { if (S.kop.logoKiri) set.add(S.kop.logoKiri); if (S.kop.logoKanan) set.add(S.kop.logoKanan); }
+  const dariSel = ps => ps.forEach(p => { if (p.img) set.add(p.img); });
+  d.parts.forEach(pt => pt.blocks.forEach(b => {
+    if (b.k === 'q' && b.s.gambar) set.add(b.s.gambar);
+    if (b.k === 'tabel') b.rows.forEach(r => (r.cells || []).forEach(c => dariSel(c.p)));
+    if (b.k === 'kv') b.rows.forEach(r => dariSel(r[1]));
+  }));
+  return [...set];
+}
+function gambarXML(g, maksWmm, maksHmm) {
+  let wmm = g.w * 25.4 / 96, hmm = g.h * 25.4 / 96;
+  const r = Math.min(1, maksWmm / wmm, maksHmm / hmm);
+  wmm *= r; hmm *= r;
+  const id = ++DX.idGambar, cx = EMU(wmm), cy = EMU(hmm);
+  return `<w:r><w:drawing><wp:inline distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${cx}" cy="${cy}"/><wp:docPr id="${id}" name="Gambar ${id}"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="${id}" name="${g.nama}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${g.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${cx}" cy="${cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
+}
+
+/* ---------- Isi sel & blok ---------- */
+function selXML(ps, w, o) {
+  o = o || {};
+  const sz = o.sz || DX.szT, out = [];
+  const lebarMm = w / 56.6929;
+  ps.forEach((p, i) => {
+    const akhir = i === ps.length - 1, sp = { after: akhir ? 0 : 30, line: 240, keepNext: o.keepNext };
+    if (p.img) {
+      const g = DX.gambar.get(p.img), lim = GBR[S.tata.gambar] || GBR.m;
+      out.push(g ? para(gambarXML(g, lebarMm - 3, lim[1] * .75), sp) : para(run('[Gambar: ' + p.img + ']', { sz: sz - 2, i: true, color: 'AA3333' }), sp));
+    } else if (p.lab) {
+      const ind = Math.round(sz * 12);
+      out.push(para(run(p.lab, { sz }) + TAB + kayaXML(p.s, { sz }), { ...sp, left: ind, hanging: ind }));
+    } else {
+      const seg = pecahBlok(p.s);
+      (seg.length ? seg : ['']).forEach((t, j) => out.push(para(kayaXML(t, { sz, b: p.b }), { ...sp, after: j === seg.length - 1 ? sp.after : 30, al: p.al === 'center' ? 'center' : undefined })));
+    }
+  });
+  return out.join('') || para('');
+}
+function kopXML(lebar) {
+  const K = S.kop, baris = K.baris.filter(b => b.t);
+  const teks = baris.map((b, i) => para(run(b.t, { sz: (+b.s || 12) * 2, b: b.b }), { al: 'center', line: 240, after: i === baris.length - 1 ? 0 : 0 })).join('') || para('');
+  const garisXML = () => {
+    const g = K.garis;
+    if (g === 'tanpa') return sisip(100);
+    const bd = g === 'ganda' ? '<w:bottom w:val="thickThinSmallGap" w:sz="18" w:space="1" w:color="000000"/>' : g === 'tebal' ? '<w:bottom w:val="single" w:sz="18" w:space="1" w:color="000000"/>' : '<w:bottom w:val="single" w:sz="6" w:space="1" w:color="000000"/>';
+    return para('', { border: bd, line: 100, lineRule: 'exact', after: 160 });
+  };
+  const ada = K.logoKiri || K.logoKanan;
+  if (!ada) return teks + garisXML();
+  const lg = TW(K.logoSize + 3), tengah = lebar - 2 * lg;
+  const logo = src => { const g = src && DX.gambar.get(src); return g ? para(gambarXML(g, K.logoSize, K.logoSize), { al: 'center' }) : para(''); };
+  return tabel({ cols: [lg, tengah, lg], border: false, mar: 0, rows: [{ cells: [{ xml: logo(K.logoKiri), va: 'center' }, { xml: teks, va: 'center' }, { xml: logo(K.logoKanan), va: 'center' }] }] }) + garisXML();
+}
+function qXML(b, lebar, sempit) {
+  const s = b.s, jawab = b.tampil === 'jawab', indNo = TW(8), lebarIsi = lebar - indNo, gap = TW(S.tata.gap);
+  const bag = [];
+  const ln = Math.round(240 * S.tata.spasi);
+  const segSoal = pecahBlok(s.soal);
+  segSoal.slice(0, 1).concat(segSoal.length ? [] : ['']).forEach(t => bag.push({ inner: run(s.n + '.') + TAB + kayaXML(t) + (b.skorEs && segSoal.length < 2 ? run(' (Skor: ' + skorStr(s.skor) + ')', { i: true }) : ''), o: { left: indNo, hanging: indNo, line: ln, after: 20 } }));
+  segSoal.slice(1).forEach((t, i) => bag.push({ inner: kayaXML(t) + (b.skorEs && i === segSoal.length - 2 ? run(' (Skor: ' + skorStr(s.skor) + ')', { i: true }) : ''), o: { left: indNo, line: ln, after: 20 } }));
+  if (s.gambar) {
+    const g = DX.gambar.get(s.gambar), lim = GBR[S.tata.gambar] || GBR.m;
+    if (g) bag.push({ inner: gambarXML(g, (lebarIsi / 56.6929) * lim[0] / 100, lim[1]), o: { left: indNo, before: 40, after: 40 } });
+    else bag.push({ inner: run('[Gambar soal: ' + s.gambar + ']', { i: true, color: 'AA3333', sz: DX.sz - 3 }), o: { left: indNo, after: 40 } });
+  }
+  if (s.tipe === 'PG') {
+    const c = opsiKolom(s, sempit), indOp = TW(6);
+    if (c === 1) {
+      s.opsi.forEach(o => {
+        const key = jawab && o.kunci;
+        bag.push({ inner: run(o.k + '.', { b: key }) + TAB + kayaXML(o.t, { b: key }) + (key ? run(' ✓', { b: true, font: 'Segoe UI Symbol' }) : ''), o: { left: indNo + indOp, hanging: indOp, line: ln, after: 10, shd: key ? 'E8F3EA' : undefined } });
+      });
+    } else {
+      const lk = Math.floor(lebarIsi / c), baris = [];
+      for (let i = 0; i < s.opsi.length; i += c) {
+        const cells = [];
+        for (let j = 0; j < c; j++) {
+          const o = s.opsi[i + j];
+          if (!o) { cells.push({ xml: para('') }); continue; }
+          const key = jawab && o.kunci;
+          cells.push({ shd: key ? 'E8F3EA' : undefined, xml: para(run(o.k + '.', { b: key }) + TAB + kayaXML(o.t, { b: key }) + (key ? run(' ✓', { b: true, font: 'Segoe UI Symbol' }) : ''), { left: indOp, hanging: indOp, line: ln, after: 10, keepNext: true }) });
+        }
+        baris.push({ cells });
+      }
+      const cols = []; for (let j = 0; j < c; j++) cols.push(lk);
+      bag.push({ raw: tabel({ cols, border: false, mar: 0, ind: indNo, rows: baris }) });
+    }
+    if (jawab) bag.push({ inner: run('Kunci: ' + (s.kunci || '-'), { b: true, sz: DX.sz - 1 }), o: { left: indNo, shd: 'F1F3F6', before: 30 } });
+  } else if (jawab) {
+    bag.push({ inner: run('Pedoman jawaban:', { b: true, sz: DX.sz - 1 }), o: { left: indNo, shd: 'F1F3F6', before: 30 } });
+    (pecahBlok(s.pedoman || '-')).forEach(t => bag.push({ inner: kayaXML(t, { sz: DX.sz - 1 }), o: { left: indNo, shd: 'F1F3F6' } }));
+  }
+  for (let i = 0; i < (b.garis || 0); i++) bag.push({ inner: '', o: { left: indNo, border: '<w:bottom w:val="dotted" w:sz="4" w:space="1" w:color="333333"/><w:between w:val="dotted" w:sz="4" w:space="1" w:color="333333"/>', line: 360, lineRule: 'exact' } });
+  if (b.meta) {
+    const m = ['Skor ' + skorStr(s.skor), s.level ? 'Level ' + s.level : '', s.tp ? 'TP: ' + s.tp : ''].filter(Boolean).join(' · ');
+    bag.push({ inner: kayaXML(m, { sz: DX.sz - 4, color: '333333' }), o: { left: indNo, before: 20 } });
+  }
+  // Soal yang sangat panjang tidak dipaksa utuh: Word akan memindahkannya dan menyisakan halaman kosong
+  const utuh = (s.soal || '').length + (jawab ? (s.pedoman || '').length : 0) < 1500;
+  let x = '';
+  bag.forEach((p, i) => {
+    const akhir = i === bag.length - 1;
+    if (p.raw) { x += p.raw; if (akhir) x += para('', { line: Math.max(gap, 40), lineRule: 'exact' }); return; }
+    x += para(p.inner, { ...p.o, keepNext: utuh && !akhir, keepLines: utuh, after: akhir ? gap : p.o.after });
+  });
+  return x;
+}
+function blokXML(b, lebar, sempit, berikut) {
+  const sz = DX.sz, ln = Math.round(240 * S.tata.spasi);
+  switch (b.k) {
+    case 'kop': return kopXML(lebar);
+    case 'judul': return para(run(b.a, { b: true, sz: sz + 2 }), { al: 'center', keepNext: true, after: b.b.length ? 0 : 100 }) + b.b.map((t, i) => para(run(t, { b: true, sz: sz - 1 }), { al: 'center', after: i === b.b.length - 1 ? 100 : 0, keepNext: true })).join('');
+    case 'identitas': {
+      const lk = TW(30), tk = TW(3.5), sisa = lebar - 2 * lk - 2 * tk, a = Math.round(sisa / 2), b2 = sisa - a;
+      const c = t => ({ xml: para(run(t, { sz: sz - 1 }), { before: 15, after: 15 }) });
+      return tabel({ cols: [lk, tk, a, lk, tk, b2], border: false, mar: 30, rows: b.rows.map(r => ({ cells: [c(r[0]), c(':'), c(r[1]), c(r[2]), c(r[2] ? ':' : ''), c(r[3])] })) }) + sisip(80);
+    }
+    case 'peserta': {
+      const a = Math.round(lebar * .52), c = Math.round(lebar * .19), bb = lebar - a - c;
+      const cell = t => ({ xml: para(run(t, { sz: sz - 1 }), { before: 30, after: 150 }) });
+      return tabel({ cols: [a, bb, c], rows: [{ cells: [cell('Nama :'), cell('No. Peserta :'), cell('Nilai :')] }] }) + sisip(90);
+    }
+    case 'petunjuk': {
+      const ind = TW(5), isi = para(run('Petunjuk umum:', { b: true, sz: sz - 1 }), {}) + b.items.map((t, i) => para(run((i + 1) + '.', { sz: sz - 1 }) + TAB + kayaXML(t, { sz: sz - 1 }), { left: ind, hanging: ind })).join('');
+      return tabel({ cols: [lebar], rows: [{ cells: [{ xml: isi }] }] }) + sisip(90);
+    }
+    case 'h': return para(run(b.t, { b: true }), { before: 60, after: b.i ? 0 : 50, keepNext: true }) + (b.i ? para(run(b.i, { i: true }), { after: 50, keepNext: true }) : '');
+    case 'q': return qXML(b, lebar, sempit);
+    case 'p': return para(kayaXML(b.s, { sz: b.kecil ? sz - 3 : sz, b: b.b }), { after: 70, line: ln });
+    case 'tabel': {
+      const tot = b.cols.reduce((a, c) => a + c.w, 0);
+      const cols = b.cols.map(c => Math.round(c.w / tot * lebar));
+      cols[cols.length - 1] += lebar - cols.reduce((a, c) => a + c, 0);
+      const rows = [{ header: true, cells: b.cols.map(c => ({ shd: 'E6E9EE', va: 'center', xml: para(run(c.h, { b: true, sz: DX.szT }), { al: 'center' }) })) }];
+      b.rows.forEach(r => {
+        if (r.group) { rows.push({ cells: [{ span: cols.length, shd: 'F1F3F6', xml: para(run(r.group, { b: true, sz: DX.szT }), { keepNext: true }) }] }); return; }
+        let i = 0;
+        rows.push({ cells: r.cells.map(c => {
+          const span = c.span || 1; let w = 0; for (let k = 0; k < span; k++) w += cols[i + k]; i += span;
+          return { span: c.span, xml: selXML(c.p, w - 140) };
+        }) });
+      });
+      return tabel({ cols, rows }) + sisip(100);
+    }
+    case 'kv': {
+      const l = Math.round(lebar * .24), v = lebar - l;
+      const rows = [{ cells: [{ span: 2, shd: 'DFE3EA', xml: para(run(b.judul, { b: true, sz: DX.szT }), { al: 'center', keepNext: true }) }] }];
+      b.rows.forEach((r, i) => rows.push({ cells: [{ shd: 'EEF0F4', xml: para(run(r[0], { b: true, sz: DX.szT }), { keepNext: i < b.rows.length - 1 }) }, { xml: selXML(r[1], v - 140, { keepNext: i < b.rows.length - 1 }) }] }));
+      return tabel({ cols: [l, v], rows }) + sisip(160);
+    }
+    case 'ljkpg': {
+      const lk = Math.floor(lebar / b.kolom), cols = Array(b.kolom).fill(lk), baris = [];
+      const nRow = Math.min(b.perKol, b.items.length);
+      for (let r = 0; r < nRow; r++) {
+        const cells = [];
+        for (let c = 0; c < b.kolom; c++) {
+          const it = b.items[c * b.perKol + r];
+          cells.push({ xml: para(it ? run(String(it.n) + '.', { b: true, sz: sz - 2 }) + run('  ' + it.opsi.map(o => String.fromCodePoint(0x24B6 + o.charCodeAt(0) - 65)).join(' '), { font: 'Segoe UI Symbol', sz: sz }) : '', { before: 40, after: 40 }) });
+        }
+        baris.push({ cells });
+      }
+      return tabel({ cols, rows: baris, border: 'luar', mar: 40 }) + sisip(100);
+    }
+    case 'ljkes': {
+      let x = para(run(b.n + '.', { b: true }), { keepNext: true });
+      for (let i = 0; i < b.garis; i++) x += para('', { border: '<w:bottom w:val="dotted" w:sz="4" w:space="1" w:color="333333"/><w:between w:val="dotted" w:sz="4" w:space="1" w:color="333333"/>', line: 370, lineRule: 'exact', keepNext: i < b.garis - 1, after: i === b.garis - 1 ? 110 : 0 });
+      return x;
+    }
+    case 'ttd': {
+      const T = nilaiTTD(), a = Math.floor(lebar / 2);
+      const kol = (b1, b2, nm, nip) => para(run(b1, {}), { al: 'center', keepNext: true }) + para(run(b2, {}), { al: 'center', after: 1000, keepNext: true }) + para(run(nm || TITIK, { b: true, u: true }), { al: 'center', keepNext: !!(nip && nip !== '-') }) + (nip && nip !== '-' ? para(run('NIP. ' + nip, {}), { al: 'center' }) : '');
+      return sisip(120) + tabel({ cols: [a, lebar - a], border: false, rows: [{ cells: [{ xml: kol('Mengetahui,', 'Kepala Sekolah', T.kepsek, T.nipKepsek) }, { xml: kol((T.kota ? T.kota + ', ' : '') + tanggalTTD(), 'Guru Mata Pelajaran', T.guru, T.nipGuru) }] }] }) + para('', { line: 20, lineRule: 'exact' });
+    }
+    default: return '';
+  }
+}
+
+/* ---------- Kerangka paket OOXML ---------- */
+const NS = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"';
+const XML_DEK = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n';
+// Bidang kompleks: setiap bagiannya berformat sendiri, sehingga ukuran angka sama dengan teks di sekitarnya
+function fld(instr, sz) {
+  const r = isi => `<w:r>${rPr({ sz })}${isi}</w:r>`;
+  return r('<w:fldChar w:fldCharType="begin"/>') + r(`<w:instrText xml:space="preserve"> ${instr} </w:instrText>`) + r('<w:fldChar w:fldCharType="separate"/>') + r('<w:t>1</w:t>') + r('<w:fldChar w:fldCharType="end"/>');
+}
+function footerXML(label, pakaiTotal, lebar) {
+  const sz = 17;
+  const nomor = run('Halaman ', { sz }) + fld('PAGE', sz) + (pakaiTotal ? run(' dari ', { sz }) + fld('SECTIONPAGES', sz) : '');
+  return XML_DEK + `<w:ftr ${NS}>` + para(run(label, { sz }) + TAB + nomor, { tabs: `<w:tab w:val="right" w:pos="${lebar}"/>` }) + '</w:ftr>';
+}
+function headerWatermark(teks, fontPx) {
+  return XML_DEK + `<w:hdr ${NS}><w:p><w:pPr><w:spacing w:after="0"/></w:pPr><w:r><w:rPr><w:noProof/></w:rPr><w:pict>` +
+    '<v:shapetype id="_x0000_t136" coordsize="21600,21600" o:spt="136" adj="10800" path="m@7,l@8,m@5,21600l@6,21600e"><v:formulas><v:f eqn="sum #0 0 10800"/><v:f eqn="prod #0 2 1"/><v:f eqn="sum 21600 0 @1"/><v:f eqn="sum 0 0 @2"/><v:f eqn="sum 21600 0 @3"/><v:f eqn="if @0 @3 0"/><v:f eqn="if @0 21600 @1"/><v:f eqn="if @0 0 @2"/><v:f eqn="if @0 @4 21600"/><v:f eqn="mid @5 @6"/><v:f eqn="mid @8 @5"/><v:f eqn="mid @7 @8"/><v:f eqn="mid @6 @7"/><v:f eqn="sum @6 0 @5"/></v:formulas><v:path textpathok="t" o:connecttype="custom" o:connectlocs="@9,0;@10,10800;@11,21600;@12,10800" o:connectangles="270,180,90,0"/><v:textpath on="t" fitshape="t"/><v:handles><v:h position="#0,bottomRight" xrange="6629,14971"/></v:handles><o:lock v:ext="edit" text="t" shapetype="t"/></v:shapetype>' +
+    `<v:shape id="WatermarkCetakSoal" o:spid="_x0000_s2049" type="#_x0000_t136" style="position:absolute;margin-left:0;margin-top:0;width:${fontPx}pt;height:${Math.round(fontPx / 3.6)}pt;rotation:315;z-index:-251658752;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin" o:allowincell="f" fillcolor="silver" stroked="f"><v:fill opacity=".35"/><v:textpath style="font-family:&quot;Arial&quot;;font-size:1pt;font-weight:bold" string="${xe(teks)}"/></v:shape>` +
+    '</w:pict></w:r></w:p></w:hdr>';
+}
+
+/* Berkas ZIP tanpa kompresi: cukup untuk .docx, gambar sudah terkompresi */
+const CRC = (() => { const t = new Uint32Array(256); for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xEDB88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0; } return t; })();
+function crc32(b) { let c = 0xFFFFFFFF; for (let i = 0; i < b.length; i++) c = CRC[(c ^ b[i]) & 255] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+function buatZip(files) {
+  const enc = new TextEncoder(), lokal = [], pusat = [];
+  let off = 0;
+  const d = new Date();
+  const waktu = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), tgl = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+  files.forEach(f => {
+    const nama = enc.encode(f.name), isi = typeof f.data === 'string' ? enc.encode(f.data) : f.data, crc = crc32(isi);
+    const h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(8, 0, true); h.setUint16(10, waktu, true); h.setUint16(12, tgl, true);
+    h.setUint32(14, crc, true); h.setUint32(18, isi.length, true); h.setUint32(22, isi.length, true); h.setUint16(26, nama.length, true);
+    lokal.push(new Uint8Array(h.buffer), nama, isi);
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(10, 0, true); c.setUint16(12, waktu, true); c.setUint16(14, tgl, true);
+    c.setUint32(16, crc, true); c.setUint32(20, isi.length, true); c.setUint32(24, isi.length, true); c.setUint16(28, nama.length, true); c.setUint32(42, off, true);
+    pusat.push(new Uint8Array(c.buffer), nama);
+    off += 30 + nama.length + isi.length;
+  });
+  const ukPusat = pusat.reduce((a, b) => a + b.length, 0);
+  const e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, ukPusat, true); e.setUint32(16, off, true);
+  return new Blob([...lokal, ...pusat, new Uint8Array(e.buffer)], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+}
+
+async function buatDocx(d) {
+  const T = S.tata;
+  DX = { sz: T.ukuran * 2, szT: T.ukuranTabel * 2, gambar: new Map(), media: [], gambarGagal: [], idGambar: 0, rumusGagal: 0 };
+  await Promise.all(kumpulkanGambar(d).map(siapkanGambar));
+  const pgW = TW(d.w), pgH = TW(d.h), mL = TW(T.ml), mR = TW(T.mr), mT = TW(T.mt), mB = TW(T.mb), ftr = T.footer ? TW(7) : 0;
+  const lebarPenuh = pgW - mL - mR, celah = TW(7), lebarKol = Math.floor((lebarPenuh - celah) / 2);
+  const berkas = [], rels = [];
+  const adaWm = !!T.watermark;
+  if (adaWm) {
+    berkas.push({ name: 'word/header1.xml', data: headerWatermark(T.watermark, Math.round((d.w - T.ml - T.mr) * 2.6)) });
+    rels.push({ id: 'rIdHdr1', type: 'header', target: 'header1.xml' });
+  }
+  const sect = (o) => {
+    const ref = (adaWm ? '<w:headerReference w:type="default" r:id="rIdHdr1"/>' : '') + (o.footer ? `<w:footerReference w:type="default" r:id="${o.footer}"/>` : '');
+    return `<w:sectPr>${ref}<w:type w:val="${o.continuous ? 'continuous' : 'nextPage'}"/><w:pgSz w:w="${pgW}" w:h="${pgH}"${d.orient === 'landscape' ? ' w:orient="landscape"' : ''}/><w:pgMar w:top="${mT}" w:right="${mR}" w:bottom="${mB + ftr}" w:left="${mL}" w:header="${Math.round(mT / 2)}" w:footer="${mB}" w:gutter="0"/>${o.restart ? '<w:pgNumType w:start="1"/>' : ''}${o.dua ? `<w:cols w:num="2" w:space="${celah}" w:sep="1"/>` : '<w:cols w:space="720"/>'}<w:docGrid w:linePitch="360"/></w:sectPr>`;
+  };
+  let isi = '', sectAkhir = '';
+  d.parts.forEach((part, ip) => {
+    const adaKolom = part.blocks.some(b => b.k === 'kolom');
+    let idFooter = '';
+    if (T.footer) {
+      idFooter = 'rIdFtr' + (ip + 1);
+      berkas.push({ name: 'word/footer' + (ip + 1) + '.xml', data: footerXML(part.label, !adaKolom, lebarPenuh) });
+      rels.push({ id: idFooter, type: 'footer', target: 'footer' + (ip + 1) + '.xml' });
+    }
+    let dua = false, buf = '';
+    part.blocks.forEach((b, i) => {
+      if (b.k === 'kolom') {
+        // akhiri seksi 1 kolom (kop & identitas), soal berikutnya mengalir 2 kolom di halaman yang sama
+        buf += para('', { line: 20, lineRule: 'exact', sect: sect({ footer: idFooter, restart: true }) });
+        dua = true;
+        return;
+      }
+      buf += blokXML(b, dua ? lebarKol : lebarPenuh, dua, part.blocks[i + 1]);
+    });
+    const sAkhir = sect({ footer: idFooter, restart: !dua, continuous: dua, dua });
+    isi += buf;
+    if (ip < d.parts.length - 1) isi += para('', { line: 20, lineRule: 'exact', sect: sAkhir });
+    else sectAkhir = sAkhir;
+  });
+  const dokumen = XML_DEK + `<w:document ${NS}><w:body>${isi}${sectAkhir}</w:body></w:document>`;
+  const font = T.font;
+  const gaya = XML_DEK + `<w:styles ${NS}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="${xe(font)}" w:hAnsi="${xe(font)}" w:cs="${xe(font)}" w:eastAsia="${xe(font)}"/><w:sz w:val="${DX.sz}"/><w:szCs w:val="${DX.sz}"/><w:lang w:val="id-ID" w:eastAsia="id-ID" w:bidi="ar-SA"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:qFormat/></w:style><w:style w:type="table" w:default="1" w:styleId="TableNormal"><w:name w:val="Normal Table"/><w:uiPriority w:val="99"/><w:semiHidden/><w:unhideWhenUsed/><w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style></w:styles>`;
+  const setelan = XML_DEK + `<w:settings ${NS}><w:zoom w:percent="100"/><w:defaultTabStop w:val="567"/><w:characterSpacingControl w:val="doNotCompress"/><w:compat><w:compatSetting w:name="compatibilityMode" w:uri="http://schemas.microsoft.com/office/word" w:val="15"/></w:compat><m:mathPr><m:mathFont m:val="Cambria Math"/><m:smallFrac m:val="0"/><m:dispDef/><m:lMargin m:val="0"/><m:rMargin m:val="0"/><m:defJc m:val="centerGroup"/><m:wrapIndent m:val="1440"/><m:intLim m:val="subSup"/><m:naryLim m:val="undOvr"/></m:mathPr></w:settings>`;
+  DX.media.forEach(g => { berkas.push({ name: 'word/media/' + g.nama, data: g.bytes }); });
+  const relInti = [
+    `<Relationship Id="rIdStyles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>`,
+    `<Relationship Id="rIdSettings" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/>`,
+    ...rels.map(r => `<Relationship Id="${r.id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/${r.type}" Target="${r.target}"/>`),
+    ...DX.media.map(g => `<Relationship Id="${g.rid}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/${g.nama}"/>`)
+  ];
+  const tipe = XML_DEK + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="png" ContentType="image/png"/><Default Extension="jpeg" ContentType="image/jpeg"/>' +
+    '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/>' +
+    rels.map(r => `<Override PartName="/word/${r.target}" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.${r.type}+xml"/>`).join('') + '</Types>';
+  const sekarang = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
+  const judul = namaBerkas(d).replace(/_/g, ' ');
+  const inti = XML_DEK + `<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${xe(judul)}</dc:title><dc:creator>${xe((S.kop.baris[0] || {}).t || 'Cetak Soal')}</dc:creator><dcterms:created xsi:type="dcterms:W3CDTF">${sekarang}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${sekarang}</dcterms:modified></cp:coreProperties>`;
+  const app = XML_DEK + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Cetak Soal</Application></Properties>';
+  const relRoot = XML_DEK + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>';
+  const blob = buatZip([
+    { name: '[Content_Types].xml', data: tipe }, { name: '_rels/.rels', data: relRoot },
+    { name: 'word/document.xml', data: dokumen }, { name: 'word/styles.xml', data: gaya }, { name: 'word/settings.xml', data: setelan },
+    { name: 'word/_rels/document.xml.rels', data: XML_DEK + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + relInti.join('') + '</Relationships>' },
+    { name: 'docProps/core.xml', data: inti }, { name: 'docProps/app.xml', data: app }, ...berkas
+  ]);
+  return { blob, gambarGagal: DX.gambarGagal.length, rumusGagal: DX.rumusGagal };
+}
+function namaBerkas(d) {
+  const mapel = [...new Set(d.units.map(u => u.p.mapel).filter(Boolean))];
+  const kelas = [...new Set(d.units.flatMap(u => u.kelas))].sort(kelasUrut);
+  const bag = [d.T.nama, mapel.length > 2 ? mapel.length + ' mapel' : mapel.join(' '), kelas.length > 3 ? kelas.length + ' kelas' : kelas.join(' ')];
+  return bag.filter(Boolean).join('_').replace(/\s*[&+]\s*/g, ' dan ').replace(/[\\/:*?"<>|]+/g, '').replace(/[,\s]+/g, '_').slice(0, 110);
+}
+
+/* =====================================================================
+   ANTARMUKA
+   ===================================================================== */
+const LANGKAH = [
+  ['data', 'Soal', '<path d="M4 6h16M4 12h16M4 18h10"/>'],
+  ['template', 'Template', '<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>'],
+  ['kop', 'KOP', '<path d="M3 10l9-6 9 6M5 10v9h14v-9M9 19v-5h6v5"/>'],
+  ['naskah', 'Identitas', '<circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/>'],
+  ['tata', 'Tata letak', '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/>'],
+  ['butir', 'Butir', '<path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>']
+];
+function bukaPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('aktif', p.dataset.panel === id));
+  document.querySelectorAll('#langkah button').forEach(b => b.classList.toggle('aktif', b.dataset.p === id));
+  if (id === 'butir') renderButir();
+}
+$('langkah').innerHTML = LANGKAH.map(([id, n, svg]) => `<button type="button" data-p="${id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${svg}</svg>${n}<span class="jml hidden" id="jml-${id}"></span></button>`).join('');
+$('langkah').addEventListener('click', e => { const b = e.target.closest('button'); if (b) bukaPanel(b.dataset.p); });
+$('langkah').querySelector('button').classList.add('aktif');
+document.addEventListener('click', e => { const b = e.target.closest('[data-ke]'); if (b) bukaPanel(b.dataset.ke); });
+
+/* Pengikatan isian ke state lewat atribut data-b */
+const ambilJalur = p => p.split('.').reduce((o, k) => (o == null ? o : o[k]), S);
+function aturJalur(p, v) { const a = p.split('.'), k = a.pop(); a.reduce((o, x) => o[x], S)[k] = v; }
+function isiIkatan() {
+  document.querySelectorAll('[data-b]').forEach(el => {
+    const v = ambilJalur(el.dataset.b);
+    if (el.type === 'checkbox') el.checked = !!v; else el.value = v == null ? '' : v;
+  });
+  $('wrapPetunjuk').classList.toggle('hidden', !S.naskah.petunjukOn);
+  renderSegGaris();
+}
+document.querySelectorAll('[data-b]').forEach(el => {
+  const baca = () => {
+    let v = el.type === 'checkbox' ? el.checked : el.value;
+    if (el.dataset.num !== undefined) v = v === '' ? 0 : parseFloat(v);
+    aturJalur(el.dataset.b, v);
+    if (el.dataset.b === 'naskah.petunjukOn') $('wrapPetunjuk').classList.toggle('hidden', !v);
+    if (el.dataset.b === 'pilih.skala') { renderButir(); }
+    if (el.dataset.b === 'pilih.pg' || el.dataset.b === 'pilih.es') renderButir();
+    simpan(); jadwal();
+  };
+  el.addEventListener(el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input', baca);
+});
+
+/* Pilihan mapel, kelas, paket */
+function renderChip(el, list, pilihan, kunciS) {
+  if (!META) { el.innerHTML = '<span class="kosong" style="width:100%">Menunggu data…</span>'; return; }
+  if (!list.length) { el.innerHTML = '<span class="kosong" style="width:100%">Tidak ada data.</span>'; return; }
+  el.innerHTML = list.map(v => `<button class="chip" type="button" data-v="${esc(v)}" aria-pressed="${pilihan.includes(v)}">${esc(v)}</button>`).join('');
+  el.onclick = e => {
+    const b = e.target.closest('.chip'); if (!b) return;
+    const v = b.dataset.v, arr = S.pilih[kunciS], i = arr.indexOf(v);
+    if (i >= 0) arr.splice(i, 1); else arr.push(v);
+    perbaruiPilihan();
+  };
+}
+document.querySelectorAll('[data-semua]').forEach(b => b.addEventListener('click', () => { const k = b.dataset.semua; S.pilih[k] = k === 'mapel' ? daftarMapel() : daftarKelas(); perbaruiPilihan(); }));
+document.querySelectorAll('[data-hapus]').forEach(b => b.addEventListener('click', () => { S.pilih[b.dataset.hapus] = []; perbaruiPilihan(); }));
+function renderPaket() {
+  const el = $('daftarPaket'), cocok = paketCocok();
+  $('jmlPaket').textContent = cocok.length ? paketAktifDipilih().length + ' dari ' + cocok.length + ' dipilih' : '';
+  if (!cocok.length) { el.innerHTML = '<div class="kosong">Pilih mata pelajaran dan kelas.</div>'; return; }
+  el.innerHTML = cocok.map(p => {
+    const on = paketDipilih(p), st = STATUS[p.id], sl = SOAL[p.id];
+    let ket;
+    if (st === 'muat') ket = '<span class="spin"></span> mengambil soal…';
+    else if (st === 'err') ket = `<span class="lencana err">Gagal</span> ${esc(GALAT[p.id] || '')} <button class="tautan" type="button" data-ulang="${esc(p.id)}">Coba lagi</button>`;
+    else if (sl) { const g = sl.filter(s => s.tipe === 'PG').length, e = sl.length - g; ket = `${g} PG · ${e} essay${sl.length ? '' : ' <span class="lencana warn">kosong</span>'}`; }
+    else ket = 'Centang untuk mengambil soal';
+    return `<label class="paket${on ? ' on' : ''}"><input type="checkbox" data-paket="${esc(p.id)}"${on ? ' checked' : ''}><span style="min-width:0"><span class="nm">${esc(p.nama)}</span> ${p.aktif ? '' : '<span class="lencana warn">nonaktif</span>'}<br><span class="mt">${esc(mapelNama(p))} · ${esc(p.kelas.join(', ') || 'semua kelas')}</span><br><span class="mt">${ket}</span></span></label>`;
+  }).join('');
+}
+$('daftarPaket').addEventListener('change', e => {
+  const c = e.target.closest('[data-paket]'); if (!c) return;
+  S.pilih.paket[c.dataset.paket] = c.checked;
+  perbaruiPilihan();
+});
+$('daftarPaket').addEventListener('click', e => {
+  const u = e.target.closest('[data-ulang]');
+  if (u) { e.preventDefault(); ambilSoal(u.dataset.ulang, true); renderPaket(); }
+});
+function perbaruiPilihan() {
+  renderChip($('chipMapel'), daftarMapel(), S.pilih.mapel, 'mapel');
+  renderChip($('chipKelas'), daftarKelas(), S.pilih.kelas, 'kelas');
+  pastikanSoal(); renderPaket(); renderButir(); simpan(); jadwal();
+}
+
+/* Template */
+$('galeri').innerHTML = TEMPLATE.map(t => `<button class="tpl" type="button" data-t="${t.id}" aria-pressed="false">${sketsa(t.id)}<b>${esc(t.nama)}</b><small>${esc(t.desk)}</small></button>`).join('');
+$('galeri').addEventListener('click', e => { const b = e.target.closest('.tpl'); if (!b) return; S.tpl.id = b.dataset.t; renderTemplate(); simpan(); jadwal(60); });
+function renderTemplate() {
+  const T = tplAktif();
+  document.querySelectorAll('.tpl').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === T.id));
+  document.querySelectorAll('[data-tpl]').forEach(el => el.classList.toggle('hidden', !el.dataset.tpl.split(',').includes(T.id)));
+  $('catatanTpl').textContent = T.catatan;
+}
+
+/* KOP */
+function renderKop() {
+  const list = S.kop.baris;
+  $('kopBaris').innerHTML = list.map((b, i) => `<div class="baris-kop" data-i="${i}">
+    <input type="text" data-f="t" value="${esc(b.t)}" placeholder="Teks baris KOP" aria-label="Teks baris ${i + 1}">
+    <span class="lbl">Ukuran</span>
+    <input type="number" data-f="s" min="7" max="30" value="${+b.s}" title="Ukuran huruf (pt)" aria-label="Ukuran huruf baris ${i + 1} dalam pt">
+    <button class="ik${b.b ? ' on' : ''}" type="button" data-a="b" title="Huruf tebal" aria-pressed="${!!b.b}" aria-label="Tebal baris ${i + 1}">B</button>
+    <span></span>
+    <button class="ik" type="button" data-a="naik" ${i === 0 ? 'disabled' : ''} aria-label="Naikkan baris ${i + 1}">↑</button>
+    <button class="ik" type="button" data-a="turun" ${i === list.length - 1 ? 'disabled' : ''} aria-label="Turunkan baris ${i + 1}">↓</button>
+    <button class="ik" type="button" data-a="hapus" aria-label="Hapus baris ${i + 1}">×</button></div>`).join('') || '<div class="kosong">Belum ada baris KOP.</div>';
+  [['logoKiri', 'Logo kiri'], ['logoKanan', 'Logo kanan']].forEach(([k, n]) => {
+    const v = S.kop[k], serverAda = META?.setting?.LOGO_URL;
+    $(k).innerHTML = `<div class="gbr">${v ? `<img src="${esc(v)}" alt="${n}" referrerpolicy="no-referrer">` : n}</div><div class="btn-baris"><button class="btn kecil" type="button" data-unggah="${k}">Unggah</button>${serverAda ? `<button class="btn kecil" type="button" data-server="${k}">Server</button>` : ''}${v ? `<button class="btn kecil bahaya" type="button" data-buang="${k}">Hapus</button>` : ''}</div><input type="file" accept="image/*" class="hidden" data-berkas="${k}">`;
+  });
+}
+function renderSegGaris() { document.querySelectorAll('#segGaris button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.kop.garis)); }
+$('segGaris').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; S.kop.garis = b.dataset.v; renderSegGaris(); simpan(); jadwal(60); });
+$('kopBaris').addEventListener('input', e => {
+  const r = e.target.closest('[data-i]'); if (!r) return;
+  const f = e.target.dataset.f; S.kop.baris[+r.dataset.i][f] = f === 's' ? parseFloat(e.target.value) || 12 : e.target.value;
+  simpan(); jadwal();
+});
+$('kopBaris').addEventListener('click', e => {
+  const t = e.target.closest('[data-a]'); if (!t) return;
+  const i = +t.closest('[data-i]').dataset.i, L = S.kop.baris;
+  if (t.dataset.a === 'b') L[i].b = !L[i].b;
+  if (t.dataset.a === 'hapus') L.splice(i, 1);
+  if (t.dataset.a === 'naik' && i > 0) [L[i - 1], L[i]] = [L[i], L[i - 1]];
+  if (t.dataset.a === 'turun' && i < L.length - 1) [L[i + 1], L[i]] = [L[i], L[i + 1]];
+  renderKop(); simpan(); jadwal(60);
+});
+$('kopTambah').addEventListener('click', () => { S.kop.baris.push({ t: '', s: 11, b: false }); renderKop(); $('kopBaris').querySelector('.baris-kop:last-child input').focus(); simpan(); });
+$('kopReset').addEventListener('click', () => { S.kop = KOP_BAWAAN(); renderKop(); isiIkatan(); simpan(); jadwal(60); UE.toast('KOP dikembalikan ke bawaan', 'ok'); });
+async function logoDariBerkas(file) {
+  const u = URL.createObjectURL(file);
+  try {
+    const im = await muatElemen(u), maks = 360, r = Math.min(1, maks / Math.max(im.naturalWidth, im.naturalHeight));
+    const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.naturalWidth * r)); c.height = Math.max(1, Math.round(im.naturalHeight * r));
+    c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+    return c.toDataURL('image/png');
+  } finally { URL.revokeObjectURL(u); }
+}
+['logoKiri', 'logoKanan'].forEach(k => {
+  $(k).addEventListener('click', e => {
+    if (e.target.closest('[data-unggah]')) $(k).querySelector('input[type=file]').click();
+    if (e.target.closest('[data-buang]')) { S.kop[k] = ''; renderKop(); simpan(); jadwal(60); }
+    if (e.target.closest('[data-server]')) { S.kop[k] = META.setting.LOGO_URL; renderKop(); simpan(); jadwal(60); }
+  });
+  $(k).addEventListener('change', async e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    try { S.kop[k] = await logoDariBerkas(f); renderKop(); simpan(); jadwal(60); }
+    catch (err) { UE.toast('Berkas logo tidak dapat dibaca', 'err'); }
+  });
+});
+
+/* Butir soal & level */
+function renderOpsiFilterLevel() {
+  const v = $('filterLevel').value;
+  $('filterLevel').innerHTML = '<option value="">Semua level</option><option value="-">Belum ada level</option>' + levelSkala().map(l => `<option value="${l}">${l} — ${NAMA_LEVEL[l]}</option>`).join('');
+  $('filterLevel').value = [...$('filterLevel').options].some(o => o.value === v) ? v : '';
+}
+function renderButir() {
+  renderOpsiFilterLevel();
+  const pakets = paketAktifDipilih(), el = $('daftarButir');
+  const cari = $('cariButir').value.trim().toLowerCase(), fl = $('filterLevel').value;
+  let total = 0, tanpa = 0, pilih = 0, h = '';
+  pakets.forEach(p => {
+    const soal = (SOAL[p.id] || []).filter(s => (s.tipe === 'PG' ? S.pilih.pg : S.pilih.es));
+    if (!soal.length) return;
+    let baris = '';
+    soal.forEach(s => {
+      const key = kunciLv(p.id, s), lv = infoLevel(p.id, s), off = !!S.pilih.off[key];
+      total++; if (!lv.v) tanpa++; if (!off) pilih++;
+      if (cari && !(teksPolos(s.soal) + ' ' + (s.tp || '')).toLowerCase().includes(cari)) return;
+      if (fl === '-' ? lv.v : fl && lv.v !== fl) return;
+      const pil = levelSkala().includes(lv.v) || !lv.v ? levelSkala() : levelSkala().concat(lv.v);
+      baris += `<div class="butir"><input type="checkbox" data-sl="${esc(key)}"${off ? '' : ' checked'} aria-label="Sertakan soal ${s.no}"><div class="tks"><span class="lencana ${s.tipe === 'PG' ? 'pg' : 'es'}">${s.tipe === 'PG' ? 'PG' : 'Essay'} ${s.no}</span> ${esc(ringkas(s.soal, 120))}<span class="tp">${s.tp ? 'TP: ' + esc(ringkas(s.tp, 90)) : 'TP belum diisi'}</span></div><div><select data-lv="${esc(key)}" aria-label="Level soal ${s.no}"><option value="">-</option>${pil.map(l => `<option${l === lv.v ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>${lv.est ? '<span class="est" title="Hasil perkiraan dari kata kerja TP. Silakan tinjau.">perkiraan</span>' : ''}</div></div>`;
+    });
+    if (baris) h += `<div class="grup-butir">${esc(p.nama)}</div>` + baris;
+  });
+  el.innerHTML = h || `<div class="kosong">${total ? 'Tidak ada soal yang cocok dengan pencarian.' : 'Pilih paket di menu Soal terlebih dahulu.'}</div>`;
+  const jml = $('jml-butir');
+  if (jml) { jml.textContent = pilih; jml.classList.toggle('hidden', !total); }
+  const c = $('catatanLevel');
+  c.classList.toggle('hidden', !tanpa);
+  c.textContent = tanpa + ' dari ' + total + ' soal belum memiliki Level. Isi satu per satu, tekan “Perkirakan level kosong”, atau tambahkan kolom LEVEL pada sheet soal.';
+}
+$('daftarButir').addEventListener('change', e => {
+  const c = e.target.closest('[data-sl]');
+  if (c) { if (c.checked) delete S.pilih.off[c.dataset.sl]; else S.pilih.off[c.dataset.sl] = 1; simpan(); renderButirJumlah(); jadwal(); return; }
+  const l = e.target.closest('[data-lv]');
+  if (l) { LV[l.dataset.lv] = { v: l.value, est: false }; simpan(); jadwal(); renderButir(); }
+});
+function renderButirJumlah() { const pakets = paketAktifDipilih(); let n = 0; pakets.forEach(p => (SOAL[p.id] || []).forEach(s => { if (!S.pilih.off[kunciLv(p.id, s)] && (s.tipe === 'PG' ? S.pilih.pg : S.pilih.es)) n++; })); $('jml-butir').textContent = n; }
+$('cariButir').addEventListener('input', renderButir);
+$('filterLevel').addEventListener('change', renderButir);
+const untukSemuaButir = fn => paketAktifDipilih().forEach(p => (SOAL[p.id] || []).forEach(s => fn(p, s, kunciLv(p.id, s))));
+$('butirSemua').addEventListener('click', () => { untukSemuaButir((p, s, k) => { delete S.pilih.off[k]; }); renderButir(); simpan(); jadwal(); });
+$('butirKosong').addEventListener('click', () => { untukSemuaButir((p, s, k) => { S.pilih.off[k] = 1; }); renderButir(); simpan(); jadwal(); });
+$('butirPerkirakan').addEventListener('click', () => {
+  let terisi = 0, gagal = 0;
+  untukSemuaButir((p, s, k) => {
+    if (infoLevel(p.id, s).v) return;
+    const c = perkirakanLevel(s);
+    if (c) { LV[k] = { v: c, est: true }; terisi++; } else gagal++;
+  });
+  renderButir(); simpan(); jadwal(60);
+  UE.toast(terisi + ' level diperkirakan' + (gagal ? ', ' + gagal + ' soal perlu diisi manual' : '') + '. Mohon ditinjau kembali.', terisi ? 'ok' : '');
+});
+
+/* Zoom */
+$('zoomBesar').addEventListener('click', () => { zoomMode = 'manual'; zoomNilai = Math.min(2, zoomNilai + .1); aturZoom(); });
+$('zoomKecil').addEventListener('click', () => { zoomMode = 'manual'; zoomNilai = Math.max(.25, zoomNilai - .1); aturZoom(); });
+$('zoomPas').addEventListener('click', () => { zoomMode = 'pas'; aturZoom(); });
+window.addEventListener('resize', () => { if (zoomMode === 'pas') aturZoom(); });
+
+/* Ekspor */
+function cetak() {
+  if (!DOC || !DOC.parts.length) return;
+  const judulLama = document.title;
+  document.title = namaBerkas(DOC);
+  const pulih = () => { document.title = judulLama; window.removeEventListener('afterprint', pulih); };
+  window.addEventListener('afterprint', pulih);
+  window.print();
+}
+$('btnCetak').addEventListener('click', cetak);
+$('btnPDF').addEventListener('click', () => { if (UE.store.get(KUNCI_NONPDF, false)) cetak(); else $('lapisPDF').classList.remove('hidden'); });
+$('pdfBatal').addEventListener('click', () => $('lapisPDF').classList.add('hidden'));
+$('pdfLanjut').addEventListener('click', () => { if ($('pdfJangan').checked) UE.store.set(KUNCI_NONPDF, true); $('lapisPDF').classList.add('hidden'); setTimeout(cetak, 60); });
+$('btnDOCX').addEventListener('click', async () => {
+  if (!DOC || !DOC.parts.length) return;
+  const b = $('btnDOCX'), isi = b.innerHTML;
+  b.disabled = true; b.innerHTML = '<span class="spin"></span> Membuat Word…';
+  try {
+    const d = buildDoc();
+    const { blob, gambarGagal, rumusGagal } = await buatDocx(d);
+    const a = document.createElement('a'), url = URL.createObjectURL(blob);
+    a.href = url; a.download = namaBerkas(d) + '.docx';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+    if (gambarGagal) UE.toast(gambarGagal + ' gambar tidak bisa disematkan (server gambar menolak). Tautannya dicetak di dokumen; sisipkan manual di Word.', 'err');
+    else if (rumusGagal) UE.toast(rumusGagal + ' rumus dicetak sebagai teks LaTeX. Periksa koneksi internet lalu ulangi.', 'err');
+    else UE.toast('Dokumen Word berhasil dibuat', 'ok');
+  } catch (e) {
+    console.error(e); UE.toast('Gagal membuat Word: ' + e.message, 'err');
+  } finally { b.disabled = false; b.innerHTML = isi; }
+});
+
+/* Cadangan & reset */
+$('cadangSimpan').addEventListener('click', () => {
+  const data = JSON.stringify({ aplikasi: 'cetak-soal', versi: 1, pengaturan: S, level: LV }, null, 1);
+  const a = document.createElement('a'), u = URL.createObjectURL(new Blob([data], { type: 'application/json' }));
+  a.href = u; a.download = 'Pengaturan_Cetak_Soal.json'; a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 5000);
+});
+$('cadangMuat').addEventListener('click', () => $('cadangFile').click());
+$('cadangFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try {
+    const j = JSON.parse(await f.text());
+    if (j.aplikasi !== 'cetak-soal') throw new Error('bukan berkas pengaturan Cetak Soal');
+    S = gabung(STATE_BAWAAN(), j.pengaturan || {}); LV = j.level || {};
+    isiIkatan(); renderKop(); renderTemplate(); perbaruiPilihan();
+    UE.toast('Pengaturan berhasil dimuat', 'ok');
+  } catch (err) { UE.toast('Berkas tidak valid: ' + err.message, 'err'); }
+  e.target.value = '';
+});
+$('resetSemua').addEventListener('click', () => {
+  const benih = S.naskah.seed;
+  S.tata = TATA_BAWAAN(); S.naskah = NASKAH_BAWAAN(); S.naskah.seed = benih; S.tpl = { ...TPL_BAWAAN(), id: S.tpl.id };
+  isiDefaultServer(); isiIkatan(); simpan(); jadwal(60);
+  UE.toast('Tata letak dan identitas naskah dikembalikan', 'ok');
+});
+$('acakUlang').addEventListener('click', () => { S.naskah.seed = (S.naskah.seed || 1) + 1; simpan(); jadwal(60); UE.toast('Urutan diacak ulang'); });
+
+/* ---------- Muat data & masuk ---------- */
+/* Nilai dari PENGATURAN server hanya jadi cadangan & placeholder, tidak disalin ke pengaturan tersimpan */
+function isiDefaultServer() {
+  const s = (META && META.setting) || {};
+  const ph = (jalur, v) => { const el = document.querySelector(`[data-b="${jalur}"]`); if (el) el.placeholder = v && v !== '-' ? v : ''; };
+  ph('naskah.tahun', s.TAHUN_PELAJARAN); ph('ttd.kota', s.KOTA); ph('ttd.kepsek', s.NAMA_KEPSEK); ph('ttd.nipKepsek', s.NIP_KEPSEK); ph('ttd.guru', s.NAMA_GURU); ph('ttd.nipGuru', s.NIP_GURU);
+}
+function pasangMeta(m) {
+  META = m;
+  // Bersihkan pilihan lama yang sudah tidak ada di data
+  const mp = daftarMapel(), kl = daftarKelas();
+  S.pilih.mapel = S.pilih.mapel.filter(x => mp.includes(x));
+  S.pilih.kelas = S.pilih.kelas.filter(x => kl.includes(x));
+  isiDefaultServer(); isiIkatan(); renderKop(); perbaruiPilihan();
+}
+function setSumber(teks, contoh) { const p = $('sumber'); p.textContent = teks; p.classList.toggle('contoh', !!contoh); }
+async function hubungkan() {
+  setSumber('Menghubungkan…');
+  try {
+    let m;
+    try {
+      AKSI = AKSI_CETAK;
+      m = await UE.api(AKSI.meta, { password: PW }, 60000);
+    } catch (e) {
+      if (!/Aksi tidak dikenal/i.test(e.message)) throw e;
+      AKSI = AKSI_GURU; // Code.gs belum diperbarui: hanya password guru yang berlaku
+      m = await UE.api(AKSI.meta, { password: PW }, 60000);
+    }
+    // Disimpan terpisah dari sesi dashboard, karena password cetak tidak berlaku di dashboard
+    sessionStorage.setItem('cs_pw', PW);
+    MODE_CONTOH = false;
+    $('lapisLogin').classList.add('hidden');
+    setSumber('Terhubung ke spreadsheet');
+    Object.keys(SOAL).forEach(k => delete SOAL[k]); Object.keys(STATUS).forEach(k => delete STATUS[k]);
+    pasangMeta(m);
+    return true;
+  } catch (e) {
+    setSumber('Belum terhubung');
+    if (/password/i.test(e.message)) { sessionStorage.removeItem('cs_pw'); sessionStorage.removeItem('ue_guru_pw'); }
+    $('errLogin').textContent = e.message;
+    $('lapisLogin').classList.remove('hidden');
+    return false;
+  }
+}
+$('formLogin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const b = $('btnMasuk');
+  PW = $('pwLogin').value; $('errLogin').textContent = '';
+  b.disabled = true; b.innerHTML = '<span class="spin"></span>';
+  await hubungkan();
+  b.disabled = false; b.textContent = 'Masuk';
+});
+$('btnContoh').addEventListener('click', () => {
+  MODE_CONTOH = true;
+  pilihAsli = S.pilih; S.pilih = { ...STATE_BAWAAN().pilih, pg: S.pilih.pg, es: S.pilih.es, skala: S.pilih.skala };
+  LV = {};
+  const dc = dataContoh();
+  Object.keys(dc.soal).forEach(id => { SOAL[id] = dc.soal[id]; STATUS[id] = 'ok'; });
+  $('lapisLogin').classList.add('hidden');
+  setSumber('MODE CONTOH — bukan soal asli', true);
+  pasangMeta(dc.meta);
+});
+$('btnMuatUlang').addEventListener('click', () => { if (MODE_CONTOH) { UE.toast('Sedang memakai data contoh. Muat ulang halaman untuk masuk dengan password.'); return; } hubungkan(); });
+
+function dataContoh() {
+  const gambar = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="420" height="190" viewBox="0 0 420 190"><rect width="420" height="190" fill="#fff"/><path d="M40 160H380M40 160V20" stroke="#000" stroke-width="2"/><path d="M60 140L150 60L260 60L360 30" fill="none" stroke="#1f4e8c" stroke-width="3"/><text x="170" y="182" font-family="Arial" font-size="14">Waktu (menit)</text><text x="48" y="18" font-family="Arial" font-size="14">Suhu (°C)</text></svg>');
+  const pg = (no, soal, opsi, kunci, tp, skor, gbr) => ({ id: 'PG-' + no, tipe: 'PG', no, soal, gambar: gbr || '', opsi: opsi.map((t, i) => ({ k: HURUF[i], t })), kunci, skor: skor || 2, waktu: 60, tp });
+  const es = (no, soal, pedoman, tp, skor) => ({ id: 'ES-' + no, tipe: 'ES', no, soal, gambar: '', pedoman, skor: skor || 10, waktu: 300, tp });
+  const tpK1 = 'Menjelaskan konsep kalor dan satuannya', tpK2 = 'Menghitung kalor yang diperlukan untuk menaikkan suhu benda', tpK3 = 'Menganalisis grafik perubahan suhu terhadap waktu';
+  const tpM1 = 'Menentukan nilai variabel pada persamaan linear satu variabel', tpM2 = 'Menghitung luas dan keliling bangun datar', tpM3 = 'Menerapkan teorema Pythagoras';
+  const tpB1 = 'Menentukan gagasan utama paragraf', tpB2 = 'Menyusun kalimat efektif';
+  return {
+    meta: {
+      pakets: [
+        { id: 'IPA8-KALOR', nama: 'Penilaian Sumatif Suhu dan Kalor', mapel: 'Ilmu Pengetahuan Alam', kelas: ['VIII-A', 'VIII-B'], mode: 'TIMER', durasiMenit: 90, aktif: true },
+        { id: 'MTK8-ALJABAR', nama: 'Penilaian Sumatif Aljabar dan Geometri', mapel: 'Matematika', kelas: ['VIII-A', 'VIII-B', 'IX-A'], mode: 'TIMER', durasiMenit: 120, aktif: true },
+        { id: 'BIN7-TEKS', nama: 'Penilaian Sumatif Teks Deskripsi', mapel: 'Bahasa Indonesia', kelas: ['SEMUA'], mode: 'TIMERSOAL', durasiMenit: 0, aktif: true },
+        { id: 'IPA8-LAMA', nama: 'Ulangan Harian Lama', mapel: 'Ilmu Pengetahuan Alam', kelas: ['VIII-A'], mode: 'TIMER', durasiMenit: 40, aktif: false }
+      ],
+      users: [{ u: 'a', n: 'Contoh', k: 'VII-A' }, { u: 'b', n: 'Contoh', k: 'VII-B' }, { u: 'c', n: 'Contoh', k: 'VIII-A' }, { u: 'd', n: 'Contoh', k: 'VIII-B' }, { u: 'e', n: 'Contoh', k: 'IX-A' }],
+      setting: { TAHUN_PELAJARAN: '2026/2027', KOTA: 'Ratatotok', NAMA_GURU: 'Nama Guru, S.Pd.', NIP_GURU: '-', NAMA_KEPSEK: 'Nama Kepala Sekolah, M.Pd.', NIP_KEPSEK: '-' }
+    },
+    soal: {
+      'IPA8-KALOR': [
+        pg(1, 'Satuan kalor dalam Sistem Internasional adalah …', ['kalori', 'joule', 'watt', 'kelvin'], 'B', tpK1),
+        pg(2, 'Kalor adalah energi yang berpindah karena adanya perbedaan …', ['massa benda', 'volume benda', 'suhu benda', 'massa jenis benda'], 'C', tpK1),
+        pg(3, 'Air bermassa $2\\text{ kg}$ dipanaskan dari $25^\\circ\\text{C}$ menjadi $75^\\circ\\text{C}$. Jika $c = 4200\\text{ J/kg}^\\circ\\text{C}$, kalor yang diperlukan adalah …', ['$210\\text{ kJ}$', '$420\\text{ kJ}$', '$630\\text{ kJ}$', '$840\\text{ kJ}$'], 'B', tpK2),
+        pg(4, 'Rumus yang tepat untuk menghitung kalor jenis adalah …', ['$c = \\frac{Q}{m \\cdot \\Delta T}$', '$c = Q \\cdot m \\cdot \\Delta T$', '$c = \\frac{m}{Q \\cdot \\Delta T}$', '$c = \\frac{\\Delta T}{Q \\cdot m}$'], 'A', tpK2),
+        pg(5, 'Perhatikan grafik berikut. Pada bagian mendatar grafik, zat sedang mengalami …', ['kenaikan suhu', 'perubahan wujud', 'penurunan kalor jenis', 'pengurangan massa'], 'B', tpK3, 2, gambar),
+        pg(6, 'Peristiwa berikut yang merupakan contoh perpindahan kalor secara konveksi adalah …', ['Sendok logam menjadi panas saat digunakan mengaduk kopi panas di dalam gelas', 'Terjadinya angin laut pada siang hari di daerah pantai', 'Tubuh terasa hangat saat berada di dekat api unggun', 'Telapak tangan terasa panas saat menyentuh setrika'], 'B', tpK1),
+        es(1, 'Jelaskan perbedaan antara **suhu** dan **kalor** beserta satuannya!', 'Suhu menyatakan derajat panas benda (kelvin), kalor adalah energi yang berpindah karena perbedaan suhu (joule). Skor 5 untuk definisi, 5 untuk satuan.', tpK1, 10),
+        es(2, 'Logam bermassa 500 g menerima kalor $9.000\\text{ J}$ sehingga suhunya naik $40^\\circ\\text{C}$. Hitunglah kalor jenis logam tersebut!', '$$c = \\frac{Q}{m \\Delta T} = \\frac{9000}{0{,}5 \\times 40} = 450\\text{ J/kg}^\\circ\\text{C}$$ Skor penuh bila rumus, substitusi, dan hasil benar.', tpK2, 15)
+      ],
+      'MTK8-ALJABAR': [
+        pg(1, 'Nilai $x$ yang memenuhi $3x + 5 = 20$ adalah …', ['3', '4', '5', '6'], 'C', tpM1),
+        pg(2, 'Hasil dari $\\sqrt{144} + 2^3$ adalah …', ['14', '20', '24', '32'], 'B', tpM1),
+        pg(3, 'Penyelesaian sistem $\\frac{x}{2} + 1 = 4$ adalah …', ['$x = 3$', '$x = 5$', '$x = 6$', '$x = 8$'], 'C', tpM1),
+        pg(4, 'Luas lingkaran dengan jari-jari $r = 7\\text{ cm}$ dan $\\pi = \\frac{22}{7}$ adalah …', ['$44\\text{ cm}^2$', '$88\\text{ cm}^2$', '$154\\text{ cm}^2$', '$308\\text{ cm}^2$'], 'C', tpM2),
+        pg(5, 'Segitiga siku-siku memiliki sisi tegak $6\\text{ cm}$ dan $8\\text{ cm}$. Panjang sisi miringnya adalah …', ['$9\\text{ cm}$', '$10\\text{ cm}$', '$12\\text{ cm}$', '$14\\text{ cm}$', '$15\\text{ cm}$'], 'B', tpM3),
+        es(1, 'Sebuah persegi panjang memiliki keliling $48\\text{ cm}$ dan panjang dua kali lebarnya. Tentukan luas persegi panjang tersebut!', '$$2(2l + l) = 48 \\Rightarrow l = 8,\\; p = 16,\\; L = 128\\text{ cm}^2$$', tpM2, 20)
+      ],
+      'BIN7-TEKS': [
+        pg(1, 'Gagasan utama paragraf biasanya terdapat pada …', ['kalimat utama', 'kalimat penjelas', 'judul bacaan', 'daftar pustaka'], 'A', tpB1),
+        pg(2, 'Kalimat berikut yang efektif adalah …', ['Para siswa-siswa berkumpul di lapangan.', 'Siswa berkumpul di lapangan.', 'Bagi siswa-siswa harap berkumpul.', 'Di lapangan para siswa-siswa berkumpul.'], 'B', tpB2),
+        es(1, 'Tulislah satu paragraf deskripsi tentang lingkungan sekolahmu (minimal lima kalimat)!', 'Memuat gagasan utama, rincian objek, dan ejaan yang tepat. Skor 4 tiap aspek.', tpB2, 12)
+      ],
+      'IPA8-LAMA': [pg(1, 'Alat untuk mengukur suhu adalah …', ['barometer', 'termometer', 'higrometer', 'neraca'], 'B', tpK1)]
+    }
+  };
+}
+
+/* ---------- Mulai ---------- */
+(function mulai() {
+  UE.daftarSW();
+  const mjx = $('mjx');
+  const setelahMJ = () => { if (window.MathJax && MathJax.startup && MathJax.startup.promise) MathJax.startup.promise.then(() => { if (DOC) jadwal(50); }); };
+  if (siapMJ()) setelahMJ(); else mjx.addEventListener('load', setelahMJ);
+  mjx.addEventListener('error', () => { if (DOC) jadwal(50); });
+  isiIkatan(); renderKop(); renderTemplate(); renderOpsiFilterLevel();
+  renderChip($('chipMapel'), [], [], 'mapel'); renderChip($('chipKelas'), [], [], 'kelas'); renderPaket();
+  $('pages').innerHTML = layarKosong();
+  PW = sessionStorage.getItem('ue_guru_pw') || sessionStorage.getItem('cs_pw') || '';
+  if (PW) hubungkan();
+  else { $('lapisLogin').classList.remove('hidden'); setTimeout(() => $('pwLogin').focus(), 50); }
+})();
+</script>
+</body>
+</html>

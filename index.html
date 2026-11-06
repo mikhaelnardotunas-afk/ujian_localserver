@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#5BC0F0">
+  <title>Siber Ujian Gemini V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Baloo+2:wght@600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --sky-top: #4FB8F0;
+      --sky-bot: #CFF0FF;
+      --red: #E5322D;
+      --yellow: #FFD21F;
+      --cream: #FFF3C4;
+      --grass: #7ACB3B;
+      --grass-dark: #4E9A22;
+      --dirt: #8A5A2B;
+      --wood: #D9953B;
+      --wood-dark: #5A3213;
+      --wood-deep: #3A1F0B;
+      --stone: #B9C0C8;
+      --stone-dark: #4A525B;
+      --ice: #9FE3FF;
+      --ice-dark: #2F7FA3;
+      --display: 'Lilita One', 'Impact', 'Arial Black', sans-serif;
+      --body: 'Baloo 2', 'Trebuchet MS', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent
+    }
+
+    html,
+    body {
+      height: 100%
+    }
+
+    body {
+      font-family: var(--body);
+      background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bot) 70%);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ---------- Langit ---------- */
+    .sky {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0
+    }
+
+    .sun {
+      position: absolute;
+      top: -70px;
+      right: -70px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #FFF6A8 0 35%, #FFE45C 36% 60%, rgba(255, 228, 92, .35) 61% 100%);
+    }
+
+    .cloud {
+      position: absolute;
+      width: 150px;
+      opacity: .95;
+      animation: drift linear infinite
+    }
+
+    .cloud.c1 {
+      top: 9%;
+      left: -180px;
+      animation-duration: 60s
+    }
+
+    .cloud.c2 {
+      top: 26%;
+      left: -180px;
+      width: 110px;
+      animation-duration: 85s;
+      animation-delay: -30s
+    }
+
+    .cloud.c3 {
+      top: 45%;
+      left: -180px;
+      width: 130px;
+      animation-duration: 70s;
+      animation-delay: -55s;
+      opacity: .8
+    }
+
+    @keyframes drift {
+      to {
+        transform: translateX(calc(100vw + 400px))
+      }
+    }
+
+    /* ---------- Layout ---------- */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: max(18px, env(safe-area-inset-top)) 18px 0;
+    }
+
+    header {
+      text-align: center;
+      width: 100%;
+      max-width: 520px;
+      margin-top: 6px
+    }
+
+    .logo-birds {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 2px;
+      height: 84px
+    }
+
+    .logo-birds svg {
+      width: 72px;
+      height: 72px;
+      filter: drop-shadow(0 5px 0 rgba(0, 0, 0, .18))
+    }
+
+    .logo-birds .b-yellow {
+      width: 58px;
+      height: 58px;
+      transform: rotate(12deg)
+    }
+
+    .logo-birds .b-red {
+      animation: hop 1.1s ease-in-out 0.4s 2
+    }
+
+    @keyframes hop {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      40% {
+        transform: translateY(-18px) rotate(-6deg)
+      }
+    }
+
+    h1 {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(2.8rem, 15vw, 5rem);
+      line-height: .95;
+      letter-spacing: 1px;
+      color: var(--cream);
+      -webkit-text-stroke: 11px #5C1A10;
+      paint-order: stroke fill;
+      text-shadow: 0 8px 0 #5C1A10, 0 14px 18px rgba(0, 0, 0, .3);
+      transform: rotate(-3deg);
+      margin-top: 2px;
+    }
+
+    .tagline {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 3px 18px 5px;
+      background: var(--red);
+      border: 4px solid #7A1410;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-size: 1.05rem;
+      letter-spacing: .5px;
+      box-shadow: 0 4px 0 #7A1410;
+      text-shadow: 1px 2px 0 #7A1410;
+    }
+
+    /* ---------- Tombol papan kayu ---------- */
+    nav {
+      width: 100%;
+      max-width: 440px;
+      margin: 26px 0 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px
+    }
+
+    .plank {
+      --c1: var(--wood);
+      --c2: #C47F26;
+      --edge: var(--wood-dark);
+      --deep: var(--wood-deep);
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px 14px 14px;
+      min-height: 84px;
+      border-radius: 18px;
+      border: 5px solid var(--edge);
+      background:
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 0 38px, rgba(0, 0, 0, .07) 38px 41px),
+        repeating-linear-gradient(0deg, var(--c1) 0 14px, var(--c2) 14px 17px);
+      box-shadow: 0 8px 0 var(--deep), 0 16px 18px rgba(0, 0, 0, .28);
+      color: #fff;
+      text-decoration: none;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .plank::before,
+    .plank::after {
+      /* baut */
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #eee, #8a8a8a);
+      border: 2px solid var(--deep);
+      transform: translateY(-50%);
+    }
+
+    .plank::before {
+      left: 5px;
+      top: 12px;
+      transform: none
+    }
+
+    .plank::after {
+      right: 6px;
+      bottom: 12px;
+      top: auto;
+      transform: none
+    }
+
+    .plank:nth-child(3n+2) {
+      --c1: var(--stone);
+      --c2: #A5ADB6;
+      --edge: var(--stone-dark);
+      --deep: #2E343A
+    }
+
+    .plank:nth-child(3n) {
+      --c1: var(--ice);
+      --c2: #86D6F7;
+      --edge: var(--ice-dark);
+      --deep: #1C556F
+    }
+
+    .plank.install-btn {
+      --c1: var(--grass);
+      --c2: #8ED84B;
+      --edge: var(--grass-dark);
+      --deep: #2D6110
+    }
+
+    .plank:hover {
+      transform: translateY(-4px) rotate(-.8deg);
+      box-shadow: 0 12px 0 var(--deep), 0 22px 22px rgba(0, 0, 0, .28)
+    }
+
+    .plank:active {
+      transform: translateY(7px);
+      box-shadow: 0 1px 0 var(--deep), 0 4px 8px rgba(0, 0, 0, .3)
+    }
+
+    .plank:focus-visible {
+      outline: 5px solid var(--yellow);
+      outline-offset: 4px
+    }
+
+    .ico {
+      flex: none;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 1.9rem;
+      background: var(--cream);
+      border: 4px solid var(--deep);
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .12);
+    }
+
+    .txt {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.05;
+      min-width: 0
+    }
+
+    .txt b {
+      font-family: var(--display);
+      font-weight: 400;
+      font-size: clamp(1.55rem, 7.5vw, 2rem);
+      text-shadow: 2px 3px 0 var(--deep);
+      letter-spacing: .5px;
+    }
+
+    .txt small {
+      font-family: var(--body);
+      font-weight: 600;
+      font-size: .95rem;
+      margin-top: 3px;
+      text-shadow: 1px 2px 0 var(--deep);
+    }
+
+    /* Utils */
+    .hidden {
+      display: none !important;
+    }
+
+    /* ---------- Pemandangan bawah ---------- */
+    .ground {
+      margin-top: auto;
+      width: calc(100% + 36px);
+      margin-left: -18px;
+      position: relative;
+      line-height: 0;
+    }
+
+    .ground svg {
+      width: 100%;
+      height: auto;
+      display: block
+    }
+
+    .ground .dirt {
+      height: max(26px, env(safe-area-inset-bottom));
+      background: var(--dirt);
+      margin-top: -1px
+    }
+
+    .pig-wobble {
+      transform-origin: 290px 180px;
+      animation: wobble 2.6s ease-in-out infinite
+    }
+
+    @keyframes wobble {
+
+      0%,
+      100% {
+        transform: rotate(0)
+      }
+
+      50% {
+        transform: rotate(-2deg)
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    @media (min-width:700px) {
+      nav {
+        max-width: 480px
+      }
+
+      .logo-birds {
+        height: 96px
+      }
+
+      .logo-birds svg {
+        width: 84px;
+        height: 84px
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Simbol gambar (dipakai ulang) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="red-bird" viewBox="0 0 120 120">
+        <path d="M22 78 L2 70 L6 84 L0 96 L24 92Z" fill="#8E1A15" stroke="#4A0D0A" stroke-width="4"
+          stroke-linejoin="round" />
+        <path d="M46 24 Q40 4 54 0 Q54 14 62 22 Q68 6 82 8 Q74 20 74 32Z" fill="#B71F1B" stroke="#4A0D0A"
+          stroke-width="4" stroke-linejoin="round" />
+        <circle cx="62" cy="68" r="46" fill="#E5322D" stroke="#4A0D0A" stroke-width="5" />
+        <ellipse cx="66" cy="96" rx="30" ry="19" fill="#F6E3C0" />
+        <circle cx="48" cy="62" r="14" fill="#fff" stroke="#4A0D0A" stroke-width="4" />
+        <circle cx="80" cy="62" r="14" fill="#fff" stroke="#4A0D0A" stroke-width="4" />
+        <circle cx="53" cy="65" r="5.5" fill="#111" />
+        <circle cx="75" cy="65" r="5.5" fill="#111" />
+        <line x1="30" y1="42" x2="58" y2="55" stroke="#1a0a08" stroke-width="10" stroke-linecap="round" />
+        <line x1="98" y1="42" x2="70" y2="55" stroke="#1a0a08" stroke-width="10" stroke-linecap="round" />
+        <path d="M56 72 Q80 64 102 80 Q80 96 56 86Z" fill="#FFB800" stroke="#7A4E00" stroke-width="4"
+          stroke-linejoin="round" />
+      </symbol>
+
+      <symbol id="yellow-bird" viewBox="0 0 120 120">
+        <path d="M58 6 L112 100 Q60 116 8 100Z" fill="#FFD21F" stroke="#7A5A00" stroke-width="5"
+          stroke-linejoin="round" />
+        <path d="M52 8 L40 -2 M64 8 L74 -2" stroke="#1a0a08" stroke-width="6" stroke-linecap="round" />
+        <circle cx="46" cy="66" r="12" fill="#fff" stroke="#7A5A00" stroke-width="4" />
+        <circle cx="74" cy="66" r="12" fill="#fff" stroke="#7A5A00" stroke-width="4" />
+        <circle cx="50" cy="68" r="4.5" fill="#111" />
+        <circle cx="70" cy="68" r="4.5" fill="#111" />
+        <line x1="30" y1="50" x2="54" y2="60" stroke="#1a0a08" stroke-width="8" stroke-linecap="round" />
+        <line x1="90" y1="50" x2="66" y2="60" stroke="#1a0a08" stroke-width="8" stroke-linecap="round" />
+        <path d="M50 76 Q72 70 94 82 Q72 94 50 88Z" fill="#FF8A00" stroke="#7A4E00" stroke-width="4"
+          stroke-linejoin="round" />
+      </symbol>
+
+      <symbol id="pig" viewBox="0 0 120 120">
+        <circle cx="26" cy="30" r="13" fill="#8BC34A" stroke="#2F5A10" stroke-width="5" />
+        <circle cx="94" cy="30" r="13" fill="#8BC34A" stroke="#2F5A10" stroke-width="5" />
+        <circle cx="60" cy="64" r="46" fill="#8BC34A" stroke="#2F5A10" stroke-width="5" />
+        <circle cx="42" cy="50" r="12" fill="#fff" stroke="#2F5A10" stroke-width="4" />
+        <circle cx="78" cy="50" r="12" fill="#fff" stroke="#2F5A10" stroke-width="4" />
+        <circle cx="44" cy="52" r="4.5" fill="#111" />
+        <circle cx="76" cy="52" r="4.5" fill="#111" />
+        <ellipse cx="60" cy="78" rx="22" ry="16" fill="#A9DB63" stroke="#2F5A10" stroke-width="5" />
+        <ellipse cx="52" cy="78" rx="4" ry="6.5" fill="#2F5A10" />
+        <ellipse cx="68" cy="78" rx="4" ry="6.5" fill="#2F5A10" />
+      </symbol>
+
+      <symbol id="cloud" viewBox="0 0 160 80">
+        <path
+          d="M30 76 Q4 76 6 54 Q8 36 30 38 Q34 14 62 14 Q84 14 90 30 Q96 18 114 20 Q136 22 136 44 Q156 46 154 62 Q152 76 132 76Z"
+          fill="#fff" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Langit -->
+  <div class="sky" aria-hidden="true">
+    <div class="sun"></div>
+    <svg class="cloud c1">
+      <use href="#cloud" />
+    </svg>
+    <svg class="cloud c2">
+      <use href="#cloud" />
+    </svg>
+    <svg class="cloud c3">
+      <use href="#cloud" />
+    </svg>
+  </div>
+
+  <div class="page">
+    <header>
+      <div class="logo-birds" aria-hidden="true">
+        <svg class="b-yellow">
+          <use href="#yellow-bird" />
+        </svg>
+        <svg class="b-red">
+          <use href="#red-bird" />
+        </svg>
+      </div>
+      <h1>SIBER<br>UJIAN</h1>
+      <p class="tagline">Versi Gemini -Ver 3</p>
+    </header>
+
+    <nav aria-label="Menu utama">
+      <!-- TOMBOL INSTALL PWA -->
+      <a class="plank install-btn hidden" href="#" id="btnInstall">
+        <span class="ico" aria-hidden="true">📲</span>
+        <span class="txt"><b>Install App</b><small>Pasang di layar utama HP</small></span>
+      </a>
+
+      <a class="plank" href="kuis.html">
+        <span class="ico" aria-hidden="true">🎒</span>
+        <span class="txt"><b>Kuis</b><small>Mulai kerjakan soal</small></span>
+      </a>
+
+      <!-- TOMBOL GURU -->
+      <a class="plank" href="guru.html">
+        <span class="ico" aria-hidden="true">🍩</span>
+        <span class="txt"><b>Guru</b><small>Kelola soal dan nilai</small></span>
+      </a>
+
+      <a class="plank" href="Cetak_Kartu.html">
+        <span class="ico" aria-hidden="true">🎯</span>
+        <span class="txt"><b>Cetak Kartu</b><small>Cetak kartu peserta</small></span>
+      </a>
+    </nav>
+
+    <div class="ground" aria-hidden="true">
+      <svg viewBox="0 0 400 190" preserveAspectRatio="xMidYMax meet">
+        <!-- bukit -->
+        <path d="M0 150 Q70 96 150 140 Q220 100 300 136 Q360 112 400 134 L400 190 L0 190Z" fill="#5FB52C" />
+        <path d="M0 168 Q100 140 200 164 Q300 142 400 164 L400 190 L0 190Z" fill="var(--grass)" />
+        <rect x="0" y="176" width="400" height="14" fill="var(--grass-dark)" />
+
+        <!-- ketapel -->
+        <g stroke="#6B3F1D" stroke-linecap="round" fill="none">
+          <path d="M70 178 L70 140" stroke-width="13" />
+          <path d="M70 142 L50 100" stroke-width="12" />
+          <path d="M70 142 L92 104" stroke-width="12" />
+        </g>
+        <path d="M50 102 Q70 118 92 106" stroke="#2b1608" stroke-width="5" fill="none" stroke-linecap="round" />
+        <svg x="50" y="68" width="46" height="46" viewBox="0 0 120 120">
+          <use href="#red-bird" />
+        </svg>
+
+        <!-- burung kuning menunggu -->
+        <svg x="118" y="144" width="34" height="34" viewBox="0 0 120 120">
+          <use href="#yellow-bird" />
+        </svg>
+
+        <!-- benteng babi -->
+        <g class="pig-wobble">
+          <rect x="248" y="124" width="12" height="54" fill="#D9953B" stroke="#5A3213" stroke-width="3" />
+          <rect x="320" y="124" width="12" height="54" fill="#D9953B" stroke="#5A3213" stroke-width="3" />
+          <svg x="262" y="124" width="56" height="54" viewBox="0 0 120 120" overflow="visible">
+            <use href="#pig" />
+          </svg>
+          <rect x="240" y="112" width="100" height="14" rx="3" fill="#C47F26" stroke="#5A3213" stroke-width="3" />
+          <rect x="262" y="82" width="12" height="30" fill="#B9C0C8" stroke="#4A525B" stroke-width="3" />
+          <rect x="306" y="82" width="12" height="30" fill="#B9C0C8" stroke="#4A525B" stroke-width="3" />
+          <rect x="256" y="72" width="68" height="12" rx="3" fill="#9FE3FF" stroke="#2F7FA3" stroke-width="3" />
+          <svg x="270" y="40" width="40" height="40" viewBox="0 0 120 120">
+            <use href="#pig" />
+          </svg>
+        </g>
+      </svg>
+      <div class="dirt"></div>
+      <div
+        style="position: absolute; bottom: 8px; width: 100%; text-align: center; color: rgba(255,255,255,0.7); font-size: 0.85rem; font-family: var(--body); text-shadow: 1px 1px 2px rgba(0,0,0,0.6);">
+        Siber Ujian v2.2.0 • Auto Update</div>
+    </div>
+  </div>
+
+
+
+  <!-- SCRIPT UNTUK INSTALASI PWA (Tombol Install) -->
+  <script>
+    let deferredPrompt;
+    const btnInstall = document.getElementById('btnInstall');
+
+    // Mendengarkan event dari browser jika aplikasi siap diinstal
+    window.addEventListener('beforeinstallprompt', (e) => {
+      // Mencegah mini-infobar default muncul di HP
+      e.preventDefault();
+      // Simpan event sehingga bisa dipicu nanti lewat tombol
+      deferredPrompt = e;
+      // Munculkan tombol Install di menu
+      btnInstall.classList.remove('hidden');
+    });
+
+    // Saat tombol Install diklik
+    btnInstall.addEventListener('click', async (e) => {
+      e.preventDefault();
+      // Sembunyikan tombol setelah diklik
+      btnInstall.classList.add('hidden');
+      // Munculkan prompt instalasi bawaan browser
+      deferredPrompt.prompt();
+      // Tunggu pilihan user (apakah memilih Install atau Batal)
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Pilihan instalasi: ${outcome}`);
+      // Bersihkan prompt event
+      deferredPrompt = null;
+    });
+
+    // Sembunyikan tombol secara otomatis jika aplikasi telah terinstal
+    window.addEventListener('appinstalled', () => {
+      btnInstall.classList.add('hidden');
+      deferredPrompt = null;
+      console.log('Aplikasi berhasil dipasang di perangkat');
+    });
+  </script>
+
+  <!-- Daftarkan Service Worker (Agar PWA berfungsi & Install terpicu) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => {
+            console.log('Service Worker terdaftar!', reg);
+
+            // Paksa periksa update di latar belakang tiap kali halaman dibuka
+            reg.update();
+
+            // Jika ada versi baru di GitHub, otomatis muat ulang halaman saat siswa membuka
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('Versi baru ditemukan, memuat ulang halaman...');
+                  window.location.reload(true);
+                }
+              });
+            });
+          })
+          .catch(err => console.log('Service Worker gagal', err));
+      });
+    }
+  </script>
+
+</body>
+
+</html>

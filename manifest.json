@@ -1,0 +1,16 @@
+{
+  "name": "Petualangan Ujian",
+  "short_name": "Ujian",
+  "description": "Ujian pilihan ganda & essay offline dengan penilaian AI",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#36b0ec",
+  "theme_color": "#2e8fd8",
+  "lang": "id",
+  "icons": [
+    { "src": "assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

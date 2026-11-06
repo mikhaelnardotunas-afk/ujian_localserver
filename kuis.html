@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2e8fd8">
+  <title>Petualangan Ujian</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' },
+      options: { enableMenu: false },
+      startup: { typeset: false }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" async></script>
+  <script src="config.js"></script>
+</head>
+<body>
+  <div class="scene" aria-hidden="true">
+    <div class="sun"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
+    <svg class="hills" viewBox="0 0 1200 300" preserveAspectRatio="none">
+      <path d="M0 170 C150 90 300 90 450 160 C600 230 700 80 900 120 C1030 145 1120 110 1200 130 V300 H0Z" fill="#8ed36a"/>
+      <path d="M0 220 C200 150 350 200 520 210 C700 220 820 150 1000 180 C1100 195 1160 190 1200 185 V300 H0Z" fill="#63bf3b"/>
+      <path d="M0 262 C300 245 600 270 900 252 C1050 244 1150 255 1200 250 V300 H0Z" fill="#3b8a20"/>
+    </svg>
+  </div>
+
+  <main class="app" id="app">
+    <header class="topbar" id="topbar">
+      <div class="brand">
+        <img src="assets/maskot.svg" alt="">
+        <div>
+          <div class="brand-name" id="appName">Petualangan Ujian</div>
+          <div class="brand-sub" id="schoolName">Ujian offline</div>
+        </div>
+      </div>
+      <span class="net" id="net"></span>
+    </header>
+
+    <!-- 1. Unduh data pertama kali -->
+    <section class="screen" id="scr-setup">
+      <div class="hero">
+        <img src="assets/maskot.svg" alt="Burhan, maskot burung hantu">
+        <div class="bubble"><b>Halo, petualang!</b><br>Pilih kelasmu lalu unduh data ujian. Setelah itu aplikasi bisa dipakai tanpa internet.</div>
+      </div>
+      <div class="board">
+        <h2 class="board-title">Unduh data ujian</h2>
+        <p class="board-sub">Satu HP boleh mengunduh beberapa kelas.</p>
+        <div id="kelasBox" class="stack">
+          <button class="btn btn-blue btn-block" id="btnMuatKelas">Tampilkan daftar kelas</button>
+        </div>
+        <div id="kelasPilih" class="hidden">
+          <div class="chips" id="kelasChips" role="group" aria-label="Pilih kelas"></div>
+          <button class="btn btn-green btn-block btn-lg" id="btnUnduh" style="margin-top:18px" disabled>Unduh data</button>
+        </div>
+        <p class="small muted" id="setupMsg" style="margin-top:12px"></p>
+      </div>
+      <button class="btn btn-wood btn-block hidden" id="btnSetupKembali">Kembali</button>
+    </section>
+
+    <!-- 2. Login siswa -->
+    <section class="screen" id="scr-login">
+      <div class="hero">
+        <img src="assets/maskot.svg" alt="">
+        <div class="bubble"><b>Siapa yang main?</b><br>Masuk dengan username dan password dari gurumu.</div>
+      </div>
+      <form class="board" id="formLogin" autocomplete="off">
+        <h2 class="board-title">Masuk</h2>
+        <label class="field"><span>Username</span>
+          <input class="input" id="inUser" autocapitalize="none" autocomplete="off" spellcheck="false" required>
+        </label>
+        <label class="field"><span>Password</span>
+          <span class="pw-wrap">
+            <input class="input" id="inPass" type="password" autocomplete="off" required>
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Tampilkan password">👁</button>
+          </span>
+        </label>
+        <button class="btn btn-green btn-block btn-lg" type="submit">Masuk</button>
+      </form>
+      <div class="row">
+        <button class="btn btn-gold" id="btnOutbox">Kirim jawaban <span class="badge hidden" id="outboxBadge">0</span></button>
+        <button class="btn btn-blue" id="btnSync">Perbarui data</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn btn-wood btn-sm" id="btnTambahKelas">+ Kelas lain</button>
+        <button class="btn btn-wood btn-sm" id="btnSuara">🔊 Suara</button>
+        <button class="btn btn-red btn-sm" id="btnReset">Hapus data HP</button>
+      </div>
+      <p class="footer-note" id="infoPaket"></p>
+    </section>
+
+    <!-- 3. Peta ujian -->
+    <section class="screen" id="scr-map">
+      <div class="hero">
+        <img src="assets/maskot.svg" alt="">
+        <div class="bubble"><b id="sapaNama">Hai!</b><br><span id="sapaInfo">Pilih ujian yang akan kamu kerjakan.</span></div>
+      </div>
+      <div class="board">
+        <h2 class="board-title">Daftar ujian</h2>
+        <div class="levels" id="levelList"></div>
+      </div>
+      <div class="row">
+        <button class="btn btn-blue" id="btnNilaiSaya">Lihat nilaiku</button>
+        <button class="btn btn-wood" id="btnLogout">Ganti pemain</button>
+      </div>
+    </section>
+
+    <!-- 4. Token -->
+    <section class="screen" id="scr-token">
+      <div class="board center">
+        <span class="plank" id="tokPaket">Ujian</span>
+        <h2 class="board-title" style="margin-top:16px">Masukkan token</h2>
+        <p class="board-sub">Token diberikan gurumu saat ujian dimulai.</p>
+        <form id="formToken">
+          <input class="input input-token" id="inToken" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" required aria-label="Token ujian">
+          <p class="small" id="tokMsg" style="min-height:1.4em;color:var(--red-d);font-weight:800"></p>
+          <button class="btn btn-green btn-block btn-lg" type="submit">Buka ujian</button>
+        </form>
+      </div>
+      <button class="btn btn-wood btn-block" data-back="scr-map">Kembali</button>
+    </section>
+
+    <!-- 5. Briefing -->
+    <section class="screen" id="scr-brief">
+      <div class="board">
+        <span class="plank" id="brPaket">Ujian</span>
+        <h2 class="board-title" style="margin-top:16px" id="brJudul">Siap bertualang?</h2>
+        <ul class="list" id="brList"></ul>
+        <button class="btn btn-red btn-block btn-lg" id="btnMulai" style="margin-top:14px">Mulai!</button>
+      </div>
+      <button class="btn btn-wood btn-block" data-back="scr-map">Nanti dulu</button>
+    </section>
+
+    <!-- 6. Bermain / mengerjakan -->
+    <section class="screen" id="scr-play">
+      <div class="hud">
+        <div class="hud-main">
+          <div class="hud-peserta">
+            <svg class="hud-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4.2 4.2 0 1 0 0-8.4 4.2 4.2 0 0 0 0 8.4Zm0 2.1c-4.4 0-7.8 2.3-7.8 5V21h15.6v-1.9c0-2.7-3.4-5-7.8-5Z"/></svg>
+            <span class="hud-name" id="hudName">-</span>
+          </div>
+          <div class="hud-info">
+            <span class="pos-pill" id="hudPos" aria-live="polite">Soal <b>1</b>/1</span>
+            <span class="hud-hit" title="Sudah dijawab"><i class="dot sudah"></i><b id="hudSudah">0</b> dijawab</span>
+            <span class="hud-hit" title="Belum dijawab"><i class="dot"></i><b id="hudBelum">0</b> belum</span>
+            <span class="total-pill hidden" id="totalPill">⏳ <b id="totalLbl">0:00</b></span>
+            <span class="total-pill danger hidden" id="hudPelanggaran">⚠ <b id="pelLbl">0/3</b></span>
+          </div>
+        </div>
+        <div class="timer" id="timer" role="timer" aria-live="off">
+          <svg viewBox="0 0 80 80"><circle class="track" cx="40" cy="40" r="34"/><circle class="bar" id="timerBar" cx="40" cy="40" r="34"/></svg>
+          <div class="lbl" id="timerLbl">0:00</div>
+          <div class="timer-cap" id="timerCap">soal</div>
+        </div>
+        <div class="nomor-strip" id="nomorSoal" aria-label="Nomor soal: hijau sudah dijawab, bening belum dijawab"></div>
+      </div>
+      <article class="board q-card" id="qCard">
+        <div class="q-no">
+          <span class="plank" id="qNo">Soal 1</span>
+          <span class="q-poin"><span class="tipe-tag" id="qTipe">PG</span> <span id="qPoin">10 poin</span></span>
+        </div>
+        <div class="q-text" id="qText"></div>
+        <img class="q-img hidden" id="qImg" alt="Gambar soal">
+      </article>
+
+      <div class="board hidden" id="pgArea">
+        <h3 class="board-title" style="font-size:1.15rem">Pilih jawaban</h3>
+        <div class="opsi-list" id="opsiList" role="radiogroup" aria-label="Pilihan jawaban"></div>
+      </div>
+
+      <div class="board answer-area hidden" id="esArea">
+        <h3 class="board-title" style="font-size:1.15rem">Jawabanmu</h3>
+        <div class="toolbar" id="toolbar" aria-label="Sisipkan simbol matematika"></div>
+        <textarea class="answer" id="answer" placeholder="Tulis jawabanmu di sini…" spellcheck="false"></textarea>
+        <div class="save-hint"><span id="saveHint">Tersimpan otomatis di HP</span><span id="charCount">0 kata</span></div>
+        <div class="preview hidden" id="preview" aria-live="polite"></div>
+      </div>
+
+      <div class="next-wrap">
+        <div class="nav-row" id="navRow">
+          <button class="btn btn-wood btn-icon hidden" id="btnPrev" aria-label="Soal sebelumnya">◀</button>
+          <button class="btn btn-gold hidden" id="btnRagu" aria-pressed="false">Ragu</button>
+          <button class="btn btn-blue btn-icon hidden" id="btnPeta" aria-label="Daftar soal">☰</button>
+          <button class="btn btn-green btn-lg" id="btnNext">Lanjut</button>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Layar Pemulihan (Terkunci) -->
+    <section class="screen" id="scr-pemulihan">
+      <div class="board center">
+        <span class="plank" style="background:var(--red);border-color:var(--red-d)">Ujian Terhenti</span>
+        <h2 class="board-title" style="margin-top:16px;color:var(--red-d)">Pelanggaran Maksimal!</h2>
+        <p class="board-sub">Kamu telah keluar dari layar ujian melebihi batas yang diizinkan. Silakan lapor ke gurumu untuk meminta Token Pemulihan agar bisa melanjutkan.</p>
+        <form id="formPemulihan">
+          <input class="input input-token" id="inPemulihan" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" required aria-label="Token Pemulihan" placeholder="TOKEN GURU">
+          <p class="small" id="pemMsg" style="min-height:1.4em;color:var(--red-d);font-weight:800"></p>
+          <button class="btn btn-red btn-block btn-lg" type="submit">Buka Ujian</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 7. Selesai -->
+    <section class="screen" id="scr-finish">
+      <div class="board center">
+        <span class="plank">Misi selesai!</span>
+        <div class="big-stars" id="finStars"></div>
+        <h2 class="board-title" id="finJudul">Hebat!</h2>
+        <p id="finInfo" class="board-sub"></p>
+        <div class="status-box wait" id="finStatus"><span class="spinner dark"></span> Menyimpan…</div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn btn-gold" id="btnFinKirim">Kirim sekarang</button>
+          <button class="btn btn-wood" id="btnFinSelesai">Ganti pemain</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. Nilai -->
+    <section class="screen" id="scr-nilai">
+      <div class="board">
+        <h2 class="board-title">Nilaiku</h2>
+        <div id="nilaiBox"><span class="spinner dark"></span></div>
+      </div>
+      <button class="btn btn-wood btn-block" data-back="scr-map">Kembali</button>
+    </section>
+  </main>
+
+  <!-- Overlay Progres Pengiriman Jawaban -->
+  <div id="syncOverlay" class="overlay hidden" style="z-index: 999;">
+    <div class="msg" style="width: 100%; max-width: 500px;">
+      <div style="margin-bottom: 20px;">🚀 Mengirim Jawaban...</div>
+      <div style="background: rgba(0,0,0,0.3); border: 4px solid #fff; border-radius: 20px; height: 32px; width: 80vw; max-width: 400px; margin: 0 auto; overflow: hidden; position: relative;">
+        <div id="syncBar" style="width: 0%; height: 100%; background: var(--green); transition: width 0.4s ease-out; box-shadow: inset 0 -4px 0 rgba(0,0,0,0.2);"></div>
+      </div>
+      <div id="syncText" style="font-size: 1.2rem; margin-top: 14px; text-shadow: 0 2px 0 var(--blue-d);">0 / 0</div>
+    </div>
+  </div>
+
+  <!-- Overlay Progres Unduh Data (Unduh data & Perbarui data) -->
+  <div id="unduhOverlay" class="overlay hidden" style="z-index: 1000;" role="dialog" aria-modal="true" aria-labelledby="unduhJudul">
+    <div class="unduh-box">
+      <div class="unduh-judul" id="unduhJudul">📥 Mengunduh data ujian…</div>
+      <div class="unduh-track" role="progressbar" aria-label="Progres unduh"><div id="unduhBar"></div></div>
+      <div class="unduh-persen" id="unduhPersen" aria-live="polite">0%</div>
+      <div class="unduh-detail" id="unduhDetail"></div>
+      <ol class="unduh-langkah" id="unduhLangkah">
+        <li>Server menyiapkan data <small></small></li>
+        <li>Menerima data <small></small></li>
+        <li>Menyimpan di HP <small></small></li>
+        <li>Gambar soal (offline) <small></small></li>
+      </ol>
+      <button type="button" class="btn btn-wood btn-sm hidden" id="unduhLewati">Lanjut tanpa menunggu gambar</button>
+      <div class="unduh-catatan" id="unduhCatatan">Jangan tutup aplikasi sampai selesai.</div>
+    </div>
+  </div>
+
+  <div id="toasts" aria-live="polite"></div>
+  <script src="assets/common.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

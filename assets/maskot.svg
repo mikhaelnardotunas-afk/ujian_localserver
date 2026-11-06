@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Burhan si Burung Hantu — maskot orisinal -->
+  <ellipse cx="100" cy="186" rx="56" ry="9" fill="#000" opacity=".15"/>
+  <!-- kaki -->
+  <path d="M78 172 l-6 10 M84 173 l0 11 M90 172 l6 10" stroke="#f08a1c" stroke-width="6" stroke-linecap="round"/>
+  <path d="M110 172 l-6 10 M116 173 l0 11 M122 172 l6 10" stroke="#f08a1c" stroke-width="6" stroke-linecap="round"/>
+  <!-- badan -->
+  <path d="M100 48 C150 48 168 92 164 128 C160 162 134 178 100 178 C66 178 40 162 36 128 C32 92 50 48 100 48Z" fill="#8a5a2b" stroke="#4d2e10" stroke-width="5"/>
+  <!-- sayap -->
+  <path d="M42 108 C22 118 24 148 44 158 C50 140 50 124 42 108Z" fill="#6b4220" stroke="#4d2e10" stroke-width="4"/>
+  <path d="M158 108 C178 118 176 148 156 158 C150 140 150 124 158 108Z" fill="#6b4220" stroke="#4d2e10" stroke-width="4"/>
+  <!-- perut -->
+  <path d="M100 98 C130 98 142 124 138 146 C134 166 118 172 100 172 C82 172 66 166 62 146 C58 124 70 98 100 98Z" fill="#f6dfae"/>
+  <path d="M84 128 q6 6 12 0 M104 128 q6 6 12 0 M94 146 q6 6 12 0" stroke="#d9b679" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <!-- mata -->
+  <circle cx="76" cy="88" r="24" fill="#fff" stroke="#4d2e10" stroke-width="4"/>
+  <circle cx="124" cy="88" r="24" fill="#fff" stroke="#4d2e10" stroke-width="4"/>
+  <circle cx="80" cy="90" r="10" fill="#2a1a0b"/>
+  <circle cx="120" cy="90" r="10" fill="#2a1a0b"/>
+  <circle cx="84" cy="86" r="3.5" fill="#fff"/>
+  <circle cx="124" cy="86" r="3.5" fill="#fff"/>
+  <!-- kacamata -->
+  <circle cx="76" cy="88" r="27" fill="none" stroke="#2e8fd8" stroke-width="5"/>
+  <circle cx="124" cy="88" r="27" fill="none" stroke="#2e8fd8" stroke-width="5"/>
+  <path d="M100 86 h0" stroke="#2e8fd8" stroke-width="6" stroke-linecap="round"/>
+  <!-- paruh -->
+  <path d="M92 104 L108 104 L100 120 Z" fill="#ffb21f" stroke="#c46a00" stroke-width="3" stroke-linejoin="round"/>
+  <!-- toga -->
+  <path d="M100 18 L156 38 L100 58 L44 38 Z" fill="#2b2b3a" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M70 47 v14 c18 10 42 10 60 0 v-14" fill="#3a3a4d" stroke="#111" stroke-width="3"/>
+  <path d="M100 38 L150 44 L150 66" stroke="#ffcb2b" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <circle cx="150" cy="70" r="6" fill="#ffcb2b" stroke="#c78b00" stroke-width="2"/>
+</svg>

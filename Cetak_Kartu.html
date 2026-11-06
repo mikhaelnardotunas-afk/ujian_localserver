@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CardPrint Offline — Cetak Kartu Siswa</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:#eef2f7;color:#172033}
+header{background:linear-gradient(135deg,#111827,#263b72);color:#fff;padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+header h1{margin:0;font-size:22px}header small{opacity:.75}.app{display:grid;grid-template-columns:340px 1fr;min-height:calc(100vh - 70px)}
+.panel{background:#fff;border-right:1px solid #dbe2ea;padding:18px;overflow:auto}.panel h2{font-size:14px;margin:20px 0 10px;color:#526078;text-transform:uppercase;letter-spacing:.06em}
+.drop{border:2px dashed #9aa8bd;border-radius:14px;padding:18px;text-align:center;background:#f8fafc;cursor:pointer}.drop:hover{border-color:#4f6cff;background:#f4f6ff}
+input,select,button{font:inherit}input[type=file]{display:none}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.field{margin:8px 0}.field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px;color:#536174}.field input,.field select{width:100%;padding:9px;border:1px solid #ccd5e2;border-radius:8px;background:#fff}
+button{border:0;border-radius:9px;padding:10px 12px;cursor:pointer;font-weight:700}.primary{background:#4967ff;color:#fff}.secondary{background:#e9edf5;color:#263247}.danger{background:#fee2e2;color:#b42318}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.full{width:100%;margin-top:8px}
+.templates{display:grid;grid-template-columns:1fr 1fr;gap:8px}.template{padding:10px;border:2px solid #d9e0ea;border-radius:10px;background:#fff;text-align:left;cursor:pointer}.template.active{border-color:#4f6cff;box-shadow:0 0 0 2px #dce2ff}.swatch{height:30px;border-radius:6px;margin-bottom:6px}.template b{font-size:12px}
+.stage{padding:22px;overflow:auto}.toolbar{display:flex;gap:8px;align-items:center;margin-bottom:15px;flex-wrap:wrap}.count{font-weight:700;color:#58667a;margin-left:auto}.paper-wrap{background:#cbd3df;padding:25px;min-width:max-content;border-radius:14px}
+.paper{background:#fff;box-shadow:0 8px 25px #0002;display:grid;align-content:start;justify-content:start}
+.card{position:relative;overflow:hidden;border-radius:8px;display:flex;flex-direction:column;break-inside:avoid;page-break-inside:avoid}
+.card .school{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.75}
+.card .name{font-size:17px;font-weight:900;line-height:1.05}.card .class{font-size:11px;font-weight:700;margin-top:3px}
+.card .login{margin-top:auto;background:#ffffff22;border-radius:6px;padding:7px;font-size:9px;line-height:1.45}
+.card .login b{font-size:10px}.badge{position:absolute;right:8px;top:8px;font-size:8px;font-weight:800;padding:4px 6px;border-radius:20px;background:#fff5}
+.card .watermark{position:absolute;right:-15px;bottom:-24px;font-size:65px;font-weight:900;opacity:.08;transform:rotate(-12deg)}
+.info{background:#fff;border:1px solid #dbe2ea;border-radius:10px;padding:10px;font-size:11px;color:#637087;margin-top:12px}
+@media(max-width:850px){.app{grid-template-columns:1fr}.panel{border-right:0;border-bottom:1px solid #dbe2ea}}
+@media print{
+ body{background:#fff}.no-print,header{display:none!important}.app{display:block}.stage{padding:0}.paper-wrap{padding:0;background:#fff}.paper{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>🎫 CardPrint Offline</h1><small>Pembuat & pencetak kartu siswa — tanpa internet</small></div>
+  <div id="loaded">Belum ada data</div>
+</header>
+<div class="app">
+<aside class="panel no-print">
+  <div class="drop" id="drop">📁 <b>Pilih File Excel/CSV</b><br><small>Kolom: USERNAME; PASSWORD; NAMA; KELAS</small><input id="file" type="file" accept=".csv,.txt,.xlsx,.xls"></div>
+
+  <h2>Data</h2>
+  <div class="field"><label>Pemisah CSV</label><select id="sep"><option value=";">Titik koma (;)</option><option value=",">Koma (,)</option><option value="tab">Tab</option></select></div>
+  <button class="secondary full" id="sample">Gunakan Data Contoh</button>
+
+  <h2>Ukuran Kertas</h2>
+  <div class="row">
+    <div class="field"><label>Preset</label><select id="paperPreset">
+      <option value="A4">A4</option><option value="A5">A5</option><option value="F4">F4 / Folio</option><option value="CUSTOM">Custom</option>
+    </select></div>
+    <div class="field"><label>Orientasi</label><select id="orient"><option value="portrait">Portrait</option><option value="landscape">Landscape</option></select></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Lebar (mm)</label><input id="pw" type="number" value="210"></div>
+    <div class="field"><label>Tinggi (mm)</label><input id="ph" type="number" value="297"></div>
+  </div>
+
+  <h2>Ukuran & Susunan Kartu</h2>
+  <div class="row">
+    <div class="field"><label>Lebar kartu (mm)</label><input id="cw" type="number" value="85"></div>
+    <div class="field"><label>Tinggi kartu (mm)</label><input id="ch" type="number" value="54"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Horizontal</label><input id="cols" type="number" min="1" value="2"></div>
+    <div class="field"><label>Vertikal</label><input id="rows" type="number" min="1" value="5"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Jarak X (mm)</label><input id="gx" type="number" value="3"></div>
+    <div class="field"><label>Jarak Y (mm)</label><input id="gy" type="number" value="3"></div>
+  </div>
+  <div class="row">
+    <div class="field"><label>Margin kiri (mm)</label><input id="ml" type="number" value="8"></div>
+    <div class="field"><label>Margin atas (mm)</label><input id="mt" type="number" value="8"></div>
+  </div>
+
+  <h2>Template Kartu</h2>
+  <div class="templates" id="templates"></div>
+
+  <h2>Isi Kartu</h2>
+  <div class="field"><label>Nama sekolah / judul</label><input id="school" value="KARTU PESERTA DIDIK"></div>
+  <div class="row">
+    <div class="field"><label>Ukuran nama</label><input id="fs" type="number" value="17"></div>
+    <div class="field"><label>Radius (px)</label><input id="radius" type="number" value="8"></div>
+  </div>
+  <div class="field"><label><input id="showUser" type="checkbox" checked> Tampilkan username</label></div>
+  <div class="field"><label><input id="showPass" type="checkbox" checked> Tampilkan password</label></div>
+  <div class="field"><label><input id="showClass" type="checkbox" checked> Tampilkan kelas</label></div>
+
+  <div class="btns">
+    <button class="primary" onclick="window.print()">🖨 Cetak</button>
+    <button class="secondary" id="pdf">📄 Export PDF</button>
+  </div>
+  <button class="danger full" id="clear">Hapus Data</button>
+  <div class="info">💡 <b>Offline penuh:</b> file dibaca langsung di browser. Tidak ada data siswa yang dikirim ke server.</div>
+</aside>
+
+<main class="stage">
+  <div class="toolbar no-print">
+    <button class="secondary" id="zoomOut">−</button><button class="secondary" id="zoomIn">+</button>
+    <button class="secondary" id="fit">Fit</button>
+    <span class="count" id="count">0 kartu</span>
+  </div>
+  <div class="paper-wrap"><div id="paper" class="paper"></div></div>
+</main>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let data=[], template='modern', zoom=1;
+
+const themes={
+ modern:{name:'Modern Blue',bg:'linear-gradient(135deg,#172554,#2563eb)',fg:'#fff',accent:'#93c5fd'},
+ ocean:{name:'Ocean',bg:'linear-gradient(135deg,#083344,#0891b2)',fg:'#fff',accent:'#a5f3fc'},
+ sunset:{name:'Sunset',bg:'linear-gradient(135deg,#7c2d12,#f97316)',fg:'#fff',accent:'#fed7aa'},
+ purple:{name:'Royal Purple',bg:'linear-gradient(135deg,#3b0764,#9333ea)',fg:'#fff',accent:'#e9d5ff'},
+ green:{name:'Emerald',bg:'linear-gradient(135deg,#064e3b,#10b981)',fg:'#fff',accent:'#a7f3d0'},
+ dark:{name:'Dark Carbon',bg:'linear-gradient(135deg,#111827,#374151)',fg:'#fff',accent:'#d1d5db'},
+ clean:{name:'Clean White',bg:'linear-gradient(135deg,#f8fafc,#e2e8f0)',fg:'#172033',accent:'#475569'},
+ school:{name:'School Gold',bg:'linear-gradient(135deg,#422006,#ca8a04)',fg:'#fff',accent:'#fde68a'}
+};
+Object.entries(themes).forEach(([k,v])=>{
+ let d=document.createElement('button');d.className='template'+(k===template?' active':'');
+ d.innerHTML=`<div class="swatch" style="background:${v.bg}"></div><b>${v.name}</b>`;
+ d.onclick=()=>{template=k;document.querySelectorAll('.template').forEach(x=>x.classList.remove('active'));d.classList.add('active');render()};
+ $('templates').appendChild(d);
+});
+
+$('drop').onclick=e=>{if(e.target!==$('file'))$('file').click()};
+$('file').onchange=()=>loadFile($('file').files[0]);
+$('drop').ondragover=e=>{e.preventDefault();$('drop').style.borderColor='#4f6cff'};
+$('drop').ondrop=e=>{e.preventDefault();loadFile(e.dataTransfer.files[0])};
+
+function parseCSV(text,sep){
+ let lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(x=>x.trim());
+ if(!lines.length)return [];
+ sep=sep==='tab'?'\\t':sep;
+ const split=s=>s.split(sep).map(x=>x.trim().replace(/^"(.*)"$/,'$1'));
+ let head=split(lines[0]).map(x=>x.toUpperCase());
+ return lines.slice(1).map(line=>{let a=split(line),o={};head.forEach((h,i)=>o[h]=a[i]??'');return {
+ USERNAME:o.USERNAME||o.USER||'',PASSWORD:o.PASSWORD||o.PASS||'',NAMA:o.NAMA||o.NAME||'',KELAS:o.KELAS||o.CLASS||''
+ }}).filter(x=>x.NAMA||x.USERNAME);
+}
+async function loadFile(f){
+ if(!f)return;
+ const text=await f.text();
+ if(/\.xlsx?$/.test(f.name.toLowerCase())){
+   alert('Untuk mode offline tanpa library eksternal, Excel .xlsx perlu disimpan sebagai CSV terlebih dahulu. Pilih CSV UTF-8 dengan pemisah ;');
+   return;
+ }
+ data=parseCSV(text,$('sep').value); render();
+}
+$('sample').onclick=()=>{data=[
+ ['SISWA001','12345','Andi Pratama','7A'],['SISWA002','67890','Budi Santoso','7A'],['SISWA003','54321','Citra Lestari','7B'],['SISWA004','24680','Dimas Wijaya','7B'],['SISWA005','13579','Eka Putri','8A'],['SISWA006','11223','Fajar Hadi','8A'],['SISWA007','44556','Gita Sari','8B'],['SISWA008','77889','Hendra Kurnia','8B'],['SISWA009','99887','Intan Dewi','9A'],['SISWA010','66554','Joko Saputra','9A']
+].map(x=>({USERNAME:x[0],PASSWORD:x[1],NAMA:x[2],KELAS:x[3]}));render()};
+
+function mm(v){return v*3.779527559}
+function val(id){return parseFloat($(id).value)||0}
+function render(){
+ let pW=val('pw'),pH=val('ph');
+ if($('orient').value==='landscape' && $('paperPreset').value!=='CUSTOM'){[pW,pH]=[pH,pW]}
+ const cw=val('cw'),ch=val('ch'),cols=Math.max(1,val('cols')),rows=Math.max(1,val('rows'));
+ $('paper').style.width=mm(pW)+'px';$('paper').style.height=mm(pH)+'px';
+ $('paper').style.gridTemplateColumns=`repeat(${cols},${mm(cw)}px)`;
+ $('paper').style.gridAutoRows=mm(ch)+'px';$('paper').style.columnGap=mm(val('gx'))+'px';$('paper').style.rowGap=mm(val('gy'))+'px';
+ $('paper').style.paddingLeft=mm(val('ml'))+'px';$('paper').style.paddingTop=mm(val('mt'))+'px';
+ $('paper').style.transform=`scale(${zoom})`; $('paper').style.transformOrigin='top left';
+ $('paper').innerHTML='';
+ let th=themes[template],n=Math.min(data.length,cols*rows);
+ for(let i=0;i<n;i++){
+  let s=data[i],c=document.createElement('div');c.className='card';
+  c.style.cssText+=`width:${mm(cw)}px;height:${mm(ch)}px;background:${th.bg};color:${th.fg};padding:10px;border-radius:${val('radius')}px`;
+  c.innerHTML=`<div class="school" style="color:${th.accent}">${esc($('school').value)}</div>
+   <div class="badge">${esc(s.KELAS)}</div>
+   <div class="name" style="font-size:${val('fs')}px;margin-top:5px">${esc(s.NAMA)}</div>
+   ${$('showClass').checked?`<div class="class" style="color:${th.accent}">KELAS ${esc(s.KELAS)}</div>`:''}
+   <div class="login">${$('showUser').checked?`Username: <b>${esc(s.USERNAME)}</b><br>`:''}${$('showPass').checked?`Password: <b>${esc(s.PASSWORD)}</b>`:''}</div>
+   <div class="watermark">ID</div>`;
+  $('paper').appendChild(c);
+ }
+ $('count').textContent=`${data.length} data • ${n} kartu/lembar`;
+ $('loaded').textContent=data.length?`${data.length} siswa`:'Belum ada data';
+}
+function esc(x){return String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+
+$('paperPreset').onchange=()=>{
+ const x={A4:[210,297],A5:[148,210],F4:[215.9,330.2],CUSTOM:[val('pw'),val('ph')]}[$('paperPreset').value];
+ if(x){$('pw').value=x[0];$('ph').value=x[1]}render()
+};
+['orient','pw','ph','cw','ch','cols','rows','gx','gy','ml','mt','school','fs','radius','showUser','showPass','showClass'].forEach(id=>$(id).addEventListener('input',render));
+$('clear').onclick=()=>{data=[];render()};
+$('zoomIn').onclick=()=>{zoom=Math.min(1.6,zoom+.1);render()};
+$('zoomOut').onclick=()=>{zoom=Math.max(.5,zoom-.1);render()};
+$('fit').onclick=()=>{zoom=1;render()};
+
+$('pdf').onclick=()=>{
+ alert('Untuk export PDF offline: klik tombol ini lalu pilih printer “Save as PDF” pada dialog cetak. Ini menghasilkan PDF tanpa internet.');
+ window.print();
+};
+render();
+</script>
+</body>
+</html>
